@@ -1,3 +1,4 @@
+package br.com.davidbuzatto.mysimplegameengine.legacy;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,6 +24,8 @@ import javax.swing.JPanel;
 /**
  * Engine simples para criação de jogos ou simulações usando Java 2D.
  * Grande parte da sua API é baseada na engine de jogos Raylib (www.raylib.com).
+ * 
+ * Observação: Versão anterior com toda a implementação feita internamente.
  * 
  * @author Prof. Dr. David Buzatto
  * @copyright Copyright (c) 2024
@@ -1810,7 +1813,7 @@ public abstract class Engine extends JFrame {
      * @param triangle um triângulo.
      * @param color cor de desenho.
      */
-    public void drawTriangles( Triangle2D triangle, Color color ) {
+    public void drawTriangle( Triangle2D triangle, Color color ) {
         drawTriangle( triangle.x1, triangle.y1, triangle.x2, triangle.y2, triangle.x3, triangle.y3, color );
     }
 

@@ -1,5 +1,7 @@
+import br.com.davidbuzatto.mysimplegameengine.core.Engine;
+
 /**
- * Modelo para desenvolvimento de exercícios criativos em Java 2D.
+ * Classe básica de exemplo de utilização da engine.
  * 
  * @author Prof. Dr. David Buzatto
  * @copyright Copyright (c) 2024
@@ -16,7 +18,8 @@ public class Main extends Engine {
             600,                  // 600 pixels de largura
             "Título da Janela",   // título da janela
             true,                 // ativa a suavização (antialiasing)
-            60 );                 // 60 quadros por segundo
+            60                    // 60 quadros por segundo
+        );
 
     }
 
@@ -25,21 +28,21 @@ public class Main extends Engine {
      * e/ou inicializa os objetos/contextos/variáveis do jogo ou simulação.
      */
     @Override
-    public void criar() {
+    public void create() {
     }
 
     /**
      * Atualiza os objetos/contextos/variáveis do jogo ou simulação.
      */
     @Override
-    public void atualizar() {
+    public void update() {
     }
 
     /**
      * Desenha o estado dos objetos/contextos/variáveis do jogo ou simulação.
      */
     @Override
-    public void desenhar() {
+    public void draw() {
     }
 
     public static void main( String[] args ) {
