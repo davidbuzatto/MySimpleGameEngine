@@ -36,7 +36,7 @@ public class Line implements Drawable {
 
     @Override
     public String toString() {
-        return String.format( "Line2D[%.2f, %.2f, %.2f, %.2f]", x1, y1, x2, y2 );
+        return String.format( "Line[%.2f, %.2f, %.2f, %.2f]", x1, y1, x2, y2 );
     }
 
 }

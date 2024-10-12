@@ -1,12 +1,2 @@
-Implementar fill para:
-    Arc
-    CubicCurve
-    QuadCurve
-    Não faz sentido para:
-        Point
-        Vector
-    Arco e SetorCircular: analisar, provavelmente colocar métodos para desenho usando
-    o arco como parâmetro.
-
-Padronizar nomes para curvas/splines
 Funções de colisão
+indicador fps

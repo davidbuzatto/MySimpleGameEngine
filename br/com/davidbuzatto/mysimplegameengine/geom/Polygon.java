@@ -42,7 +42,7 @@ public class Polygon implements Drawable {
 
     @Override
     public String toString() {
-        return String.format( "Polygon2D[%.2f, %.2f, %d, %.2f, %.2f]", x, y, sides, radius, rotation );
+        return String.format( "Polygon[%.2f, %.2f, %d, %.2f, %.2f]", x, y, sides, radius, rotation );
     }
 
 }

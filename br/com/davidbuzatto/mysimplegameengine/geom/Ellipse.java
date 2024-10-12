@@ -36,7 +36,7 @@ public class Ellipse implements Drawable {
 
     @Override
     public String toString() {
-        return String.format( "Ellipse2D[%.2f, %.2f, %.2f, %.2f]", x, y, radiusH, radiusV );
+        return String.format( "Ellipse[%.2f, %.2f, %.2f, %.2f]", x, y, radiusH, radiusV );
     }
 
 }

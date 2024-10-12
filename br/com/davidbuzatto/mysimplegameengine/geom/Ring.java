@@ -46,7 +46,7 @@ public class Ring implements Drawable {
 
     @Override
     public String toString() {
-        return String.format( "Ring2D[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %d]", x, y, innerRadius, outerRadius, startAngle, endAngle, segments );
+        return String.format( "Ring[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %d]", x, y, innerRadius, outerRadius, startAngle, endAngle, segments );
     }
 
 }

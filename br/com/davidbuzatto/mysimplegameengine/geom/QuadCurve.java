@@ -30,17 +30,17 @@ public class QuadCurve implements Drawable {
 
     @Override
     public void draw( Engine engine, Color color ) {
-        engine.drawSplineSegmentBezierQuadratic( this, color );
+        engine.drawQuadCurve( this, color );
     }
 
     @Override
     public void fill( Engine engine, Color color ) {
-        engine.drawSplineSegmentBezierQuadratic( this, color );
+        engine.fillQuadCurve( this, color );
     }
 
     @Override
     public String toString() {
-        return String.format( "QuadCurve2D[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f]", x1, y1, cx, cy, x2, x2 );
+        return String.format( "QuadCurve[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f]", x1, y1, cx, cy, x2, x2 );
     }
 
 }

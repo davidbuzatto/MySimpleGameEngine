@@ -38,7 +38,7 @@ public class RoundRectangle implements Drawable {
 
     @Override
     public String toString() {
-        return String.format( "RoundRectangle2D[%.2f, %.2f, %.2f, %.2f, %.2f]", x, y, width, height, roundness );
+        return String.format( "RoundRectangle[%.2f, %.2f, %.2f, %.2f, %.2f]", x, y, width, height, roundness );
     }
 
 }

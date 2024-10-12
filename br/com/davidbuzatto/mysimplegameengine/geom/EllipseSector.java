@@ -10,7 +10,7 @@ import java.awt.Color;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class Arc implements Drawable {
+public class EllipseSector implements Drawable {
     
     public double x;
     public double y;
@@ -19,7 +19,7 @@ public class Arc implements Drawable {
     public double startAngle;
     public double endAngle;
 
-    public Arc( double x, double y, double radiusH, double radiusV, double startAngle, double endAngle ) {
+    public EllipseSector( double x, double y, double radiusH, double radiusV, double startAngle, double endAngle ) {
         this.x = x;
         this.y = y;
         this.radiusH = radiusH;
@@ -28,23 +28,19 @@ public class Arc implements Drawable {
         this.endAngle = endAngle;
     }
 
-    public Arc( double x, double y, double radius, double startAngle, double endAngle ) {
-        this( x, y, radius, radius, startAngle, endAngle );
-    }
-
     @Override
     public void draw( Engine engine, Color color ) {
-        engine.drawArc( this, color );
+        engine.drawEllipseSector( this, color );
     }
 
     @Override
     public void fill( Engine engine, Color color ) {
-        engine.fillArc( this, color );
+        engine.fillEllipseSector( this, color );
     }
 
     @Override
     public String toString() {
-        return String.format( "Arc[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f]", x, y, radiusH, radiusV, startAngle, endAngle );
+        return String.format( "EllipseSector[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f]", x, y, radiusH, radiusV, startAngle, endAngle );
     }
 
 }

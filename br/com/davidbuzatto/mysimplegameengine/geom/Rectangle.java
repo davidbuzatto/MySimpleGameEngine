@@ -36,7 +36,7 @@ public class Rectangle implements Drawable {
 
     @Override
     public String toString() {
-        return String.format( "Rectangle2D[%.2f, %.2f, %.2f, %.2f]", x, y, width, height );
+        return String.format( "Rectangle[%.2f, %.2f, %.2f, %.2f]", x, y, width, height );
     }
 
 }

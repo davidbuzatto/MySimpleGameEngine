@@ -34,17 +34,17 @@ public class CubicCurve implements Drawable {
 
     @Override
     public void draw( Engine engine, Color color ) {
-        engine.drawSplineSegmentBezierCubic( this, color );
+        engine.drawCubicCurve( this, color );
     }
 
     @Override
     public void fill( Engine engine, Color color ) {
-        engine.drawSplineSegmentBezierCubic( this, color );
+        engine.fillCubicCurve( this, color );
     }
 
     @Override
     public String toString() {
-        return String.format( "CubicCurve2D[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f]", x1, y1, c1x, c1y, c2x, c2y, x2, x2 );
+        return String.format( "CubicCurve[%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f]", x1, y1, c1x, c1y, c2x, c2y, x2, x2 );
     }
 
 }

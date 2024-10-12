@@ -27,12 +27,12 @@ public class Point implements Drawable {
 
     @Override
     public void fill( Engine engine, Color color ) {
-        engine.drawPixel( this, color );
+        throw new UnsupportedOperationException( "can'f fill a point." );
     }
 
     @Override
     public String toString() {
-        return String.format( "Point2D[%.2f, %.2f]", x, y );
+        return String.format( "Point[%.2f, %.2f]", x, y );
     }
 
 }
