@@ -3,6 +3,7 @@ package br.com.davidbuzatto.mysimplegameengine.utils;
 import br.com.davidbuzatto.mysimplegameengine.geom.*;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 
 /**
  * Classe com métodos estáticos utilitários.
@@ -469,6 +470,26 @@ public class Utils {
      */
     public static Vector pointToVector( Point p ) {
         return new Vector( p.x, p.y );
+    }
+
+    /**
+     * Ontém a coordenada do mouse de um evento do mouse e gera um ponto.
+     * 
+     * @param e O evento do mouse.
+     * @return O ponto onde ocorreu o evento do mouse.
+     */
+    public static Point mouseEventPositionToPoint( MouseEvent e ) {
+        return new Point( e.getX(), e.getY() );
+    }
+
+    /**
+     * Ontém a coordenada do mouse de um evento do mouse e gera um vetor.
+     * 
+     * @param e O evento do mouse.
+     * @return O vetor onde ocorreu o evento do mouse.
+     */
+    public static Vector mouseEventPositionToVector( MouseEvent e ) {
+        return new Vector( e.getX(), e.getY() );
     }
 
     /**
@@ -1148,8 +1169,10 @@ public class Utils {
             double angle = 360.0 / polygon.sides;
 
             for ( int i = 0; i < polygon.sides; i++ ) {
-                points[i].x = polygon.x + Math.cos( Math.toRadians( polygon.rotation + angle * i ) ) * polygon.radius;
-                points[i].y = polygon.y + Math.sin( Math.toRadians( polygon.rotation + angle * i ) ) * polygon.radius;
+                points[i] = new Point(
+                    polygon.x + Math.cos( Math.toRadians( polygon.rotation + angle * i ) ) * polygon.radius,
+                    polygon.y + Math.sin( Math.toRadians( polygon.rotation + angle * i ) ) * polygon.radius
+                );
             }
 
             for ( int i = 0, j = polygon.sides - 1; i < polygon.sides; j = i++ ) {
