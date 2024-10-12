@@ -1,4 +1,2 @@
 Funções de colisão
-    - organizar
-    - documentar
     - testar

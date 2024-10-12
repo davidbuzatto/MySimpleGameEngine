@@ -6,7 +6,8 @@ import java.awt.Color;
 
 /**
  * Classe com métodos estáticos utilitários.
- * As implementações são baseadas na raylib e em seus módulos (www.raylib.com)
+ * Várias implementações são baseadas na raylib e em seus módulos
+ * (www.raylib.com).
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -493,13 +494,13 @@ public class Utils {
      * @param p1y coordenada y do ponto inicial.
      * @param p2x coordenada x do ponto final.
      * @param p2y coordenada y do ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da linha.
      */
-    public static Point getPointAtLine( double p1x, double p1y, double p2x, double p2y, double t ) {
+    public static Point getPointAtLine( double p1x, double p1y, double p2x, double p2y, double amount ) {
 
-        double x = p1x * ( 1.0f - t ) + p2x * t;
-        double y = p1y * ( 1.0f - t ) + p2y * t;
+        double x = p1x * ( 1.0 - amount ) + p2x * amount;
+        double y = p1y * ( 1.0 - amount ) + p2y * amount;
 
         return new Point( x, y );
         
@@ -508,36 +509,36 @@ public class Utils {
     /**
      * Obtém um ponto dentro de uma linha.
      * 
-     * @param p1 ponto final.
-     * @param p2 ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param p1 ponto inicial da linha.
+     * @param p2 ponto final da linha.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da linha.
      */
-    public static Point getPointAtLine( Vector p1, Vector p2, double t ) {
-        return getPointAtLine( p1.x, p1.y, p2.x, p2.y, t )        ;
+    public static Point getPointAtLine( Point p1, Point p2, double amount ) {
+        return getPointAtLine( p1.x, p1.y, p2.x, p2.y, amount )        ;
     }
 
     /**
      * Obtém um ponto dentro de uma linha.
      * 
-     * @param p1 ponto final.
-     * @param p2 ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param v1 vetor do ponto inicial da linha.
+     * @param v2 vetor do ponto final da linha.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da linha.
      */
-    public static Point getPointAtLine( Point p1, Point p2, double t ) {
-        return getPointAtLine( p1.x, p1.y, p2.x, p2.y, t )        ;
+    public static Point getPointAtLine( Vector v1, Vector v2, double amount ) {
+        return getPointAtLine( v1.x, v1.y, v2.x, v2.y, amount )        ;
     }
 
     /**
      * Obtém um ponto dentro de uma linha.
      * 
      * @param line uma linha.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da linha.
      */
-    public static Point getPointAtLine( Line line, double t ) {
-        return getPointAtLine( line.x1, line.y1, line.x2, line.y2, t );
+    public static Point getPointAtLine( Line line, double amount ) {
+        return getPointAtLine( line.x1, line.y1, line.x2, line.y2, amount );
     }
 
     /**
@@ -549,14 +550,14 @@ public class Utils {
      * @param cy coordenada y do ponto de controle.
      * @param p2x coordenada x do ponto final.
      * @param p2y coordenada y do ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtQuadCurve( double p1x, double p1y, double cx, double cy, double p2x, double p2y, double t ) {
+    public static Point getPointAtQuadCurve( double p1x, double p1y, double cx, double cy, double p2x, double p2y, double amount ) {
 
-        double a = Math.pow( 1.0 - t, 2 );
-        double b = 2.0 * ( 1.0 - t ) * t;
-        double c = Math.pow( t, 2 );
+        double a = Math.pow( 1.0 - amount, 2 );
+        double b = 2.0 * ( 1.0 - amount ) * amount;
+        double c = Math.pow( amount, 2 );
 
         double x = a * p1x + b * cx + c * p2x;
         double y = a * p1y + b * cy + c * p2y;
@@ -571,35 +572,35 @@ public class Utils {
      * @param p1 ponto inicial.
      * @param c ponto de controle.
      * @param p2 ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtQuadCurve( Vector p1, Vector c, Vector p2, double t ) {
-        return getPointAtQuadCurve( p1.x, p1.y, c.x, c.y, p2.x, p2.y, t );
+    public static Point getPointAtQuadCurve( Point p1, Point c, Point p2, double amount ) {
+        return getPointAtQuadCurve( p1.x, p1.y, c.x, c.y, p2.x, p2.y, amount );
     }
 
     /**
      * Obtém um ponto dentro de uma curva quadrática (curva Bézier quadrática).
      * 
-     * @param p1 ponto inicial.
-     * @param c ponto de controle.
-     * @param p2 ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param v1 vetor do ponto inicial da curva.
+     * @param c vetor do ponto de controle da curva.
+     * @param v2 vetor do ponto final da curva.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtQuadCurve( Point p1, Point c, Point p2, double t ) {
-        return getPointAtQuadCurve( p1.x, p1.y, c.x, c.y, p2.x, p2.y, t );
+    public static Point getPointAtQuadCurve( Vector v1, Vector c, Vector v2, double amount ) {
+        return getPointAtQuadCurve( v1.x, v1.y, c.x, c.y, v2.x, v2.y, amount );
     }
     
     /**
      * Obtém um ponto dentro de uma curva quadrática (curva Bézier quadrática).
      * 
      * @param quadCurve uma curva Bézier quadrática.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtQuadCurve( QuadCurve quadCurve, double t ) {
-        return getPointAtQuadCurve( quadCurve.x1, quadCurve.y1, quadCurve.cx, quadCurve.cy, quadCurve.x2, quadCurve.y2, t );
+    public static Point getPointAtQuadCurve( QuadCurve quadCurve, double amount ) {
+        return getPointAtQuadCurve( quadCurve.x1, quadCurve.y1, quadCurve.cx, quadCurve.cy, quadCurve.x2, quadCurve.y2, amount );
     }
 
     /**
@@ -613,15 +614,15 @@ public class Utils {
      * @param c2y coordenada y do segundo ponto de controle.
      * @param p2x coordenada x do ponto final.
      * @param p2y coordenada y do ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtCubicCurve( double p1x, double p1y, double c1x, double c1y, double c2x, double c2y, double p2x, double p2y, double t ) {
+    public static Point getPointAtCubicCurve( double p1x, double p1y, double c1x, double c1y, double c2x, double c2y, double p2x, double p2y, double amount ) {
 
-        double a = Math.pow( 1.0 - t, 3 );
-        double b = 3.0 * Math.pow( 1.0 - t, 2 ) * t;
-        double c = 3.0 * ( 1.0 - t ) * Math.pow( t, 2 );
-        double d = Math.pow( t, 3 );
+        double a = Math.pow( 1.0 - amount, 3 );
+        double b = 3.0 * Math.pow( 1.0 - amount, 2 ) * amount;
+        double c = 3.0 * ( 1.0 - amount ) * Math.pow( amount, 2 );
+        double d = Math.pow( amount, 3 );
 
         double x = a * p1x + b * c1x + c * c2x + d * p2x;
         double y = a * p1y + b * c1y + c * c2y + d * p2y;
@@ -637,48 +638,62 @@ public class Utils {
      * @param c1 primeiro ponto de controle.
      * @param c2 segundo ponto de controle.
      * @param p2 ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtCubicCurve( Vector p1, Vector c1, Vector c2, Vector p2, double t ) {
-        return getPointAtCubicCurve( p1.x, p1.y, c1.x, c1.y, c2.x, c2.y, p2.x, p2.y, t );
+    public static Point getPointAtCubicCurve( Point p1, Point c1, Point c2, Point p2, double amount ) {
+        return getPointAtCubicCurve( p1.x, p1.y, c1.x, c1.y, c2.x, c2.y, p2.x, p2.y, amount );
     }
 
     /**
      * Obtém um ponto dentro de uma curva cúbica (curva Bézier cúbica).
      * 
-     * @param p1 ponto inicial.
-     * @param c1 primeiro ponto de controle.
-     * @param c2 segundo ponto de controle.
-     * @param p2 ponto final.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param v1 vetor do ponto inicial da curva.
+     * @param c1 vetor do primeiro ponto de controle da curva.
+     * @param c2 vetor do segundo ponto de controle da curva.
+     * @param v2 vetor do ponto final da curva.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtCubicCurve( Point p1, Point c1, Point c2, Point p2, double t ) {
-        return getPointAtCubicCurve( p1.x, p1.y, c1.x, c1.y, c2.x, c2.y, p2.x, p2.y, t );
+    public static Point getPointAtCubicCurve( Vector v1, Vector c1, Vector c2, Vector v2, double amount ) {
+        return getPointAtCubicCurve( v1.x, v1.y, c1.x, c1.y, c2.x, c2.y, v2.x, v2.y, amount );
     }
 
     /**
      * Obtém um ponto dentro de uma curva cúbica (curva Bézier cúbica).
      * 
      * @param cubicCurve uma curva Bézier cúbica.
-     * @param t Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
+     * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtCubicCurve( CubicCurve cubicCurve, double t ) {
-        return getPointAtCubicCurve( cubicCurve.x1, cubicCurve.y1, cubicCurve.c1x, cubicCurve.c1y, cubicCurve.c2x, cubicCurve.c2y, cubicCurve.x2, cubicCurve.y2, t );
+    public static Point getPointAtCubicCurve( CubicCurve cubicCurve, double amount ) {
+        return getPointAtCubicCurve( cubicCurve.x1, cubicCurve.y1, cubicCurve.c1x, cubicCurve.c1y, cubicCurve.c2x, cubicCurve.c2y, cubicCurve.x2, cubicCurve.y2, amount );
     }
 
+    /**
+     * Verifica se dois retângulos colidiram.
+     * 
+     * @param rec1 Um retângulo.
+     * @param rec2 Outro retângulo.
+     * @return Verdadeiro caso os retângulos tenham colidido, falso caso contrário.
+     */
     public static boolean checkCollisionRectangles( Rectangle rec1, Rectangle rec2 ) {
         return ( 
-            ( rec1.x < ( rec2.x + rec2.width ) && 
-            ( rec1.x + rec1.width ) > rec2.x ) &&
-            ( rec1.y < ( rec2.y + rec2.height ) &&
-            ( rec1.y + rec1.height ) > rec2.y )
+            ( rec1.x < ( rec2.x + rec2.width ) &&  ( rec1.x + rec1.width ) > rec2.x ) &&
+            ( rec1.y < ( rec2.y + rec2.height ) && ( rec1.y + rec1.height ) > rec2.y )
         );
     }
 
-    public static boolean checkCollisionCircles( Vector center1, double radius1, Vector center2, double radius2 ) {
+    /**
+     * Verifica se dois círculos definidos por pontos e raios colidiram.
+     * 
+     * @param center1 Ponto do centro do primeiro círculo.
+     * @param radius1 Raio do primeiro círculo.
+     * @param center2 Ponto do centro do segundo círculo.
+     * @param radius2 Raio do segundo círculo.
+     * @return Verdadeiro caso os círculos tenham colidido, falso caso contrário.
+     */
+    public static boolean checkCollisionCircles( Point center1, double radius1, Point center2, double radius2 ) {
         
         double dx = center2.x - center1.x;
         double dy = center2.y - center1.y;
@@ -690,14 +705,45 @@ public class Utils {
 
     }
 
+    /**
+     * Verifica se dois círculos definidos por vetores e raios colidiram.
+     * 
+     * @param center1 Vetor do centro do primeiro círculo.
+     * @param radius1 Raio do primeiro círculo.
+     * @param center2 Vetor do centro do segundo círculo.
+     * @param radius2 Raio do segundo círculo.
+     * @return Verdadeiro caso os círculos tenham colidido, falso caso contrário.
+     */
+    public static boolean checkCollisionCircles( Vector center1, double radius1, Vector center2, double radius2 ) {
+        return checkCollisionCircles( vectorToPoint( center1 ), radius1, vectorToPoint( center2 ), radius2 );
+
+    }
+
+    /**
+     * Verifica se dois círculos colidiram.
+     * 
+     * @param circle1 Um círculo.
+     * @param circle2 Outro círculo.
+     * @return Verdadeiro caso os círculos tenham colidido, falso caso contrário.
+     */
     public static boolean checkCollisionCircles( Circle circle1, Circle circle2 ) {
         return checkCollisionCircles( 
-            new Vector( circle1.x, circle1.y ), circle1.radius,
-            new Vector( circle2.x, circle2.y ), circle2.radius
+            new Point( circle1.x, circle1.y ), circle1.radius,
+            new Point( circle2.x, circle2.y ), circle2.radius
         );
     }
     
-    public static boolean checkCollisionCircleLine( Vector center, double radius, Vector p1, Vector p2 ) {
+    /**
+     * Verifica se um círculo, definido por um ponto e pelo raio, colidiu
+     * com uma linha definida por dois pontos.
+     * 
+     * @param center Ponto do centro do círculo.
+     * @param radius Raio do círculo.
+     * @param p1 Ponto inicial da linha.
+     * @param p2 Ponto final da linha.
+     * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleLine( Point center, double radius, Point p1, Point p2 ) {
 
         double dx = p1.x - p2.x;
         double dy = p1.y - p2.y;
@@ -712,8 +758,8 @@ public class Utils {
 
         if ( dotProduct > 1.0 ) {
             dotProduct = 1.0;
-        } else if ( dotProduct < 0.0f ) {
-            dotProduct = 0.0f;
+        } else if ( dotProduct < 0.0 ) {
+            dotProduct = 0.0;
         }
 
         double dx2 = ( p1.x - ( dotProduct * ( dx ) ) ) - center.x;
@@ -724,19 +770,97 @@ public class Utils {
 
     }
 
-    public static boolean checkCollisionCircleLine( Circle circle, Vector p1, Vector p2 ) {
-        return checkCollisionCircleLine( new Vector( circle.x, circle.y ), circle.radius, p1, p2 );
+    /**
+     * Verifica se um círculo, definido por um ponto e pelo raio, colidiu
+     * com uma linha definida por dois vetores.
+     * 
+     * @param center Ponto do centro do círculo.
+     * @param radius Raio do círculo.
+     * @param p1 Vetor inicial da linha.
+     * @param p2 Vetor final da linha.
+     * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleLine( Point center, double radius, Vector p1, Vector p2 ) {
+        return checkCollisionCircleLine( center, radius, vectorToPoint( p1 ), vectorToPoint( p2 ) );
     }
 
+    /**
+     * Verifica se um círculo, definido por um vetor e pelo raio, colidiu
+     * com uma linha definida por dois pontos.
+     * 
+     * @param center Vetor do centro do círculo.
+     * @param radius Raio do círculo.
+     * @param p1 Ponto inicial da linha.
+     * @param p2 Ponto final da linha.
+     * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleLine( Vector center, double radius, Point p1, Point p2 ) {
+        return checkCollisionCircleLine( vectorToPoint( center ), radius, p1, p2 );
+    }
+
+    /**
+     * Verifica se um círculo, definido por um vetor e pelo raio, colidiu
+     * com uma linha definida por dois vetores.
+     * 
+     * @param center Vetor do centro do círculo.
+     * @param radius Raio do círculo.
+     * @param p1 Vetor inicial da linha.
+     * @param p2 Vetor final da linha.
+     * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleLine( Vector center, double radius, Vector p1, Vector p2 ) {
+        return checkCollisionCircleLine( vectorToPoint( center ), radius, vectorToPoint( p1 ), vectorToPoint( p2 ) );
+    }
+
+    /**
+     * Verifica se um círculo colidiu com uma linha definida por dois pontos.
+     * 
+     * @param circle O círculo.
+     * @param p1 Ponto inicial da linha.
+     * @param p2 Ponto final da linha.
+     * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleLine( Circle circle, Point p1, Point p2 ) {
+        return checkCollisionCircleLine( new Point( circle.x, circle.y ), circle.radius, p1, p2 );
+    }
+
+    /**
+     * Verifica se um círculo colidiu com uma linha definida por dois vetores.
+     * 
+     * @param circle O círculo.
+     * @param p1 Vetor inicial da linha.
+     * @param p2 Vetor final da linha.
+     * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleLine( Circle circle, Vector p1, Vector p2 ) {
+        return checkCollisionCircleLine( new Point( circle.x, circle.y ), circle.radius, vectorToPoint( p1 ), vectorToPoint( p2 ) );
+    }
+
+    /**
+     * Verifica se um círculo colidiu com uma linha.
+     * 
+     * @param circle O círculo.
+     * @param line A linha.
+     * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
+     */
     public static boolean checkCollisionCircleLine( Circle circle, Line line ) {
         return checkCollisionCircleLine( 
-            new Vector( circle.x, circle.y ), circle.radius,
-            new Vector( line.x1, line.y1 ), 
-            new Vector( line.x2, line.y2 )
+            new Point( circle.x, circle.y ), circle.radius,
+            new Point( line.x1, line.y1 ), 
+            new Point( line.x2, line.y2 )
         );
     }
 
-    public static boolean checkCollisionCircleRectangle( Vector center, double radius, Rectangle rec ) {
+    /**
+     * Verifica se um círculo, definido por um ponto e pelo raio, colidiu
+     * com um retângulo.
+     * 
+     * @param center Ponto do centro do círculo.
+     * @param radius Raio do círculo.
+     * @param rec Um retângulo.
+     * @return Verdadeiro caso o círculo tenha colidido com o retângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleRectangle( Point center, double radius, Rectangle rec ) {
 
         double recCenterX = rec.x + rec.width / 2.0;
         double recCenterY = rec.y + rec.height / 2.0;
@@ -764,54 +888,165 @@ public class Utils {
         return cornerDistanceSq <= ( radius * radius );
 
     }
+    
+    /**
+     * Verifica se um círculo, definido por um vetor e pelo raio, colidiu
+     * com um retângulo.
+     * 
+     * @param center Vetor do centro do círculo.
+     * @param radius Raio do círculo.
+     * @param rec Um retângulo.
+     * @return Verdadeiro caso o círculo tenha colidido com o retângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionCircleRectangle( Vector center, double radius, Rectangle rec ) {
+        return checkCollisionCircleRectangle( vectorToPoint( center ), radius, rec );
+    }
 
+    /**
+     * Verifica se um círculo colidiu com um retângulo.
+     * 
+     * @param circle O círculo.
+     * @param rec O retângulo.
+     * @return Verdadeiro caso o círculo tenha colidido com o retângulo, falso caso contrário.
+     */
     public static boolean checkCollisionCircleRectangle( Circle circle, Rectangle rec ) {
-        return checkCollisionCircleRectangle( new Vector( circle.x, circle.y ), circle.radius, rec );
+        return checkCollisionCircleRectangle( new Point( circle.x, circle.y ), circle.radius, rec );
     }
 
+    /**
+     * Verifica se um ponto, definido pela coordenada inicial, colidiu com um retângulo.
+     * 
+     * @param x Coordenada x do ponto.
+     * @param y Coordenada y do ponto.
+     * @param rec O retângulo.
+     * @return Verdadeiro caso o ponto tenha colidido com o retângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionPointRectangle( double x, double y, Rectangle rec ) {
+        return ( 
+            ( x >= rec.x ) && 
+            ( x < ( rec.x + rec.width ) ) && 
+            ( y >= rec.y ) && 
+            ( y < ( rec.y + rec.height ) )
+        );
+    }
+
+    /**
+     * Verifica se um ponto colidiu com um retângulo.
+     * 
+     * @param point O ponto.
+     * @param rec O retângulo.
+     * @return Verdadeiro caso o ponto tenha colidido com o retângulo, falso caso contrário.
+     */
     public static boolean checkCollisionPointRectangle( Point point, Rectangle rec ) {
-        return ( 
-            ( point.x >= rec.x ) && 
-            ( point.x < ( rec.x + rec.width ) ) && 
-            ( point.y >= rec.y ) && 
-            ( point.y < ( rec.y + rec.height ) )
-        );
+        return checkCollisionPointRectangle( point.x, point.y, rec );
     }
 
+    /**
+     * Verifica se um vetor colidiu com um retângulo.
+     * 
+     * @param vector O vetor.
+     * @param rec O retângulo.
+     * @return Verdadeiro caso o ponto tenha colidido com o retângulo, falso caso contrário.
+     */
     public static boolean checkCollisionVectorRectangle( Vector vector, Rectangle rec ) {
-        return ( 
-            ( vector.x >= rec.x ) && 
-            ( vector.x < ( rec.x + rec.width ) ) && 
-            ( vector.y >= rec.y ) && 
-            ( vector.y < ( rec.y + rec.height ) )
-        );
+        return checkCollisionPointRectangle( vector.x, vector.y, rec );
     }
 
+    /**
+     * Verifica se um ponto colidiu com um círculo.
+     * 
+     * @param x Coordenada x do ponto.
+     * @param y Coordenada y do ponto.
+     * @param center Ponto do centro do círculo.
+     * @param radius Raio do círculo.
+     * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
+     */
+    public static boolean checkCollisionPointCircle( double x, double y, Point center, double radius ) {
+        double distanceSquared = ( x - center.x ) * ( x - center.x ) + 
+                                 ( y - center.y ) * ( y - center.y );
+        return distanceSquared <= radius * radius;
+    }
+
+    /**
+     * Verifica se um ponto colidiu com um círculo.
+     * 
+     * @param point O ponto.
+     * @param center Ponto do centro do círculo.
+     * @param radius Raio do círculo.
+     * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
+     */
     public static boolean checkCollisionPointCircle( Point point, Point center, double radius ) {
-        double distanceSquared = ( point.x - center.x ) * ( point.x - center.x ) + 
-                                 ( point.y - center.y ) * ( point.y - center.y );
-        return distanceSquared <= radius * radius;
+        return checkCollisionPointCircle( point.x, point.y, center, radius );
     }
 
+    /**
+     * Verifica se um ponto colidiu com um círculo.
+     * 
+     * @param point O ponto.
+     * @param center Vetor do centro do círculo.
+     * @param radius Raio do círculo.
+     * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
+     */
+    public static boolean checkCollisionPointCircle( Point point, Vector center, double radius ) {
+        return checkCollisionPointCircle( point.x, point.y, vectorToPoint( center ), radius );
+    }
+
+    /**
+     * Verifica se um ponto colidiu com um círculo.
+     * 
+     * @param point O ponto.
+     * @param circle O círculo.
+     * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
+     */
     public static boolean checkCollisionPointCircle( Point point, Circle circle ) {
-        double distanceSquared = ( point.x - circle.x ) * ( point.x - circle.x ) + 
-                                 ( point.y - circle.y ) * ( point.y - circle.y );
-        return distanceSquared <= circle.radius * circle.radius;
+        return checkCollisionPointCircle( point.x, point.y, new Point( circle.x, circle.y ), circle.radius );
     }
 
+    /**
+     * Verifica se um vetor colidiu com um círculo.
+     * 
+     * @param vector O vetor.
+     * @param center Ponto do centro do círculo.
+     * @param radius Raio do círculo.
+     * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
+     */
+    public static boolean checkCollisionVectorCircle( Vector vector, Point center, double radius ) {
+        return checkCollisionPointCircle( vector.x, vector.y, center, radius );
+    }
+    
+    /**
+     * Verifica se um vetor colidiu com um círculo.
+     * 
+     * @param vector O vetor.
+     * @param center Vetor do centro do círculo.
+     * @param radius Raio do círculo.
+     * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
+     */
     public static boolean checkCollisionVectorCircle( Vector vector, Vector center, double radius ) {
-        double distanceSquared = ( vector.x - center.x ) * ( vector.x - center.x ) + 
-                                 ( vector.y - center.y ) * ( vector.y - center.y );
-        return distanceSquared <= radius * radius;
+        return checkCollisionPointCircle( vector.x, vector.y, vectorToPoint( center ), radius );
     }
 
+    /**
+     * Verifica se um vetor colidiu com um círculo.
+     * 
+     * @param vector O vetor.
+     * @param circle O círculo.
+     * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
+     */
     public static boolean checkCollisionVectorCircle( Vector vector, Circle circle ) {
-        double distanceSquared = ( vector.x - circle.x ) * ( vector.x - circle.x ) + 
-                                 ( vector.y - circle.y ) * ( vector.y - circle.y );
-        return distanceSquared <= circle.radius * circle.radius;
+        return checkCollisionPointCircle( vector.x, vector.y, new Point( circle.x, circle.y ), circle.radius );
     }
 
-    public static boolean checkCollisionPointTriangle( Point point, Vector p1, Vector p2, Vector p3 ) {
+    /**
+     * Verifica se um ponto colidiu com um triângulo.
+     * 
+     * @param point O ponto.
+     * @param p1 Ponto do primeiro vértice do triângulo.
+     * @param p2 Ponto do segundo vértice do triângulo.
+     * @param p3 Ponto do terceiro vértice do triângulo.
+     * @return Verdadeiro caso o ponto tenha colidido com o triângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionPointTriangle( Point point, Point p1, Point p2, Point p3 ) {
 
         double alpha = ((p2.y - p3.y)*(point.x - p3.x) + (p3.x - p2.x)*(point.y - p3.y)) /
                        ((p2.y - p3.y)*(p1.x - p3.x) + (p3.x - p2.x)*(p1.y - p3.y));
@@ -825,29 +1060,85 @@ public class Utils {
 
     }
 
-    public static boolean checkCollisionVectorTriangle( Vector vector, Vector p1, Vector p2, Vector p3 ) {
+    /**
+     * Verifica se um ponto colidiu com um triângulo.
+     * 
+     * @param point O ponto.
+     * @param p1 Vetor do primeiro vértice do triângulo.
+     * @param p2 Vetor do segundo vértice do triângulo.
+     * @param p3 Vetor do terceiro vértice do triângulo.
+     * @return Verdadeiro caso o ponto tenha colidido com o triângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionPointTriangle( Point point, Vector p1, Vector p2, Vector p3 ) {
+        return checkCollisionPointTriangle( point, vectorToPoint( p1 ), vectorToPoint( p2 ), vectorToPoint( p3 ) );
+    }
+
+    /**
+     * Verifica se um ponto colidiu com um triângulo.
+     * 
+     * @param point O ponto.
+     * @param triangle O triângulo.
+     * @return Verdadeiro caso o vetor tenha colidido com o triângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionPointTriangle( Point point, Triangle triangle ) {
+        return checkCollisionPointTriangle( 
+            point, 
+            new Point( triangle.x1, triangle.y1 ),
+            new Point( triangle.x2, triangle.y2 ),
+            new Point( triangle.x3, triangle.y3 )
+        );
+    }
+
+    /**
+     * Verifica se um vetor colidiu com um triângulo.
+     * 
+     * @param vector O vetor.
+     * @param p1 Ponto do primeiro vértice do triângulo.
+     * @param p2 Ponto do segundo vértice do triângulo.
+     * @param p3 Ponto do terceiro vértice do triângulo.
+     * @return Verdadeiro caso o vetor tenha colidido com o triângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionVectorTriangle( Vector vector, Point p1, Point p2, Point p3 ) {
         return checkCollisionPointTriangle( vectorToPoint( vector ), p1, p2, p3 );
     }
 
-    public static boolean checkCollisionPointTriangle( Point point, Triangle triangle ) {
-
-        double alpha = ((triangle.y2 - triangle.y3)*(point.x - triangle.x3) + (triangle.x3 - triangle.x2)*(point.y - triangle.y3)) /
-                       ((triangle.y2 - triangle.y3)*(triangle.x1 - triangle.x3) + (triangle.x3 - triangle.x2)*(triangle.y1 - triangle.y3));
-
-        double beta = ((triangle.y3 - triangle.y1)*(point.x - triangle.x3) + (triangle.x1 - triangle.x3)*(point.y - triangle.y3)) /
-                      ((triangle.y2 - triangle.y3)*(triangle.x1 - triangle.x3) + (triangle.x3 - triangle.x2)*(triangle.y1 - triangle.y3));
-
-        double gamma = 1.0 - alpha - beta;
-
-        return ( alpha > 0 ) && ( beta > 0 ) && ( gamma > 0 );
-
+    /**
+     * Verifica se um vetor colidiu com um triângulo.
+     * 
+     * @param vector O vetor.
+     * @param p1 Vetor do primeiro vértice do triângulo.
+     * @param p2 Vetor do segundo vértice do triângulo.
+     * @param p3 Vetor do terceiro vértice do triângulo.
+     * @return Verdadeiro caso o vetor tenha colidido com o triângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionVectorTriangle( Vector vector, Vector p1, Vector p2, Vector p3 ) {
+        return checkCollisionPointTriangle( vectorToPoint( vector ), vectorToPoint( p1 ), vectorToPoint( p2 ), vectorToPoint( p3 ) );
     }
 
-    public static boolean checkCollisionPointTriangle( Vector point, Triangle triangle ) {
-        return checkCollisionPointTriangle( vectorToPoint( point ), triangle );
+    /**
+     * Verifica se um vetor colidiu com um triângulo.
+     * 
+     * @param vector O vetor.
+     * @param triangle O triângulo.
+     * @return Verdadeiro caso o vetor tenha colidido com o triângulo, falso caso contrário.
+     */
+    public static boolean checkCollisionPointTriangle( Vector vector, Triangle triangle ) {
+        return checkCollisionPointTriangle( 
+            vectorToPoint( vector ), 
+            new Point( triangle.x1, triangle.y1 ),
+            new Point( triangle.x2, triangle.y2 ),
+            new Point( triangle.x3, triangle.y3 )
+        );
     }
 
-    public static boolean checkCollisionPointPolygon( Vector point, Polygon polygon ) {
+    /**
+     * Verifica se um ponto colidiu com um polígono regular.
+     * 
+     * @param point O ponto.
+     * @param polygon O polígono.
+     * @return Verdadeiro caso o ponto tenha colidido com o polígono, falso caso contrário.
+     */
+    public static boolean checkCollisionPointPolygon( Point point, Polygon polygon ) {
 
         boolean inside = false;
 
@@ -874,7 +1165,27 @@ public class Utils {
 
     }
 
-    public static Vector checkCollisionLines( Vector startPos1, Vector endPos1, Vector startPos2, Vector endPos2 ) {
+    /**
+     * Verifica se um vetor colidiu com um polígono regular.
+     * 
+     * @param vector O vetor.
+     * @param polygon O polígono.
+     * @return Verdadeiro caso o ponto tenha colidido com o polígono, falso caso contrário.
+     */
+    public static boolean checkCollisionVectorPolygon( Vector vector, Polygon polygon ) {
+        return checkCollisionPointPolygon( vectorToPoint( vector ), polygon );
+    }
+
+    /**
+     * Verifica a colisão entre duas linhas.
+     * 
+     * @param startPos1 Ponto inicial da primeira linha.
+     * @param endPos1 Ponto final da segunda linha.
+     * @param startPos2 Ponto inicial da segunda linha.
+     * @param endPos2 Ponto final da segunda linha.
+     * @return Retorna o ponto de colisão caso as linhas tenham se interceptado ou nulo caso contrário.
+     */
+    public static Point checkCollisionLines( Point startPos1, Point endPos1, Point startPos2, Point endPos2 ) {
         
         boolean collision = false;
 
@@ -882,8 +1193,8 @@ public class Utils {
         double xi = 0;
         double yi = 0;
 
-        if (Math.abs(div) >= FLT_EPSILON)
-        {
+        if ( Math.abs(div) >= FLT_EPSILON ) {
+
             collision = true;
 
             xi = ((startPos2.x - endPos2.x)*(startPos1.x*endPos1.y - startPos1.y*endPos1.x) - (startPos1.x - endPos1.x)*(startPos2.x*endPos2.y - startPos2.y*endPos2.x))/div;
@@ -892,19 +1203,59 @@ public class Utils {
             if (((Math.abs(startPos1.x - endPos1.x) > FLT_EPSILON) && (xi < Math.min(startPos1.x, endPos1.x) || (xi > Math.max(startPos1.x, endPos1.x)))) ||
                 ((Math.abs(startPos2.x - endPos2.x) > FLT_EPSILON) && (xi < Math.min(startPos2.x, endPos2.x) || (xi > Math.max(startPos2.x, endPos2.x)))) ||
                 ((Math.abs(startPos1.y - endPos1.y) > FLT_EPSILON) && (yi < Math.min(startPos1.y, endPos1.y) || (yi > Math.max(startPos1.y, endPos1.y)))) ||
-                ((Math.abs(startPos2.y - endPos2.y) > FLT_EPSILON) && (yi < Math.min(startPos2.y, endPos2.y) || (yi > Math.max(startPos2.y, endPos2.y))))) collision = false;
+                ((Math.abs(startPos2.y - endPos2.y) > FLT_EPSILON) && (yi < Math.min(startPos2.y, endPos2.y) || (yi > Math.max(startPos2.y, endPos2.y))))) {
+                collision = false;
+            }
 
         }
 
         if ( collision ) {
-            return new Vector( xi, yi );
+            return new Point( xi, yi );
         }
 
         return null;
 
     }
 
-    public static boolean checkCollisionPointLine( Vector point, Vector p1, Vector p2, int threshold ) {
+    /**
+     * Verifica a colisão entre duas linhas.
+     * 
+     * @param startPos1 Vetor inicial da primeira linha.
+     * @param endPos1 Vetor final da segunda linha.
+     * @param startPos2 Vetor inicial da segunda linha.
+     * @param endPos2 Vetor final da segunda linha.
+     * @return Retorna o ponto de colisão caso as linhas tenham se interceptado ou nulo caso contrário.
+     */
+    public static Point checkCollisionLines( Vector startPos1, Vector endPos1, Vector startPos2, Vector endPos2 ) {
+        return checkCollisionLines( vectorToPoint( startPos1 ), vectorToPoint( endPos1 ), vectorToPoint( startPos2 ), vectorToPoint( endPos2 ) );
+    }
+
+    /**
+     * Verifica a colisão entre duas linhas.
+     * 
+     * @param line1 Uma linha.
+     * @param line2 Outra linha.
+     * @return Retorna o ponto de colisão caso as linhas tenham se interceptado ou nulo caso contrário.
+     */
+    public static Point checkCollisionLines( Line line1, Line line2 ) {
+        return checkCollisionLines(
+            new Point( line1.x1, line1.y1 ),
+            new Point( line1.x2, line1.y2 ),
+            new Point( line2.x1, line2.y1 ),
+            new Point( line2.x2, line2.y2 )
+        );
+    }
+
+    /**
+     * Verifica a colisão de um ponto com uma linha.
+     * 
+     * @param point O ponto.
+     * @param p1 O ponto inicial da linha.
+     * @param p2 O ponto final da linha.
+     * @param threshold O limite de proximidade entre o ponto e a linha.
+     * @return Verdadeiro caso o ponto tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionPointLine( Point point, Point p1, Point p2, int threshold ) {
 
         double dxc = point.x - p1.x;
         double dyc = point.y - p1.y;
@@ -923,6 +1274,76 @@ public class Utils {
 
     }
 
+    /**
+     * Verifica a colisão de um ponto com uma linha.
+     * 
+     * @param point O ponto.
+     * @param v1 O vetor inicial da linha.
+     * @param v2 O vetor final da linha.
+     * @param threshold O limite de proximidade entre o ponto e a linha.
+     * @return Verdadeiro caso o ponto tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionPointLine( Point point, Vector v1, Vector v2, int threshold ) {
+        return checkCollisionPointLine( point, vectorToPoint( v1 ), vectorToPoint( v2 ), threshold );
+    }
+
+    /**
+     * Verifica a colisão de um ponto com uma linha.
+     * 
+     * @param point O ponto.
+     * @param line A linha.
+     * @param threshold O limite de proximidade entre o ponto e a linha.
+     * @return Verdadeiro caso o ponto tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionPointLine( Point point, Line line, int threshold ) {
+        return checkCollisionPointLine( point, new Point( line.x1, line.y1 ), new Point( line.x2, line.y2 ), threshold );
+    }
+
+    /**
+     * Verifica a colisão de um vetor com uma linha.
+     * 
+     * @param vector O vetor.
+     * @param p1 O ponto inicial da linha.
+     * @param p2 O ponto final da linha.
+     * @param threshold O limite de proximidade entre o vetor e a linha.
+     * @return Verdadeiro caso o vetor tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionVectorLine( Vector vector, Point p1, Point p2, int threshold ) {
+        return checkCollisionPointLine( vectorToPoint( vector ), p1, p2, threshold );
+    }
+
+    /**
+     * Verifica a colisão de um vetor com uma linha.
+     * 
+     * @param vector O vetor.
+     * @param v1 O vetor inicial da linha.
+     * @param v2 O vetor final da linha.
+     * @param threshold O limite de proximidade entre o vetor e a linha.
+     * @return Verdadeiro caso o vetor tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionVectorLine( Vector vector, Vector v1, Vector v2, int threshold ) {
+        return checkCollisionPointLine( vectorToPoint( vector ), vectorToPoint( v1 ), vectorToPoint( v2 ), threshold );
+    }
+
+    /**
+     * Verifica a colisão de um vetor com uma linha.
+     * 
+     * @param vector O vetor.
+     * @param linha A linha.
+     * @param threshold O limite de proximidade entre o vetor e a linha.
+     * @return Verdadeiro caso o vetor tenha colidido com a linha, falso caso contrário.
+     */
+    public static boolean checkCollisionVectorLine( Vector vector, Line line, int threshold ) {
+        return checkCollisionPointLine( vectorToPoint( vector ), new Point( line.x1, line.y1 ), new Point( line.x2, line.y2 ), threshold );
+    }
+
+    /**
+     * Calcula o retângulo da sobreposição entre dois retângulos.
+     * 
+     * @param rec1 Um retângulo.
+     * @param rec2 Outro retângulo.
+     * @return O retângulo da sobreposição entre os dois retângulos.
+     */
     public static Rectangle getCollisionRectangle( Rectangle rec1, Rectangle rec2 ) {
         
         Rectangle overlap = new Rectangle();

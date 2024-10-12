@@ -460,7 +460,7 @@ public abstract class Engine extends JFrame {
      * @param height algura.
      * @param originX coordenada x do pivô da rotação.
      * @param originY coordenada y do pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawRectanglePro( double posX, double posY, double width, double height, double originX, double originY, double rotation, Color color ) {
@@ -468,7 +468,7 @@ public abstract class Engine extends JFrame {
         Graphics2D gc = (Graphics2D) g2d.create();
         gc.setColor( color );
 
-        gc.rotate( Math.toRadians( -rotation ), originX, originY );
+        gc.rotate( Math.toRadians( rotation ), originX, originY );
         gc.draw( new java.awt.geom.Rectangle2D.Double( posX, posY, width, height ) );
 
         gc.dispose();
@@ -482,7 +482,7 @@ public abstract class Engine extends JFrame {
      * @param width largura.
      * @param height algura.
      * @param origin pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawRectanglePro( Vector pos, double width, double height, Point origin, double rotation, Color color ) {
@@ -496,7 +496,7 @@ public abstract class Engine extends JFrame {
      * @param width largura.
      * @param height algura.
      * @param origin pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawRectanglePro( Point pos, double width, double height, Point origin, double rotation, Color color ) {
@@ -508,7 +508,7 @@ public abstract class Engine extends JFrame {
      * 
      * @param rectangle um retângulo.
      * @param origin pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawRectanglePro( Rectangle rectangle, Point origin, double rotation, Color color ) {
@@ -524,7 +524,7 @@ public abstract class Engine extends JFrame {
      * @param height algura.
      * @param originX coordenada x do pivô da rotação.
      * @param originY coordenada y do pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillRectanglePro( double posX, double posY, double width, double height, double originX, double originY, double rotation, Color color ) {
@@ -532,7 +532,7 @@ public abstract class Engine extends JFrame {
         Graphics2D gc = (Graphics2D) g2d.create();
         gc.setColor( color );
 
-        gc.rotate( Math.toRadians( -rotation ), originX, originY );
+        gc.rotate( Math.toRadians( rotation ), originX, originY );
         gc.fill( new java.awt.geom.Rectangle2D.Double( posX, posY, width, height ) );
 
         gc.dispose();
@@ -546,7 +546,7 @@ public abstract class Engine extends JFrame {
      * @param width largura.
      * @param height algura.
      * @param origin pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillRectanglePro( Vector pos, double width, double height, Point origin, double rotation, Color color ) {
@@ -560,7 +560,7 @@ public abstract class Engine extends JFrame {
      * @param width largura.
      * @param height algura.
      * @param origin pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillRectanglePro( Point pos, double width, double height, Point origin, double rotation, Color color ) {
@@ -572,7 +572,7 @@ public abstract class Engine extends JFrame {
      * 
      * @param rectangle um retângulo.
      * @param origin pivô da rotação.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillRectanglePro( Rectangle rectangle, Point origin, double rotation, Color color ) {
@@ -977,14 +977,14 @@ public abstract class Engine extends JFrame {
      * @param centerX coordenada x do centro.
      * @param centerY coordenada y do centro.
      * @param radius raio.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawCircleSector( double centerX, double centerY, double radius, double startAngle, double endAngle, Color color ) {
         g2d.setColor( color );
         double extent = endAngle - startAngle;
-        g2d.draw( new java.awt.geom.Arc2D.Double( centerX - radius, centerY - radius, radius * 2, radius * 2, startAngle, extent, java.awt.geom.Arc2D.PIE ) );
+        g2d.draw( new java.awt.geom.Arc2D.Double( centerX - radius, centerY - radius, radius * 2, radius * 2, startAngle, -extent, java.awt.geom.Arc2D.PIE ) );
     }
 
     /**
@@ -992,8 +992,8 @@ public abstract class Engine extends JFrame {
      * 
      * @param center ponto do centro.
      * @param radius raio.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawCircleSector( Vector center, double radius, double startAngle, double endAngle, Color color ) {
@@ -1005,8 +1005,8 @@ public abstract class Engine extends JFrame {
      * 
      * @param center ponto do centro.
      * @param radius raio.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawCircleSector( Point center, double radius, double startAngle, double endAngle, Color color ) {
@@ -1017,8 +1017,8 @@ public abstract class Engine extends JFrame {
      * Desenha um setor circular.
      * 
      * @param circle um círculo.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawCircleSector( Circle circle, double startAngle, double endAngle, Color color ) {
@@ -1029,8 +1029,8 @@ public abstract class Engine extends JFrame {
      * Desenha um setor circular.
      * 
      * @param circleSector um setor circular.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawCircleSector( CircleSector circleSector, Color color ) {
@@ -1043,14 +1043,14 @@ public abstract class Engine extends JFrame {
      * @param centerX coordenada x do centro.
      * @param centerY coordenada y do centro.
      * @param radius raio.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillCircleSector( double centerX, double centerY, double radius, double startAngle, double endAngle, Color color ) {
         g2d.setColor( color );
         double extent = endAngle - startAngle;
-        g2d.fill( new java.awt.geom.Arc2D.Double( centerX - radius, centerY - radius, radius * 2, radius * 2, startAngle, extent, java.awt.geom.Arc2D.PIE ) );
+        g2d.fill( new java.awt.geom.Arc2D.Double( centerX - radius, centerY - radius, radius * 2, radius * 2, startAngle, -extent, java.awt.geom.Arc2D.PIE ) );
     }
 
     /**
@@ -1058,8 +1058,8 @@ public abstract class Engine extends JFrame {
      * 
      * @param center ponto do centro.
      * @param radius raio.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillCircleSector( Vector center, double radius, double startAngle, double endAngle, Color color ) {
@@ -1071,8 +1071,8 @@ public abstract class Engine extends JFrame {
      * 
      * @param center ponto do centro.
      * @param radius raio.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillCircleSector( Point center, double radius, double startAngle, double endAngle, Color color ) {
@@ -1083,8 +1083,8 @@ public abstract class Engine extends JFrame {
      * Pinta um setor circular.
      * 
      * @param circle um círculo.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillCircleSector( Circle circle, double startAngle, double endAngle, Color color ) {
@@ -1095,8 +1095,8 @@ public abstract class Engine extends JFrame {
      * Pinta um setor circular.
      * 
      * @param circleSector um setor circular.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillCircleSector( CircleSector circleSector, Color color ) {
@@ -1110,14 +1110,14 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawEllipseSector( double centerX, double centerY, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         g2d.setColor( color );
         double extent = endAngle - startAngle;
-        g2d.draw( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, extent, java.awt.geom.Arc2D.PIE ) );
+        g2d.draw( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, -extent, java.awt.geom.Arc2D.PIE ) );
     }
 
     /**
@@ -1126,8 +1126,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawEllipseSector( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1140,8 +1140,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawEllipseSector( Point center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1152,8 +1152,8 @@ public abstract class Engine extends JFrame {
      * Desenha um setor de uma elipse.
      * 
      * @param ellipse uma elipse.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawEllipseSector( Ellipse ellipse, double startAngle, double endAngle, Color color ) {
@@ -1164,8 +1164,8 @@ public abstract class Engine extends JFrame {
      * Desenha um setor de uma elipse.
      * 
      * @param ellipseSector um setor de uma elipse.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawEllipseSector( EllipseSector ellipseSector, Color color ) {
@@ -1179,14 +1179,14 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillEllipseSector( double centerX, double centerY, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         g2d.setColor( color );
         double extent = endAngle - startAngle;
-        g2d.fill( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, extent, java.awt.geom.Arc2D.PIE ) );
+        g2d.fill( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, -extent, java.awt.geom.Arc2D.PIE ) );
     }
 
     /**
@@ -1195,8 +1195,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillEllipseSector( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1209,8 +1209,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillEllipseSector( Point center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1221,8 +1221,8 @@ public abstract class Engine extends JFrame {
      * Pinta um setor de uma elipse.
      * 
      * @param ellipse uma elipse.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillEllipseSector( Ellipse ellipse, double startAngle, double endAngle, Color color ) {
@@ -1233,8 +1233,8 @@ public abstract class Engine extends JFrame {
      * Pinta um setor de uma elipse.
      * 
      * @param ellipseSector um setor de uma elipse.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillEllipseSector( EllipseSector ellipseSector, Color color ) {
@@ -1248,14 +1248,14 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawArc( double centerX, double centerY, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         g2d.setColor( color );
         double extent = endAngle - startAngle;
-        g2d.draw( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, extent, java.awt.geom.Arc2D.OPEN ) );
+        g2d.draw( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, -extent, java.awt.geom.Arc2D.OPEN ) );
     }
 
     /**
@@ -1264,8 +1264,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawArc( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1278,8 +1278,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawArc( Point center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1290,8 +1290,8 @@ public abstract class Engine extends JFrame {
      * Desenha um arco
      * 
      * @param arc um arco.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawArc( Arc arc, Color color ) {
@@ -1305,14 +1305,14 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillArc( double centerX, double centerY, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         g2d.setColor( color );
         double extent = endAngle - startAngle;
-        g2d.fill( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, extent, java.awt.geom.Arc2D.CHORD ) );
+        g2d.fill( new java.awt.geom.Arc2D.Double( centerX - radiusH, centerY - radiusV, radiusH * 2, radiusV * 2, startAngle, -extent, java.awt.geom.Arc2D.CHORD ) );
     }
 
     /**
@@ -1321,8 +1321,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillArc( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1335,8 +1335,8 @@ public abstract class Engine extends JFrame {
      * @param center ponto do centro.
      * @param radiusH raio horizontal.
      * @param radiusV raio vertical.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillArc( Point center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
@@ -1347,8 +1347,8 @@ public abstract class Engine extends JFrame {
      * Pinta um arco
      * 
      * @param arc um arco.
-     * @param startAngle ângulo inicial.
-     * @param endAngle ângulo final.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillArc( Arc arc, Color color ) {
@@ -1362,8 +1362,8 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro.
      * @param innerRadius raio interno.
      * @param outerRadius raio externo.
-     * @param startAngle ângulo inicial em graus.
-     * @param endAngle ângulo final em graus.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
@@ -1377,8 +1377,8 @@ public abstract class Engine extends JFrame {
      * @param center centro do anel.
      * @param innerRadius raio interno.
      * @param outerRadius raio externo.
-     * @param startAngle ângulo inicial em graus.
-     * @param endAngle ângulo final em graus.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
@@ -1392,8 +1392,8 @@ public abstract class Engine extends JFrame {
      * @param center centro do anel.
      * @param innerRadius raio interno.
      * @param outerRadius raio externo.
-     * @param startAngle ângulo inicial em graus.
-     * @param endAngle ângulo final em graus.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
@@ -1418,8 +1418,8 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro.
      * @param innerRadius raio interno.
      * @param outerRadius raio externo.
-     * @param startAngle ângulo inicial em graus.
-     * @param endAngle ângulo final em graus.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
@@ -1433,8 +1433,8 @@ public abstract class Engine extends JFrame {
      * @param center centro do anel.
      * @param innerRadius raio interno.
      * @param outerRadius raio externo.
-     * @param startAngle ângulo inicial em graus.
-     * @param endAngle ângulo final em graus.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
@@ -1448,8 +1448,8 @@ public abstract class Engine extends JFrame {
      * @param center centro do anel.
      * @param innerRadius raio interno.
      * @param outerRadius raio externo.
-     * @param startAngle ângulo inicial em graus.
-     * @param endAngle ângulo final em graus.
+     * @param startAngle ângulo inicial em graus (sentido horário).
+     * @param endAngle ângulo final em graus (sentido horário).
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
@@ -1475,7 +1475,7 @@ public abstract class Engine extends JFrame {
         g2d.setColor( color );
 
         java.awt.geom.Path2D path = new java.awt.geom.Path2D.Double();
-        double currentAngle = -startAngle;
+        double currentAngle = startAngle;
         double angleIncrement = Math.abs( endAngle - startAngle ) / segments;
 
         double rad = Math.toRadians( currentAngle );
@@ -1485,7 +1485,7 @@ public abstract class Engine extends JFrame {
 
         for ( int i = 0; i < segments; i++ ) {
 
-            currentAngle -= angleIncrement;
+            currentAngle += angleIncrement;
 
             rad = Math.toRadians( currentAngle );
             x = centerX + innerRadius * Math.cos( rad );
@@ -1502,7 +1502,7 @@ public abstract class Engine extends JFrame {
 
         for ( int i = 0; i < segments; i++ ) {
 
-            currentAngle += angleIncrement;
+            currentAngle -= angleIncrement;
 
             rad = Math.toRadians( currentAngle );
             x = centerX + outerRadius * Math.cos( rad );
@@ -1648,7 +1648,7 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro do polígono.
      * @param sides quantidade de lados.
      * @param radius raio.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawPolygon( double centerX, double centerY, double sides, double radius, double rotation, Color color ) {
@@ -1661,7 +1661,7 @@ public abstract class Engine extends JFrame {
      * @param center centro do polígono.
      * @param sides quantidade de lados.
      * @param radius raio.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawPolygon( Vector center, double sides, double radius, double rotation, Color color ) {
@@ -1674,7 +1674,7 @@ public abstract class Engine extends JFrame {
      * @param center centro do polígono.
      * @param sides quantidade de lados.
      * @param radius raio.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void drawPolygon( Point center, double sides, double radius, double rotation, Color color ) {
@@ -1698,7 +1698,7 @@ public abstract class Engine extends JFrame {
      * @param centerY coordenada y do centro do polígono.
      * @param sides quantidade de lados.
      * @param radius raio.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillPolygon( double centerX, double centerY, double sides, double radius, double rotation, Color color ) {
@@ -1711,7 +1711,7 @@ public abstract class Engine extends JFrame {
      * @param center centro do polígono.
      * @param sides quantidade de lados.
      * @param radius raio.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillPolygon( Vector center, double sides, double radius, double rotation, Color color ) {
@@ -1724,7 +1724,7 @@ public abstract class Engine extends JFrame {
      * @param center centro do polígono.
      * @param sides quantidade de lados.
      * @param radius raio.
-     * @param rotation rotação em graus.
+     * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
     public void fillPolygon( Point center, double sides, double radius, double rotation, Color color ) {
@@ -1749,7 +1749,7 @@ public abstract class Engine extends JFrame {
         g2d.setColor( color );
 
         java.awt.geom.Path2D path = new java.awt.geom.Path2D.Double();
-        double currentAngle = -rotation;
+        double currentAngle = rotation;
         double angleIncrement = 360.0 / sides;
 
         for ( int i = 0; i < sides; i++ ) {
@@ -1764,7 +1764,7 @@ public abstract class Engine extends JFrame {
                 path.lineTo( x, y );
             }
 
-            currentAngle -= angleIncrement;
+            currentAngle += angleIncrement;
 
         }
 
@@ -2107,14 +2107,65 @@ public abstract class Engine extends JFrame {
     }
 
     /**
-     * Retorna o contexto gráfico atual.
-     * 
+     * Obtém o contexto gráfico atual.
      * Observação: Utilize apenas no método draw!
+     * 
+     * @return O contexto gráfico atual.
      */
     public Graphics2D getGraphics2D() {
         return g2d;
     }
 
+    /**
+     * Rotaciona o contexto gráfico atual a partir da coordenada (0, 0).
+     * Observação: Utilize apenas no método draw!
+     * 
+     * @param degrees Medida em graus para o ângulo de rotação.
+     */
+    public void rotate( double degrees ) {
+        g2d.rotate( Math.toRadians( degrees ) );
+    }
+
+    /**
+     * Rotaciona o contexto gráfico atual a partir de uma coordenada
+     * Observação: Utilize apenas no método draw!
+     * 
+     * @param x Coordenada x do ponto de rotação.
+     * @param y Coordenada y do ponto de rotação.
+     * @param degrees Medida em graus para o ângulo de rotação.
+     */
+    public void rotate( double degrees, double x, double y ) {
+        g2d.rotate( Math.toRadians( degrees ), x, y );
+    }
+
+    /**
+     * Translada o contexto gráfico atual.
+     * Observação: Utilize apenas no método draw!
+     * 
+     * @param x Nova origem em x.
+     * @param y Nova origem em y.
+     */
+    public void translate( double x, double y ) {
+        g2d.translate( x, y );
+    }
+
+    /**
+     * Escalona o contexto gráfico atual.
+     * Observação: Utilize apenas no método draw!
+     * 
+     * @param x Nova escala em x.
+     * @param y Nova escala em y.
+     */
+    public void scale( double x, double y ) {
+        g2d.scale( x, y );
+    }
+
+    /**
+     * Desenha o quantidade de FPS (quadros por segundo) atual.
+     * 
+     * @param x A posição em x para o desenho.
+     * @param y A posição em y para o desenho.
+     */
     public void drawFps( double x, double y ) {
 
         Font t = g2d.getFont();

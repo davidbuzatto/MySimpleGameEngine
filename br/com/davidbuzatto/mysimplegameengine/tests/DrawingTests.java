@@ -26,9 +26,12 @@ public class DrawingTests extends Engine {
     public void draw() {
 
         drawFps( 10, 30 );
+        //rotate( 90, getScreenWidth() / 2, getScreenHeight() / 2 );
+        //translate( 100, 100 );
+        //scale( 2, 2 );
 
         drawUsingPrimitives();
-        //drawUsingObjects();
+        drawUsingObjects();
 
     }
 
@@ -44,8 +47,8 @@ public class DrawingTests extends Engine {
         fillRectangle( 50, 120, 50, 100, BLUE );
         drawRectangle( 50, 120, 50, 100, BLACK );
 
-        fillRectanglePro( 50, 240, 50, 100, 50, 240, -15, BLUE );
-        drawRectanglePro( 50, 240, 50, 100, 50, 240, -15, BLACK );
+        fillRectanglePro( 50, 240, 50, 100, 50, 240, 15, BLUE );
+        drawRectanglePro( 50, 240, 50, 100, 50, 240, 15, BLACK );
 
         fillRoundRectangle( 50, 370, 80, 60, 20, BLUE );
         drawRoundRectangle( 50, 370, 80, 60, 20, BLACK );
@@ -59,11 +62,11 @@ public class DrawingTests extends Engine {
         fillEllipse( 250, 160, 60, 30, MAROON );
         drawEllipse( 250, 160, 60, 30, BLACK );
 
-        fillCircleSector( 250, 240, 30, 0, 130, MAROON );
-        drawCircleSector( 250, 240, 30, 0, 130, BLACK );
+        fillCircleSector( 250, 220, 30, 0, 130, MAROON );
+        drawCircleSector( 250, 220, 30, 0, 130, BLACK );
 
-        fillEllipseSector( 250, 300, 60, 30, 0, 130, MAROON );
-        drawEllipseSector( 250, 300, 60, 30, 0, 130, BLACK );
+        fillEllipseSector( 250, 280, 60, 30, 0, 130, MAROON );
+        drawEllipseSector( 250, 280, 60, 30, 0, 130, BLACK );
 
         fillArc( 250, 350, 60, 30, 0, 130, MAROON );
         drawArc( 250, 350, 60, 30, 0, 130, BLACK );
@@ -113,11 +116,11 @@ public class DrawingTests extends Engine {
         ellipse.fill( this, MAROON );
         ellipse.draw( this, BLACK );
 
-        CircleSector circleSector = new CircleSector( 250, 240, 30, 0, 130 );
+        CircleSector circleSector = new CircleSector( 250, 220, 30, 0, 130 );
         circleSector.fill( this, MAROON );
         circleSector.draw( this, BLACK );
 
-        EllipseSector ellipseSector = new EllipseSector( 250, 300, 60, 30, 0, 130 );
+        EllipseSector ellipseSector = new EllipseSector( 250, 280, 60, 30, 0, 130 );
         ellipseSector.fill( this, MAROON );
         ellipseSector.draw( this, BLACK );
 
