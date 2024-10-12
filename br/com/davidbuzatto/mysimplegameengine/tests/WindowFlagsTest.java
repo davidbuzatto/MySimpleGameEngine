@@ -1,7 +1,5 @@
 package br.com.davidbuzatto.mysimplegameengine.tests;
 
-import java.awt.Cursor;
-
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
 
 /**
