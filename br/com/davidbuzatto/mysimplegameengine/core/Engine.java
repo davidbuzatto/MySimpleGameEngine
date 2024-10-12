@@ -22,9 +22,11 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * Engine simples para criação de jogos ou simulações usando Java 2D.
@@ -66,11 +68,14 @@ public abstract class Engine extends JFrame {
     // tempo de um frame
     private long frameTime;
 
+    // quadros por segundo
+    private int targetFps;
+
+    // quadros por segundo atual
+    private int currentFps;
+
     // tempo esperado baseado na quantidade de quadros por segundo
     private long waitTimeFps;
-
-    // quadros por segundo
-    private int fps;
 
     // flag para controle de execução da thread de desenho
     private boolean running;
@@ -130,9 +135,9 @@ public abstract class Engine extends JFrame {
      * @param windowHeight Altura da janela.
      * @param windowTitle Título de janela.
      * @param antialiasing Flag que indica se deve ou não usar suavização para o desenho no contexto gráfico.
-     * @param fps A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
+     * @param targetFps A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
      */
-    public Engine( int windowWidth, int windowHeight, String windowTitle, boolean antialiasing, int fps ) {
+    public Engine( int windowWidth, int windowHeight, String windowTitle, boolean antialiasing, int targetFps ) {
 
         if ( windowWidth <= 0 ) {
             throw new IllegalArgumentException( "width must be positive!" );
@@ -142,8 +147,8 @@ public abstract class Engine extends JFrame {
             throw new IllegalArgumentException( "height must be positive!" );
         }
 
-        if ( fps <= 0 ) {
-            throw new IllegalArgumentException( "fps must be positive!" );
+        if ( targetFps <= 0 ) {
+            throw new IllegalArgumentException( "target fps must be positive!" );
         }
 
         defaultFont = new Font( Font.MONOSPACED, Font.PLAIN, 10 );
@@ -151,8 +156,8 @@ public abstract class Engine extends JFrame {
         defaultStroke = new BasicStroke( 1 );
 
         this.antialiasing = antialiasing;
-        this.fps = fps;
-        this.running = true;
+        this.targetFps = targetFps;
+        waitTimeFps = (long) ( 1000.0 / this.targetFps );   // quanto se espera que cada frame demore
 
         // cria e configura o painel de desenho
         drawingPanel = new DrawingPanel();
@@ -177,10 +182,8 @@ public abstract class Engine extends JFrame {
         // inicializa os objetos/contexto/variáveis do jogo atual
         create();
 
-        // quanto se espera que cada frame demore
-        waitTimeFps = (long) ( 1000.0 / this.fps );
-
         // inicia o processo de execução do jogo ou simulação
+        running = true;
         start();
 
         setVisible( true );
@@ -189,47 +192,52 @@ public abstract class Engine extends JFrame {
 
     private void start() {
 
-        new Thread( new Runnable() {
+        new Thread( () -> {
 
-            public void run() {
+            while ( running ) {
 
-                while ( running ) {
+                timeBefore = System.currentTimeMillis();
 
-                    timeBefore = System.currentTimeMillis();
-                    update();
-                    drawingPanel.repaint();
-                    timeAfter = System.currentTimeMillis();
-
-                    // quanto um frame demorou?
-                    frameTime = timeAfter - timeBefore;
-
-                    // quanto se deve esperar?
-                    waitTime = waitTimeFps - frameTime;
-
-                    // se o tempo a esperar for negativo, quer dizer que não
-                    // houve tempo suficiente, baseado no tempo esperado
-                    // para todo o frame ser atualizado e desenhado
-                    if ( waitTime < 0 ) {
-                        waitTime = 0;      // não espera
-                    }
-
-                    // se o tempo do frame é menor que o tempo se que deve esperar,
-                    // quer dizer que sobrou tempo para executar o frame, ou seja
-                    // o frame foi atualizado e desenhado em menos tempo do que 
-                    // é esperado baseado na quantidade de frames por segundo
-                    if ( frameTime < waitTime ) {
-                        frameTime = waitTime;  // o tempo que o frame demorou para executar
-                    }
-
-                    try {
-                        Thread.sleep( waitTime );
+                try {
+                    SwingUtilities.invokeAndWait( () -> {
+                        update();
                         drawingPanel.repaint();
-                    } catch ( InterruptedException exc ) {
-                        exc.printStackTrace();
-                    }
-
+                    });
+                } catch ( InterruptedException | InvocationTargetException exc ) {
+                    exc.printStackTrace();
                 }
-                
+
+                timeAfter = System.currentTimeMillis();
+
+                // quanto um frame demorou?
+                frameTime = timeAfter - timeBefore;
+
+                // quanto se deve esperar?
+                waitTime = waitTimeFps - frameTime;
+
+                //System.out.printf( "%d %d %d %d\n", timeBefore, timeAfter, frameTime, waitTime );
+
+                // se o tempo a esperar for negativo, quer dizer que não
+                // houve tempo suficiente, baseado no tempo esperado
+                // para todo o frame ser atualizado e desenhado
+                if ( waitTime < 0 ) {
+                    waitTime = 0;      // não espera
+                }
+
+                // se o tempo do frame é menor que o tempo se que deve esperar,
+                // quer dizer que sobrou tempo para executar o frame, ou seja
+                // o frame foi atualizado e desenhado em menos tempo do que 
+                // é esperado baseado na quantidade de frames por segundo
+                if ( frameTime < waitTime ) {
+                    frameTime = waitTime;  // o tempo que o frame demorou para executar
+                }
+
+                try {
+                    Thread.sleep( waitTime );
+                } catch ( InterruptedException exc ) {
+                    exc.printStackTrace();
+                }
+
             }
 
         }).start();
@@ -2112,11 +2120,14 @@ public abstract class Engine extends JFrame {
         Font t = g2d.getFont();
         g2d.setFont( defaultFpsFont );
 
-        int currentFps = (int) ( Math.round( 1000.0 / frameTime / 10.0 ) ) * 10;
+        int localFps = (int) ( Math.round( 1000.0 / frameTime / 10.0 ) ) * 10;
+        if ( localFps >= 0 ) {
+            currentFps = localFps;
+        }
 
         drawText( 
             String.format( "%d FPS", currentFps ), 
-            x, y, Utils.lerp( RED, LIME, currentFps / (double) fps ) );
+            x, y, Utils.lerp( RED, LIME, currentFps / (double) targetFps ) );
 
         g2d.setFont( t );
 

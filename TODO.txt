@@ -2,6 +2,3 @@ Funções de colisão
     - organizar
     - documentar
     - testar
-
-Indicador fps
-    - corrigir contagem de tempo engine
