@@ -2384,6 +2384,8 @@ public abstract class Engine extends JFrame {
     protected static final Color DARKBROWN  = new Color( 76, 63, 47 );
     protected static final Color WHITE      = new Color( 255, 255, 255 );
     protected static final Color BLACK      = new Color( 0, 0, 0 );
+    protected static final Color BLANK      = new Color( 0, 0, 0, 0 );
     protected static final Color MAGENTA    = new Color( 255, 0, 255 );
+    protected static final Color RAYWHITE   = new Color( 245, 245, 245 );
 
 }
