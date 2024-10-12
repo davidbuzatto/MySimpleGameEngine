@@ -1,6 +1,7 @@
 package br.com.davidbuzatto.mysimplegameengine.tests;
 
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
+import br.com.davidbuzatto.mysimplegameengine.geom.*;
 
 /**
  * Testes de desenho.
@@ -13,28 +14,26 @@ public class DrawingTests extends Engine {
         super( 800, 600, "Test Window", true, 60 );
     }
 
-    /**
-     * Processa a entrada inicial fornecida pelo usuário e cria
-     * e/ou inicializa os objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void create() {
     }
 
-    /**
-     * Atualiza os objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void update() {
     }
 
-    /**
-     * Desenha o estado dos objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void draw() {
 
         drawFps( 10, 30 );
+
+        drawUsingPrimitives();
+        //drawUsingObjects();
+
+    }
+
+    @SuppressWarnings( "unused" )
+    private void drawUsingPrimitives() {
 
         drawPixel( 50, 50, BLACK );
         drawLine( 60, 60, 100, 100, BLACK );
@@ -83,6 +82,69 @@ public class DrawingTests extends Engine {
 
         fillCubicCurve( 400, 340, 350, 380, 450, 420, 400, 460, ORANGE );
         drawCubicCurve( 400, 340, 350, 380, 450, 420, 400, 460, BLACK );
+        
+    }
+
+    @SuppressWarnings( "unused" )
+    private void drawUsingObjects() {
+
+        Point point = new Point( 50, 50 );
+        point.draw( this, BLACK );
+
+        Vector vector = new Vector( 30, 30 );
+        vector.draw( this, BLACK );
+
+        Line line = new Line( 60, 60, 100, 100 );
+        line.draw( this, BLACK );
+
+        Rectangle rectangle = new Rectangle( 50, 120, 50, 100 );
+        rectangle.fill( this, BLUE );
+        rectangle.draw( this, BLACK );
+
+        RoundRectangle roundRectangle = new RoundRectangle( 50, 370, 80, 60, 20 );
+        roundRectangle.fill( this, BLUE );
+        roundRectangle.draw( this, BLACK );
+
+        Circle circle = new Circle( 250, 70, 30 );
+        circle.fill( this, MAROON );
+        circle.draw( this, BLACK );
+
+        Ellipse ellipse = new Ellipse( 250, 160, 60, 30 );
+        ellipse.fill( this, MAROON );
+        ellipse.draw( this, BLACK );
+
+        CircleSector circleSector = new CircleSector( 250, 240, 30, 0, 130 );
+        circleSector.fill( this, MAROON );
+        circleSector.draw( this, BLACK );
+
+        EllipseSector ellipseSector = new EllipseSector( 250, 300, 60, 30, 0, 130 );
+        ellipseSector.fill( this, MAROON );
+        ellipseSector.draw( this, BLACK );
+
+        Arc arc = new Arc( 250, 350, 60, 30, 0, 130 );
+        arc.fill( this, MAROON );
+        arc.draw( this, BLACK );
+
+        Ring ring = new Ring( 250, 400, 10, 30, 0, 130, 50 );
+        ring.fill( this, MAROON );
+        ring.draw( this, BLACK );
+
+        Triangle triangle = new Triangle( 400, 50, 440, 100, 360, 100 );
+        triangle.fill( this, ORANGE );
+        triangle.draw( this, BLACK );
+
+        Polygon polygon = new Polygon( 400, 160, 5, 35, 0 );
+        polygon.fill( this, ORANGE );
+        polygon.draw( this, BLACK );
+
+
+        QuadCurve quadCurve = new QuadCurve( 400, 220, 450, 270, 400, 320 );
+        quadCurve.fill( this, ORANGE );
+        quadCurve.draw( this, BLACK );
+
+        CubicCurve cubicCurve = new CubicCurve( 400, 340, 350, 380, 450, 420, 400, 460 );
+        cubicCurve.fill( this, ORANGE );
+        cubicCurve.draw( this, BLACK );
 
     }
 

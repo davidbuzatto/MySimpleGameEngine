@@ -21,6 +21,9 @@ public class CubicCurve implements Drawable {
     public double x2;
     public double y2;
 
+    public CubicCurve() {
+    }
+
     public CubicCurve( double x1, double y1, double c1x, double c1y, double c2x, double c2y, double x2, double y2 ) {
         this.x1 = x1;
         this.y1 = y1;

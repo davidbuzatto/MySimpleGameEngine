@@ -18,6 +18,9 @@ public class Polygon implements Drawable {
     public double radius;
     public double rotation;
 
+    public Polygon() {
+    }
+
     public Polygon( double x, double y, int sides, double radius, double rotation ) {
         this.x = x;
         this.y = y;

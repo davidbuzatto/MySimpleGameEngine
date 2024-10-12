@@ -19,6 +19,9 @@ public class Triangle implements Drawable {
     public double x3;
     public double y3;
 
+    public Triangle() {
+    }
+
     public Triangle( double x1, double y1, double x2, double y2, double x3, double y3 ) {
         this.x1 = x1;
         this.y1 = y1;

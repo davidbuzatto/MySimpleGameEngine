@@ -18,6 +18,9 @@ public class RoundRectangle implements Drawable {
     public double height;
     public double roundness;
 
+    public RoundRectangle() {
+    }
+
     public RoundRectangle( double x, double y, double width, double height, double roundness ) {
         this.x = x;
         this.y = y;

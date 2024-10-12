@@ -19,6 +19,9 @@ public class Arc implements Drawable {
     public double startAngle;
     public double endAngle;
 
+    public Arc() {
+    }
+
     public Arc( double x, double y, double radiusH, double radiusV, double startAngle, double endAngle ) {
         this.x = x;
         this.y = y;

@@ -17,6 +17,9 @@ public class Ellipse implements Drawable {
     public double radiusH;
     public double radiusV;
 
+    public Ellipse() {
+    }
+
     public Ellipse( double x, double y, double radiusH, double radiusV ) {
         this.x = x;
         this.y = y;

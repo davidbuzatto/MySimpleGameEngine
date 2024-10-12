@@ -1,10 +1,6 @@
 package br.com.davidbuzatto.mysimplegameengine.utils;
 
-import br.com.davidbuzatto.mysimplegameengine.geom.CubicCurve;
-import br.com.davidbuzatto.mysimplegameengine.geom.Line;
-import br.com.davidbuzatto.mysimplegameengine.geom.Point;
-import br.com.davidbuzatto.mysimplegameengine.geom.QuadCurve;
-import br.com.davidbuzatto.mysimplegameengine.geom.Vector;
+import br.com.davidbuzatto.mysimplegameengine.geom.*;
 
 import java.awt.Color;
 
@@ -16,6 +12,8 @@ import java.awt.Color;
  */
 public class Utils {
     
+    private static double FLT_EPSILON = 2.2204460492503131e-16;
+
     /**
      * Realiza a interpolação linear entre dois valores.
      * 
@@ -669,6 +667,284 @@ public class Utils {
      */
     public static Point getPointAtCubicCurve( CubicCurve cubicCurve, double t ) {
         return getPointAtCubicCurve( cubicCurve.x1, cubicCurve.y1, cubicCurve.c1x, cubicCurve.c1y, cubicCurve.c2x, cubicCurve.c2y, cubicCurve.x2, cubicCurve.y2, t );
+    }
+
+    public static boolean checkCollisionRectangles( Rectangle rec1, Rectangle rec2 ) {
+        return ( 
+            ( rec1.x < ( rec2.x + rec2.width ) && 
+            ( rec1.x + rec1.width ) > rec2.x ) &&
+            ( rec1.y < ( rec2.y + rec2.height ) &&
+            ( rec1.y + rec1.height ) > rec2.y )
+        );
+    }
+
+    public static boolean checkCollisionCircles( Vector center1, double radius1, Vector center2, double radius2 ) {
+        
+        double dx = center2.x - center1.x;
+        double dy = center2.y - center1.y;
+    
+        double distanceSquared = dx * dx + dy * dy;
+        double radiusSum = radius1 + radius2;
+    
+        return distanceSquared <= radiusSum * radiusSum;
+
+    }
+
+    public static boolean checkCollisionCircles( Circle circle1, Circle circle2 ) {
+        return checkCollisionCircles( 
+            new Vector( circle1.x, circle1.y ), circle1.radius,
+            new Vector( circle2.x, circle2.y ), circle2.radius
+        );
+    }
+    
+    public static boolean checkCollisionCircleLine( Vector center, double radius, Vector p1, Vector p2 ) {
+
+        double dx = p1.x - p2.x;
+        double dy = p1.y - p2.y;
+
+        if ( ( Math.abs( dx ) + Math.abs( dy ) ) <= FLT_EPSILON ) {
+            return checkCollisionCircles( p1, 0, center, radius );
+        }
+
+        double lengthSQ = ( ( dx * dx ) + ( dy * dy ) );
+        double dotProduct = ( ( ( center.x - p1.x ) * ( p2.x - p1.x ) ) + 
+                              ( ( center.y - p1.y ) * ( p2.y - p1.y ) ) ) / ( lengthSQ );
+
+        if ( dotProduct > 1.0 ) {
+            dotProduct = 1.0;
+        } else if ( dotProduct < 0.0f ) {
+            dotProduct = 0.0f;
+        }
+
+        double dx2 = ( p1.x - ( dotProduct * ( dx ) ) ) - center.x;
+        double dy2 = ( p1.y - ( dotProduct * ( dy ) ) ) - center.y;
+        double distanceSQ = ( dx2 * dx2 ) + ( dy2 * dy2 );
+
+        return distanceSQ <= radius * radius;
+
+    }
+
+    public static boolean checkCollisionCircleLine( Circle circle, Vector p1, Vector p2 ) {
+        return checkCollisionCircleLine( new Vector( circle.x, circle.y ), circle.radius, p1, p2 );
+    }
+
+    public static boolean checkCollisionCircleLine( Circle circle, Line line ) {
+        return checkCollisionCircleLine( 
+            new Vector( circle.x, circle.y ), circle.radius,
+            new Vector( line.x1, line.y1 ), 
+            new Vector( line.x2, line.y2 )
+        );
+    }
+
+    public static boolean checkCollisionCircleRectangle( Vector center, double radius, Rectangle rec ) {
+
+        double recCenterX = rec.x + rec.width / 2.0;
+        double recCenterY = rec.y + rec.height / 2.0;
+
+        double dx = Math.abs( center.x - recCenterX );
+        double dy = Math.abs( center.y - recCenterY );
+
+        if ( dx > ( rec.width / 2.0 + radius ) ) {
+            return false;
+        }
+        if ( dy > ( rec.height / 2.0 + radius ) ) { 
+            return false;
+        }
+
+        if ( dx <= ( rec.width / 2.0 ) ) { 
+            return true;
+        }
+        if ( dy <= ( rec.height / 2.0 ) ) { 
+            return true;
+        }
+
+        double cornerDistanceSq = ( dx - rec.width / 2.0 ) * ( dx - rec.width / 2.0 ) +
+                                  ( dy - rec.height / 2.0 ) * ( dy - rec.height / 2.0 );
+
+        return cornerDistanceSq <= ( radius * radius );
+
+    }
+
+    public static boolean checkCollisionCircleRectangle( Circle circle, Rectangle rec ) {
+        return checkCollisionCircleRectangle( new Vector( circle.x, circle.y ), circle.radius, rec );
+    }
+
+    public static boolean checkCollisionPointRectangle( Point point, Rectangle rec ) {
+        return ( 
+            ( point.x >= rec.x ) && 
+            ( point.x < ( rec.x + rec.width ) ) && 
+            ( point.y >= rec.y ) && 
+            ( point.y < ( rec.y + rec.height ) )
+        );
+    }
+
+    public static boolean checkCollisionVectorRectangle( Vector vector, Rectangle rec ) {
+        return ( 
+            ( vector.x >= rec.x ) && 
+            ( vector.x < ( rec.x + rec.width ) ) && 
+            ( vector.y >= rec.y ) && 
+            ( vector.y < ( rec.y + rec.height ) )
+        );
+    }
+
+    public static boolean checkCollisionPointCircle( Point point, Point center, double radius ) {
+        double distanceSquared = ( point.x - center.x ) * ( point.x - center.x ) + 
+                                 ( point.y - center.y ) * ( point.y - center.y );
+        return distanceSquared <= radius * radius;
+    }
+
+    public static boolean checkCollisionPointCircle( Point point, Circle circle ) {
+        double distanceSquared = ( point.x - circle.x ) * ( point.x - circle.x ) + 
+                                 ( point.y - circle.y ) * ( point.y - circle.y );
+        return distanceSquared <= circle.radius * circle.radius;
+    }
+
+    public static boolean checkCollisionVectorCircle( Vector vector, Vector center, double radius ) {
+        double distanceSquared = ( vector.x - center.x ) * ( vector.x - center.x ) + 
+                                 ( vector.y - center.y ) * ( vector.y - center.y );
+        return distanceSquared <= radius * radius;
+    }
+
+    public static boolean checkCollisionVectorCircle( Vector vector, Circle circle ) {
+        double distanceSquared = ( vector.x - circle.x ) * ( vector.x - circle.x ) + 
+                                 ( vector.y - circle.y ) * ( vector.y - circle.y );
+        return distanceSquared <= circle.radius * circle.radius;
+    }
+
+    public static boolean checkCollisionPointTriangle( Point point, Vector p1, Vector p2, Vector p3 ) {
+
+        double alpha = ((p2.y - p3.y)*(point.x - p3.x) + (p3.x - p2.x)*(point.y - p3.y)) /
+                       ((p2.y - p3.y)*(p1.x - p3.x) + (p3.x - p2.x)*(p1.y - p3.y));
+
+        double beta = ((p3.y - p1.y)*(point.x - p3.x) + (p1.x - p3.x)*(point.y - p3.y)) /
+                      ((p2.y - p3.y)*(p1.x - p3.x) + (p3.x - p2.x)*(p1.y - p3.y));
+
+        double gamma = 1.0 - alpha - beta;
+
+        return (alpha > 0 ) && ( beta > 0 ) && ( gamma > 0 );
+
+    }
+
+    public static boolean checkCollisionVectorTriangle( Vector vector, Vector p1, Vector p2, Vector p3 ) {
+        return checkCollisionPointTriangle( vectorToPoint( vector ), p1, p2, p3 );
+    }
+
+    public static boolean checkCollisionPointTriangle( Point point, Triangle triangle ) {
+
+        double alpha = ((triangle.y2 - triangle.y3)*(point.x - triangle.x3) + (triangle.x3 - triangle.x2)*(point.y - triangle.y3)) /
+                       ((triangle.y2 - triangle.y3)*(triangle.x1 - triangle.x3) + (triangle.x3 - triangle.x2)*(triangle.y1 - triangle.y3));
+
+        double beta = ((triangle.y3 - triangle.y1)*(point.x - triangle.x3) + (triangle.x1 - triangle.x3)*(point.y - triangle.y3)) /
+                      ((triangle.y2 - triangle.y3)*(triangle.x1 - triangle.x3) + (triangle.x3 - triangle.x2)*(triangle.y1 - triangle.y3));
+
+        double gamma = 1.0 - alpha - beta;
+
+        return ( alpha > 0 ) && ( beta > 0 ) && ( gamma > 0 );
+
+    }
+
+    public static boolean checkCollisionPointTriangle( Vector point, Triangle triangle ) {
+        return checkCollisionPointTriangle( vectorToPoint( point ), triangle );
+    }
+
+    public static boolean checkCollisionPointPolygon( Vector point, Polygon polygon ) {
+
+        boolean inside = false;
+
+        if ( polygon.sides > 2 ) {
+
+            Point[] points = new Point[polygon.sides];
+            double angle = 360.0 / polygon.sides;
+
+            for ( int i = 0; i < polygon.sides; i++ ) {
+                points[i].x = polygon.x + Math.cos( Math.toRadians( polygon.rotation + angle * i ) ) * polygon.radius;
+                points[i].y = polygon.y + Math.sin( Math.toRadians( polygon.rotation + angle * i ) ) * polygon.radius;
+            }
+
+            for ( int i = 0, j = polygon.sides - 1; i < polygon.sides; j = i++ ) {
+                if ( ( points[i].y > point.y ) != ( points[j].y > point.y ) &&
+                     ( point.x < ( points[j].x - points[i].x ) * ( point.y - points[i].y ) / ( points[j].y - points[i].y ) + points[i].x ) ) {
+                    inside = !inside;
+                }
+            }
+
+        }
+
+        return inside;
+
+    }
+
+    public static Vector checkCollisionLines( Vector startPos1, Vector endPos1, Vector startPos2, Vector endPos2 ) {
+        
+        boolean collision = false;
+
+        double div = (endPos2.y - startPos2.y)*(endPos1.x - startPos1.x) - (endPos2.x - startPos2.x)*(endPos1.y - startPos1.y);
+        double xi = 0;
+        double yi = 0;
+
+        if (Math.abs(div) >= FLT_EPSILON)
+        {
+            collision = true;
+
+            xi = ((startPos2.x - endPos2.x)*(startPos1.x*endPos1.y - startPos1.y*endPos1.x) - (startPos1.x - endPos1.x)*(startPos2.x*endPos2.y - startPos2.y*endPos2.x))/div;
+            yi = ((startPos2.y - endPos2.y)*(startPos1.x*endPos1.y - startPos1.y*endPos1.x) - (startPos1.y - endPos1.y)*(startPos2.x*endPos2.y - startPos2.y*endPos2.x))/div;
+
+            if (((Math.abs(startPos1.x - endPos1.x) > FLT_EPSILON) && (xi < Math.min(startPos1.x, endPos1.x) || (xi > Math.max(startPos1.x, endPos1.x)))) ||
+                ((Math.abs(startPos2.x - endPos2.x) > FLT_EPSILON) && (xi < Math.min(startPos2.x, endPos2.x) || (xi > Math.max(startPos2.x, endPos2.x)))) ||
+                ((Math.abs(startPos1.y - endPos1.y) > FLT_EPSILON) && (yi < Math.min(startPos1.y, endPos1.y) || (yi > Math.max(startPos1.y, endPos1.y)))) ||
+                ((Math.abs(startPos2.y - endPos2.y) > FLT_EPSILON) && (yi < Math.min(startPos2.y, endPos2.y) || (yi > Math.max(startPos2.y, endPos2.y))))) collision = false;
+
+        }
+
+        if ( collision ) {
+            return new Vector( xi, yi );
+        }
+
+        return null;
+
+    }
+
+    public static boolean checkCollisionPointLine( Vector point, Vector p1, Vector p2, int threshold ) {
+
+        double dxc = point.x - p1.x;
+        double dyc = point.y - p1.y;
+        double dxl = p2.x - p1.x;
+        double dyl = p2.y - p1.y;
+        double cross = dxc * dyl - dyc * dxl;
+
+        if ( Math.abs(cross) < ( threshold * Math.max( Math.abs(dxl), Math.abs(dyl) ) ) ) {
+            if ( Math.abs( dxl ) >= Math.abs( dyl ) ) {
+                return ( dxl > 0 ) ? ( ( p1.x <= point.x ) && ( point.x <= p2.x ) ) : ( ( p2.x <= point.x ) && ( point.x <= p1.x ) );
+            }
+            return ( dyl > 0 ) ? ( ( p1.y <= point.y ) && ( point.y <= p2.y ) ) : ( ( p2.y <= point.y ) && ( point.y <= p1.y ) );
+        }
+
+        return false;
+
+    }
+
+    public static Rectangle getCollisionRectangle( Rectangle rec1, Rectangle rec2 ) {
+        
+        Rectangle overlap = new Rectangle();
+
+        double left = ( rec1.x > rec2.x ) ? rec1.x : rec2.x;
+        double right1 = rec1.x + rec1.width;
+        double right2 = rec2.x + rec2.width;
+        double right = ( right1 < right2 ) ? right1 : right2;
+        double top = ( rec1.y > rec2.y ) ? rec1.y : rec2.y;
+        double bottom1 = rec1.y + rec1.height;
+        double bottom2 = rec2.y + rec2.height;
+        double bottom = ( bottom1 < bottom2 ) ? bottom1 : bottom2;
+
+        if ( ( left < right ) && ( top < bottom ) ) {
+            overlap.x = left;
+            overlap.y = top;
+            overlap.width = right - left;
+            overlap.height = bottom - top;
+        }
+
+        return overlap;
+
     }
 
 }

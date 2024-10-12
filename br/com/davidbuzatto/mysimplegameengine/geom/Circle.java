@@ -16,6 +16,9 @@ public class Circle implements Drawable {
     public double y;
     public double radius;
 
+    public Circle() {
+    }
+
     public Circle( double x, double y, double radius ) {
         this.x = x;
         this.y = y;

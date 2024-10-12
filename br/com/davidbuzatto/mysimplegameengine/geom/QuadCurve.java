@@ -19,6 +19,9 @@ public class QuadCurve implements Drawable {
     public double x2;
     public double y2;
 
+    public QuadCurve() {
+    }
+
     public QuadCurve( double x1, double y1, double cx, double cy, double x2, double y2 ) {
         this.x1 = x1;
         this.y1 = y1;

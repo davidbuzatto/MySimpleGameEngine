@@ -18,6 +18,9 @@ public class CircleSector implements Drawable {
     public double startAngle;
     public double endAngle;
 
+    public CircleSector() {
+    }
+
     public CircleSector( double x, double y, double radius, double startAngle, double endAngle ) {
         this.x = x;
         this.y = y;

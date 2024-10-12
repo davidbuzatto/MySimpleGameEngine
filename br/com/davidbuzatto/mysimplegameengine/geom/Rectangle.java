@@ -17,6 +17,9 @@ public class Rectangle implements Drawable {
     public double width;
     public double height;
 
+    public Rectangle() {
+    }
+
     public Rectangle( double x, double y, double width, double height ) {
         this.x = x;
         this.y = y;

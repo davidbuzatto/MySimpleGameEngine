@@ -20,6 +20,9 @@ public class Ring implements Drawable {
     public double endAngle;
     public int segments;
 
+    public Ring() {
+    }
+
     public Ring( double x, double y, double innerRadius, double outerRadius, double startAngle, double endAngle, int segments ) {
         this.x = x;
         this.y = y;

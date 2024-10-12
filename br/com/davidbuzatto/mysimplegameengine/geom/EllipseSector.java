@@ -19,6 +19,9 @@ public class EllipseSector implements Drawable {
     public double startAngle;
     public double endAngle;
 
+    public EllipseSector() {
+    }
+
     public EllipseSector( double x, double y, double radiusH, double radiusV, double startAngle, double endAngle ) {
         this.x = x;
         this.y = y;
