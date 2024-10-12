@@ -1,3 +1,7 @@
+package br.com.davidbuzatto.mysimplegameengine.tests;
+
+import java.awt.Cursor;
+
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
 
 /**
@@ -6,23 +10,23 @@ import br.com.davidbuzatto.mysimplegameengine.core.Engine;
  * @author Prof. Dr. David Buzatto
  * @copyright Copyright (c) 2024
  */
-public class Main extends Engine {
+public class WindowFlagsTest extends Engine {
 
     // declaração de variáveis
 
-    public Main() {
+    public WindowFlagsTest() {
 
         // cria a janela do jogo ou simulação
         super( 
-            800,                  // 800 pixels de largura
-            600,                  // 600 pixels de largura
-            "Título da Janela",   // título da janela
-            60,                   // 60 quadros por segundo
-            true,                 // ativa a suavização (antialiasing)
-            false,                // redimensionável (resizable)
-            false,                // tela cheia (fullscreen na resolução atual)
-            false,                // sem decoração (undecorated)
-            false                 // sempre acima (always on top)
+            800,
+            600,
+            "Título da Janela",
+            60,
+            true,
+            false,
+            false,
+            false,
+            false
         );
 
     }
@@ -47,10 +51,15 @@ public class Main extends Engine {
      */
     @Override
     public void draw() {
+        drawLine( 0, 0, getScreenWidth(), getScreenHeight(), BLACK );
+        drawText( getTime() + "", 20, 20, 20, BLACK );
+        drawText( getFrameTime() + "", 20, 40, 20, BLACK );
+        drawText( getFps() + "", 20, 60, 20, BLACK );
+        drawFps( 10, 100 );
     }
 
     public static void main( String[] args ) {
-        new Main();
+        new WindowFlagsTest();
     }
 
 }

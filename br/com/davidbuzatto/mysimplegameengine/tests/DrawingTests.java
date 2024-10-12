@@ -1,11 +1,7 @@
 package br.com.davidbuzatto.mysimplegameengine.tests;
 
-import java.awt.event.MouseEvent;
-
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
-import br.com.davidbuzatto.mysimplegameengine.event.MouseEventType;
 import br.com.davidbuzatto.mysimplegameengine.geom.*;
-import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
 
 /**
  * Testes de desenho.
@@ -31,7 +27,7 @@ public class DrawingTests extends Engine {
     private CubicCurve cubicCurve;
 
     public DrawingTests() {
-        super( 800, 600, "Test Window", true, 60 );
+        super( 800, 600, "Test Window", 60, true );
     }
 
     @Override
@@ -168,32 +164,6 @@ public class DrawingTests extends Engine {
         
         cubicCurve.fill( this, ORANGE );
         cubicCurve.draw( this, BLACK );
-
-    }
-
-    @Override
-    public void handleMouseEvents( MouseEvent e, MouseEventType met ) {
-        
-        if ( met == MouseEventType.PRESSED ) {
-            if ( e.getButton() == MouseEvent.BUTTON1 ) {
-                Point p = Utils.mouseEventPositionToPoint( e );
-                if ( Utils.checkCollisionPointLine( p, line, 5 ) ) {
-                    System.out.println( "line!" );
-                }
-                if ( Utils.checkCollisionPointRectangle( p, rectangle ) ) {
-                    System.out.println( "rectangle!" );
-                }
-                if ( Utils.checkCollisionPointCircle( p, circle ) ) {
-                    System.out.println( "circle!" );
-                }
-                if ( Utils.checkCollisionPointTriangle( p, triangle ) ) {
-                    System.out.println( "triangle!" );
-                }
-                if ( Utils.checkCollisionPointPolygon( p, polygon ) ) {
-                    System.out.println( "polygon!" );
-                }
-            }
-        }
 
     }
 

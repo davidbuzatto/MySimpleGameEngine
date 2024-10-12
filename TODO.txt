@@ -1,2 +1,18 @@
-Funções de colisão
-    - testar
+int GetRandomValue(int min, int max);                       // Get a random value between min and max (both included)
+
+void TakeScreenshot(const char *fileName);                  // Takes a screenshot of current screen (filename extension defines format)
+
+// cores
+Color Fade(Color color, float alpha);                                 // Get color with alpha applied, alpha goes from 0.0f to 1.0f
+Vector3 ColorToHSV(Color color);                                      // Get HSV values for a Color, hue [0..360], saturation/value [0..1]
+Color ColorFromHSV(float hue, float saturation, float value);         // Get a Color from HSV values, hue [0..360], saturation/value [0..1]
+Color ColorTint(Color color, Color tint);                             // Get color multiplied with another color
+Color ColorBrightness(Color color, float factor);                     // Get color with brightness correction, brightness factor goes from -1.0f to 1.0f
+Color ColorContrast(Color color, float contrast);                     // Get color with contrast correction, contrast values between -1.0f and 1.0f
+Color ColorAlpha(Color color, float alpha);                           // Get color with alpha applied, alpha goes from 0.0f to 1.0f
+Color ColorAlphaBlend(Color dst, Color src, Color tint);              // Get src alpha-blended into dst color with tint
+Color GetColor(unsigned int hexValue);                                // Get Color structure from hexadecimal value
+
+void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 origin, float rotation, float fontSize, float spacing, Color tint); // Draw text using Font and pro parameters (rotation)
+
+// tratar imagens/texturas

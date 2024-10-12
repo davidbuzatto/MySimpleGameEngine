@@ -53,9 +53,6 @@ public abstract class Engine extends JFrame {
     // contorno padrão
     private BasicStroke defaultStroke;
 
-    // flag que sinaliza o uso da suavização (antialiasing) para o contexto gráfico
-    private boolean antialiasing;
-
     // tempo antes de iniciar os processos de atualização e desenho
     private long timeBefore;
 
@@ -77,6 +74,12 @@ public abstract class Engine extends JFrame {
     // tempo esperado baseado na quantidade de quadros por segundo
     private long waitTimeFps;
 
+    // tempo de início da execução do jogo/simulação
+    private long startTime;
+
+    // flag que sinaliza o uso da suavização (antialiasing) para o contexto gráfico
+    private boolean antialiasing;
+    
     // flag para controle de execução da thread de desenho
     private boolean running;
 
@@ -134,10 +137,22 @@ public abstract class Engine extends JFrame {
      * @param windowWidth Largura da janela.
      * @param windowHeight Altura da janela.
      * @param windowTitle Título de janela.
-     * @param antialiasing Flag que indica se deve ou não usar suavização para o desenho no contexto gráfico.
      * @param targetFps A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
+     * @param antialiasing Flag que indica se deve ou não usar suavização para o desenho no contexto gráfico.
+     * @param resizable Flag que indica se a janela é redimensionável.
+     * @param fullScreen Flag que indica se a janela deve rodar em modo tela cheia exclusivo.
+     * @param undecorated Flag que indica se a janela deve ser não decorada.
+     * @param alwaysOnTop Flag que indica se a janela está sempre por cima.
      */
-    public Engine( int windowWidth, int windowHeight, String windowTitle, boolean antialiasing, int targetFps ) {
+    public Engine( int windowWidth, 
+                   int windowHeight, 
+                   String windowTitle, 
+                   int targetFps, 
+                   boolean antialiasing,
+                   boolean resizable, 
+                   boolean fullScreen, 
+                   boolean undecorated, 
+                   boolean alwaysOnTop ) {
 
         if ( windowWidth <= 0 ) {
             throw new IllegalArgumentException( "width must be positive!" );
@@ -147,16 +162,14 @@ public abstract class Engine extends JFrame {
             throw new IllegalArgumentException( "height must be positive!" );
         }
 
-        if ( targetFps <= 0 ) {
-            throw new IllegalArgumentException( "target fps must be positive!" );
-        }
+        startTime = System.currentTimeMillis();
+        setTargetFps( targetFps );
 
         defaultFont = new Font( Font.MONOSPACED, Font.PLAIN, 10 );
         defaultFpsFont = new Font( Font.MONOSPACED, Font.BOLD, 20 );
         defaultStroke = new BasicStroke( 1 );
 
         this.antialiasing = antialiasing;
-        this.targetFps = targetFps;
         waitTimeFps = (long) ( 1000.0 / this.targetFps );   // quanto se espera que cada frame demore
 
         // cria e configura o painel de desenho
@@ -167,9 +180,24 @@ public abstract class Engine extends JFrame {
 
         // configura a engine
         setTitle( windowTitle );
+        setAlwaysOnTop( alwaysOnTop );
+
+        if ( fullScreen ) {
+            setResizable( false );
+            setUndecorated( true );
+            setExtendedState( MAXIMIZED_BOTH );
+        } else {
+            setResizable( resizable );
+            setUndecorated( undecorated );
+        }
+
         setDefaultCloseOperation( EXIT_ON_CLOSE );
         add( drawingPanel, BorderLayout.CENTER );
-        pack();
+
+        if ( !fullScreen ) {
+            pack();
+        }
+
         setLocationRelativeTo( null );
 
         addWindowListener( new WindowAdapter() {
@@ -188,6 +216,23 @@ public abstract class Engine extends JFrame {
 
         setVisible( true );
 
+    }
+
+    /**
+     * Cria uma instância da engine e inicia sua execução.
+     * 
+     * @param windowWidth Largura da janela.
+     * @param windowHeight Altura da janela.
+     * @param windowTitle Título de janela.
+     * @param targetFps A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
+     * @param antialiasing Flag que indica se deve ou não usar suavização para o desenho no contexto gráfico.
+     */
+    public Engine( int windowWidth, 
+                   int windowHeight, 
+                   String windowTitle, 
+                   int targetFps, 
+                   boolean antialiasing ) {
+        this( windowWidth, windowHeight, windowTitle, targetFps, antialiasing, false, false, false, false );
     }
 
     private void start() {
@@ -232,6 +277,12 @@ public abstract class Engine extends JFrame {
                     frameTime = waitTime;  // o tempo que o frame demorou para executar
                 }
 
+                int localFps = (int) ( Math.round( 1000.0 / frameTime / 10.0 ) ) * 10;
+
+                if ( localFps >= 0 ) {
+                    currentFps = localFps;
+                }
+
                 try {
                     Thread.sleep( waitTime );
                 } catch ( InterruptedException exc ) {
@@ -273,6 +324,8 @@ public abstract class Engine extends JFrame {
 
     }
 
+
+    
     /***************************************************************************
      * Métodos de desenho
      **************************************************************************/
@@ -2012,6 +2065,8 @@ public abstract class Engine extends JFrame {
         fillCubicCurve( cubicCurve.x1, cubicCurve.y1, cubicCurve.c1x, cubicCurve.c1y, cubicCurve.c2x, cubicCurve.c2y, cubicCurve.x2, cubicCurve.y2, color );
     }
 
+
+
     /***************************************************************************
      * Métodos de desenho de texto.
      **************************************************************************/
@@ -2033,11 +2088,17 @@ public abstract class Engine extends JFrame {
      * Desenha um texto.
      * 
      * @param text o texto a ser desenhado.
-     * @param point ponto do inicio do desenho do texto.
+     * @param posX coordenada x do início do desenho do texto.
+     * @param posY coordenada y do início do desenho do texto.
+     * @param fontSize tamanho da fonte.
      * @param color cor de desenho.
      */
-    public void drawText( String text, Vector point, Color color ) {
-        drawText( text, point.x, point.y, color );
+    public void drawText( String text, double posX, double posY, int fontSize, Color color ) {
+        g2d.setColor( color );
+        Font f = g2d.getFont();
+        g2d.setFont( f.deriveFont( (float) fontSize ) );
+        g2d.drawString( text, (int) posX, (int) posY );
+        g2d.setFont( f );
     }
 
     /**
@@ -2052,6 +2113,41 @@ public abstract class Engine extends JFrame {
     }
 
     /**
+     * Desenha um texto.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param point ponto do inicio do desenho do texto.
+     * @param fontSize tamanho da fonte.
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, Point point, int fontSize, Color color ) {
+        drawText( text, point.x, point.y, fontSize, color );
+    }
+
+    /**
+     * Desenha um texto.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param point ponto do inicio do desenho do texto.
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, Vector point, Color color ) {
+        drawText( text, point.x, point.y, color );
+    }
+
+    /**
+     * Desenha um texto.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param point ponto do inicio do desenho do texto.
+     * @param fontSize tamanho da fonte.
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, Vector point, int fontSize, Color color ) {
+        drawText( text, point.x, point.y, fontSize, color );
+    }
+
+    /**
      * Mede a largura de um texto.
      * 
      * @param text o texto a ser medido.
@@ -2059,6 +2155,21 @@ public abstract class Engine extends JFrame {
      */
     public int measureText( String text ) {
         return g2d.getFontMetrics().stringWidth( text );
+    }
+
+    /**
+     * Mede a largura de um texto.
+     * 
+     * @param text o texto a ser medido.
+     * @param fontSize tamanho da fonte.
+     * @return a largura de um texto.
+     */
+    public int measureText( String text, int fontSize ) {
+        Font f = g2d.getFont();
+        g2d.setFont( f.deriveFont( (float) fontSize ) );
+        int width = g2d.getFontMetrics().stringWidth( text );
+        g2d.setFont( f );
+        return width;
     }
     
     
@@ -2077,15 +2188,51 @@ public abstract class Engine extends JFrame {
     }
 
     /***************************************************************************
-     * Métodos para obtenção de dados relativos à execução.
+     * Métodos para obtenção e/ou configuração de opções e/ou dados
+     * relativos à execução.
      **************************************************************************/
 
     /**
+     * Configura o quantidade de quadros por segundo desejado para a execução
+     * do jogo/simulação.
+     * 
+     * @param targetFps A quantidade de quadros por segundo.
+     */
+    public void setTargetFps( int targetFps ) {
+
+        if ( targetFps <= 0 ) {
+            throw new IllegalArgumentException( "target fps must be positive!" );
+        }
+
+        this.targetFps = targetFps;
+
+    }
+
+    /**
      * Obtém o tempo que um frame demorou para ser atualizado e desenhado.
-     * @return
+     * 
+     * @return o tempo que um frame demorou para ser atualizado e desenhado.
      */
     public double getFrameTime() {
         return frameTime / 1000.0;
+    }
+
+    /**
+     * Obtém o tempo atual de execução do jogo/simulação, em segundos.
+     * 
+     * @return O tempo atual de execução do jogo/simulação, em segundos.
+     */
+    public double getTime() {
+        return ( System.currentTimeMillis() - startTime ) / 1000.0;
+    }
+
+    /**
+     * Obtém a quantidade de quadros por segundo atual.
+     * 
+     * @return a quantidade de quadros por segundo atual.
+     */
+    public int getFps() {
+        return currentFps;
     }
 
     /**
@@ -2170,11 +2317,6 @@ public abstract class Engine extends JFrame {
 
         Font t = g2d.getFont();
         g2d.setFont( defaultFpsFont );
-
-        int localFps = (int) ( Math.round( 1000.0 / frameTime / 10.0 ) ) * 10;
-        if ( localFps >= 0 ) {
-            currentFps = localFps;
-        }
 
         drawText( 
             String.format( "%d FPS", currentFps ), 
