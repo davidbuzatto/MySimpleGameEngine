@@ -206,8 +206,6 @@ public abstract class Engine extends JFrame {
                     // quanto se deve esperar?
                     waitTime = waitTimeFps - frameTime;
 
-                    System.out.println( timeBefore + " " + timeAfter + " " + frameTime + " " + waitTime );
-
                     // se o tempo a esperar for negativo, quer dizer que não
                     // houve tempo suficiente, baseado no tempo esperado
                     // para todo o frame ser atualizado e desenhado

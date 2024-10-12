@@ -84,12 +84,6 @@ public class DrawingTests extends Engine {
         fillCubicCurve( 400, 340, 350, 380, 450, 420, 400, 460, ORANGE );
         drawCubicCurve( 400, 340, 350, 380, 450, 420, 400, 460, BLACK );
 
-        for ( int i = 0; i < 100000; i++ ) {
-            drawLine( 0, 0, 10, 10, BLACK );
-            //System.out.println( getFrameTime() );
-        }
-
-
     }
 
     public static void main( String[] args ) {
