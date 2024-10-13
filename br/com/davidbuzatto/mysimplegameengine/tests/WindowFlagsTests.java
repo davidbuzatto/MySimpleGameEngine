@@ -8,11 +8,11 @@ import br.com.davidbuzatto.mysimplegameengine.core.Engine;
  * @author Prof. Dr. David Buzatto
  * @copyright Copyright (c) 2024
  */
-public class WindowFlagsTest extends Engine {
+public class WindowFlagsTests extends Engine {
 
     // declaração de variáveis
 
-    public WindowFlagsTest() {
+    public WindowFlagsTests() {
 
         // cria a janela do jogo ou simulação
         super( 
@@ -57,7 +57,7 @@ public class WindowFlagsTest extends Engine {
     }
 
     public static void main( String[] args ) {
-        new WindowFlagsTest();
+        new WindowFlagsTests();
     }
 
 }

@@ -1,9 +1,18 @@
 package br.com.davidbuzatto.mysimplegameengine.utils;
 
-import br.com.davidbuzatto.mysimplegameengine.geom.*;
-
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.util.Random;
+
+import br.com.davidbuzatto.mysimplegameengine.geom.Circle;
+import br.com.davidbuzatto.mysimplegameengine.geom.CubicCurve;
+import br.com.davidbuzatto.mysimplegameengine.geom.Line;
+import br.com.davidbuzatto.mysimplegameengine.geom.Point;
+import br.com.davidbuzatto.mysimplegameengine.geom.Polygon;
+import br.com.davidbuzatto.mysimplegameengine.geom.QuadCurve;
+import br.com.davidbuzatto.mysimplegameengine.geom.Rectangle;
+import br.com.davidbuzatto.mysimplegameengine.geom.Triangle;
+import br.com.davidbuzatto.mysimplegameengine.geom.Vector;
 
 /**
  * Classe com métodos estáticos utilitários.
@@ -14,7 +23,8 @@ import java.awt.event.MouseEvent;
  */
 public class Utils {
     
-    private static double FLT_EPSILON = 2.2204460492503131e-16;
+    private static final double FLT_EPSILON = 2.2204460492503131e-16;
+    private static final Random random = new Random();
 
     /**
      * Realiza a interpolação linear entre dois valores.
@@ -27,6 +37,20 @@ public class Utils {
     public static double lerp( double start, double end, double amount ) {
         return start + amount * ( end - start );
     }
+
+    /**
+     * Limita um valor entre dois valores.
+     * 
+     * @param value O valor.
+     * @param min O valor mínimo.
+     * @param max O valor máximo.
+     * @return O valor fixado entre mínimo e máximo.
+     */
+    public static int clamp( int value, int min, int max ) {
+        int result = value < min ? min : value;
+        if ( result > max ) result = max;
+        return result;
+    }    
 
     /**
      * Limita um valor entre dois valores.
@@ -81,6 +105,26 @@ public class Utils {
     }
 
     /**
+     * Gera um número pseudo-aleatório entre min (inclusive) e max (inclusive).
+     * 
+     * @param min Início do intervalo.
+     * @param max Fim do intervalo.
+     * @return Um número pseudo-aleatório entre min (inclusive) e max (inclusive).
+     */
+    public static int getRandomValue( int min, int max ) {
+        return random.nextInt( min, max + 1 );
+    }
+
+    /**
+     * Configura a semente aleatória do gerador de números aleatórios.
+     * 
+     * @param seed A semente a ser utilizada.
+     */
+    public static void setRandomSeed( long seed ) {
+        random.setSeed( seed );
+    }
+
+    /**
      * Realiza a interpolação linear entre dois pontos.
      * 
      * @param start ponto inicial.
@@ -95,20 +139,11 @@ public class Utils {
     }
 
     /**
-     * Cria um vetor 2D com ambos os componentes iguais a 0.0.
-     * 
-     * @return Um vetor 2D com ambos os componentes iguais a 0.0.
-     */
-    public static Vector vector2DZero() {
-        return new Vector( 0.0, 0.0 );
-    }
-
-    /**
      * Cria um vetor 2D com ambos os componentes iguais a 1.0.
      * 
      * @return Um vetor 2D com ambos os componentes iguais a 1.0.
      */
-    public static Vector vector2DOne() {
+    public static Vector vectorOne() {
         return new Vector( 1.0, 1.0 );
     }
 
@@ -256,7 +291,7 @@ public class Utils {
      */
     public static Vector normalize( final Vector v ) {
 
-        Vector result = vector2DZero();
+        Vector result = new Vector();
         double length = Math.sqrt( v.x * v.x + v.y * v.y );
 
         if ( length > 0 ) {
@@ -292,7 +327,7 @@ public class Utils {
      */
     public static Vector reflect( final Vector v, final Vector normal ) {
 
-        Vector result = vector2DZero();
+        Vector result = new Vector();
 
         double dotProduct = ( v.x * normal.x + v.y * normal.y ); // produto escalar
 
@@ -312,7 +347,7 @@ public class Utils {
      */
     public static Vector min( final Vector v1, final Vector v2 ) {
 
-        Vector result = vector2DZero();
+        Vector result = new Vector();
 
         result.x = Math.min( v1.x, v2.x );
         result.y = Math.min( v1.y, v2.y );
@@ -330,7 +365,7 @@ public class Utils {
      */
     public static Vector max( final Vector v1, final Vector v2 ) {
 
-        Vector result = vector2DZero();
+        Vector result = new Vector();
 
         result.x = Math.max( v1.x, v2.x );
         result.y = Math.max( v1.y, v2.y );
@@ -348,7 +383,7 @@ public class Utils {
      */
     public static Vector rotate( final Vector v, double angle ) {
 
-        Vector result = vector2DZero();
+        Vector result = new Vector();
 
         double cos = Math.cos( angle );
         double sin = Math.sin( angle );
@@ -370,7 +405,7 @@ public class Utils {
      */
     public static Vector moveTowards( final Vector v, final Vector target, double maxDistance ) {
 
-        Vector result = vector2DZero();
+        Vector result = new Vector();
 
         double dx = target.x - v.x;
         double dy = target.y - v.y;
@@ -409,7 +444,7 @@ public class Utils {
      */
     public static Vector clamp( final Vector v, final Vector min, final Vector max ) {
 
-        Vector result = vector2DZero();
+        Vector result = new Vector();
 
         result.x = Math.min( max.x, Math.max( min.x, v.x ) );
         result.y = Math.min( max.y, Math.max( min.y, v.y ) );
@@ -490,22 +525,6 @@ public class Utils {
      */
     public static Vector mouseEventPositionToVector( MouseEvent e ) {
         return new Vector( e.getX(), e.getY() );
-    }
-
-    /**
-     * Realiza a interpolação linear entre duas cores.
-     * 
-     * @param start cor inicial.
-     * @param end cor final.
-     * @param amount quantidade (0 a 1)
-     * @return Uma cor que representa a interpolação linear entre duas cores pontos.
-     */
-    public static Color lerp( final Color start, final Color end, double amount ) {
-        int r = (int) clamp( lerp( start.getRed(), end.getRed(), amount ), 0, 255 );
-        int g = (int) clamp( lerp( start.getGreen(), end.getGreen(), amount ), 0, 255 );
-        int b = (int) clamp( lerp( start.getBlue(), end.getBlue(), amount ), 0, 255 );
-        int a = (int) clamp( lerp( start.getAlpha(), end.getAlpha(), amount ), 0, 255 );
-        return new Color( r, g, b, a );
     }
 
     /**
@@ -1389,6 +1408,183 @@ public class Utils {
 
         return overlap;
 
+    }
+
+    /**
+     * Aplica transparência (alpha) na cor.
+     * 
+     * @param color A cor base.
+     * @param alpha A quantidade de transparência entre 0.0 e 1.0
+     * @return A nova cor.
+     */
+    public static Color fade( Color color, double alpha ) {
+        return new Color( 
+            color.getRed(), color.getGreen(), color.getBlue(), 
+            clamp( (int) ( 255 * alpha ), 0, 255 ) );
+    }
+
+    /**
+     * Obtém os valores HSV (hue/saturation/value - matiz/saturação/valor) de uma
+     * cor. Os intervalos são h: [0..360], s: [0..1] e v: [0..1].
+     * 
+     * @param color Uma cor.
+     * @return Os valores HSV na forma de uma array de três elementos. Os valores
+     * seguem na ordem.
+     */
+    public static double[] colorToHSV( Color color ) {
+        float[] hsb = Color.RGBtoHSB( color.getRed(), color.getGreen(), color.getBlue(), null );
+        return new double[] { hsb[0] * 360, hsb[1], hsb[2] };
+    }
+
+    /**
+     * Obtém uma cor a par dos valores HSV (hue/saturation/value - matiz/saturação/valor).
+     * Os intervalos são h: [0..360], s: [0..1] e v: [0..1].
+     * 
+     * @param hue matiz [0..360]
+     * @param saturation [0..1]
+     * @param value [0..1]
+     * @return Uma cor com tais parâmetros.
+     */
+    public static Color colorFromHSV( double hue, double saturation, double value ) {
+        return new Color( Color.HSBtoRGB( (float) ( hue / 360.0 ), (float) saturation, (float) value ) );
+    }
+
+    /**
+     * Multiplica uma cor por uma tonalidade.
+     * 
+     * @param color A cor base.
+     * @param tint A tonalidade.
+     * @return Uma nova cor multiplicada pela tonalidade.
+     */
+    public static Color colorTint( Color color, Color tint ) {
+        return new Color( 
+            color.getRed() * tint.getRed() / 255,
+            color.getGreen() * tint.getGreen() / 255,
+            color.getBlue() * tint.getBlue() / 255,
+            color.getAlpha() * tint.getAlpha() / 255
+        );
+    }
+
+    /**
+     * Obtém uma cor com correção em relação ao brilho. O fator de brilho vai de 
+     * -1.0 a 1.0.
+     * 
+     * @param color Uma cor.
+     * @param factor O fato de brilho de -1.0 a 1.0.
+     * @return Uma nova cor corrigida.
+     */
+    public static Color colorBrightness( Color color, double factor ) {
+
+        if ( factor > 1.0 ) factor = 1.0;
+        else if ( factor < -1.0 ) factor = -1.0 ;
+
+        double red = color.getRed();
+        double green = color.getGreen();
+        double blue = color.getBlue();
+
+        if ( factor < 0.0 ) {
+            factor = 1.0 + factor;
+            red *= factor;
+            green *= factor;
+            blue *= factor;
+        } else {
+            red = ( 255 - red ) * factor + red;
+            green = ( 255 - green ) * factor + green;
+            blue = ( 255 - blue ) * factor + blue;
+        }
+
+        return new Color( (int) red, (int) green, (int) blue, color.getAlpha() );
+
+    }
+
+    /**
+     * Obtém uma cor com correção em relação ao contraste. O fator de contraste vai de 
+     * -1.0 a 1.0.
+     * 
+     * @param color Uma cor.
+     * @param factor O fato de contraste de -1.0 a 1.0.
+     * @return Uma nova cor corrigida.
+     */
+    public static Color colorContrast( Color color, double contrast ) {
+
+        if ( contrast < -1.0 ) contrast = -1.0;
+        else if ( contrast > 1.0 ) contrast = 1.0;
+
+        contrast = ( 1.0 + contrast );
+        contrast *= contrast;
+
+        double pR = color.getRed() / 255.0;
+        pR -= 0.5;
+        pR *= contrast;
+        pR += 0.5;
+        pR *= 255;
+        if ( pR < 0 ) pR = 0;
+        else if ( pR > 255 ) pR = 255;
+
+        double pG = color.getGreen() / 255.0;
+        pG -= 0.5;
+        pG *= contrast;
+        pG += 0.5;
+        pG *= 255;
+        if ( pG < 0 ) pG = 0;
+        else if ( pG > 255 ) pG = 255;
+
+        double pB = color.getBlue() / 255.0f;
+        pB -= 0.5;
+        pB *= contrast;
+        pB += 0.5;
+        pB *= 255;
+        if ( pB < 0 ) pB = 0;
+        else if ( pB > 255 ) pB = 255;
+
+        return new Color( (int) pR, (int) pG, (int) pB, color.getAlpha() );
+
+    }
+
+    /**
+     * Aplica transparência (alpha) na cor.
+     * 
+     * @param color A cor base.
+     * @param alpha A quantidade de transparência entre 0.0 e 1.0
+     * @return A nova cor.
+     */
+    public static Color colorAlpha( Color color, double alpha ) {
+        return fade( color, alpha );
+    }
+
+    // Get Color structure from hexadecimal value
+    // 0xAARRGGBB
+    /**
+     * Obtém uma cor a partir de um inteido em hexadecimal na forma 0xAARRGGBB, onde:
+     *     AA: canal alfa de 00 a FF;
+     *     RR: canal vermelho de 00 a FF;
+     *     GG: canal verde de 00 a FF;
+     *     BB: canal azul de 00 a FF;
+     * 
+     * Exemplo:
+     *     0xFF00FF00: verde com alfa máximo (sem transparência)
+     * 
+     * @param hexValue Um valor inteiro em hexadecimal.
+     * @return A cor relativa ao inteiro passado.
+     */
+    public static Color getColor( int hexValue ) {
+        return new Color( hexValue, true );
+    }
+
+    /**
+     * Realiza a interpolação linear entre duas cores.
+     * 
+     * @param start cor inicial.
+     * @param end cor final.
+     * @param amount quantidade (0 a 1)
+     * @return Uma cor que representa a interpolação linear entre duas cores pontos.
+     */
+    public static Color lerp( final Color start, final Color end, double amount ) {
+        int r = (int) clamp( lerp( start.getRed(), end.getRed(), amount ), 0, 255 );
+        int g = (int) clamp( lerp( start.getGreen(), end.getGreen(), amount ), 0, 255 );
+        int b = (int) clamp( lerp( start.getBlue(), end.getBlue(), amount ), 0, 255 );
+        int a = (int) clamp( lerp( start.getAlpha(), end.getAlpha(), amount ), 0, 255 );
+        return new Color( r, g, b, a );
     }
 
 }

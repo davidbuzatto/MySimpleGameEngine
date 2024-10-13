@@ -242,10 +242,10 @@ public abstract class Engine extends JFrame {
             while ( running ) {
 
                 timeBefore = System.currentTimeMillis();
-
+                update();
+                
                 try {
                     SwingUtilities.invokeAndWait( () -> {
-                        update();
                         drawingPanel.repaint();
                     });
                 } catch ( InterruptedException | InvocationTargetException exc ) {
@@ -278,6 +278,10 @@ public abstract class Engine extends JFrame {
                 }
 
                 int localFps = (int) ( Math.round( 1000.0 / frameTime / 10.0 ) ) * 10;
+
+                if ( localFps > targetFps ) {
+                    localFps = targetFps;
+                }
 
                 if ( localFps >= 0 ) {
                     currentFps = localFps;
@@ -2072,7 +2076,7 @@ public abstract class Engine extends JFrame {
      **************************************************************************/
 
     /**
-     * Desenha um texto.
+     * Desenha um texto usando o tamanho de fonte corrente.
      * 
      * @param text o texto a ser desenhado.
      * @param posX coordenada x do início do desenho do texto.
@@ -2082,6 +2086,25 @@ public abstract class Engine extends JFrame {
     public void drawText( String text, double posX, double posY, Color color ) {
         g2d.setColor( color );
         g2d.drawString( text, (int) posX, (int) posY );
+    }
+
+    /**
+     * Desenha um texto rotacionado usando o tamanho de fonte corrente.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param posX coordenada x do início do desenho do texto.
+     * @param posY coordenada y do início do desenho do texto.
+     * @param originX coordenada x do pivô de rotação.
+     * @param originY coordenada y do pivô de rotação.
+     * @param rotation ângulo de rotação em graus (sentido horário).
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, double posX, double posY, double originX, double originY, double rotation, Color color ) {
+        g2d.setColor( color );
+        Graphics2D ig2d = (Graphics2D) g2d.create();
+        ig2d.rotate( Math.toRadians( rotation ), originX, originY );
+        ig2d.drawString( text, (int) posX, (int) posY );
+        ig2d.dispose();
     }
 
     /**
@@ -2100,9 +2123,30 @@ public abstract class Engine extends JFrame {
         g2d.drawString( text, (int) posX, (int) posY );
         g2d.setFont( f );
     }
+    
+    /**
+     * Desenha um texto rotacionado.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param posX coordenada x do início do desenho do texto.
+     * @param posY coordenada y do início do desenho do texto.
+     * @param originX coordenada x do pivô de rotação.
+     * @param originY coordenada y do pivô de rotação.
+     * @param rotation ângulo de rotação em graus (sentido horário).
+     * @param fontSize tamanho da fonte.
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, double posX, double posY, double originX, double originY, double rotation, int fontSize, Color color ) {
+        g2d.setColor( color );
+        Graphics2D ig2d = (Graphics2D) g2d.create();
+        ig2d.setFont( g2d.getFont().deriveFont( (float) fontSize ) );
+        ig2d.rotate( Math.toRadians( rotation ), originX, originY );
+        ig2d.drawString( text, (int) posX, (int) posY );
+        ig2d.dispose();
+    }
 
     /**
-     * Desenha um texto.
+     * Desenha um texto usando o tamanho de fonte corrente.
      * 
      * @param text o texto a ser desenhado.
      * @param point ponto do inicio do desenho do texto.
@@ -2110,6 +2154,19 @@ public abstract class Engine extends JFrame {
      */
     public void drawText( String text, Point point, Color color ) {
         drawText( text, point.x, point.y, color );
+    }
+
+    /**
+     * Desenha um texto rotacionado usando o tamanho de fonte corrente.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param point ponto do inicio do desenho do texto.
+     * @param origin ponto do pivô de rotação.
+     * @param rotation ângulo de rotação em graus (sentido horário).
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, Point point, Point origin, double rotation, Color color ) {
+        drawText( text, point.x, point.y, origin.x, origin.y, rotation, color );
     }
 
     /**
@@ -2129,10 +2186,37 @@ public abstract class Engine extends JFrame {
      * 
      * @param text o texto a ser desenhado.
      * @param point ponto do inicio do desenho do texto.
+     * @param origin ponto do pivô de rotação.
+     * @param rotation ângulo de rotação em graus (sentido horário).
+     * @param fontSize tamanho da fonte.
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, Point point, Point origin, double rotation, int fontSize, Color color ) {
+        drawText( text, point.x, point.y, origin.x, origin.y, rotation, fontSize, color );
+    }
+
+    /**
+     * Desenha um texto usando o tamanho de fonte corrente.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param point ponto do inicio do desenho do texto.
      * @param color cor de desenho.
      */
     public void drawText( String text, Vector point, Color color ) {
         drawText( text, point.x, point.y, color );
+    }
+
+    /**
+     * Desenha um texto rotacionado usando o tamanho de fonte corrente.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param point ponto do inicio do desenho do texto.
+     * @param origin ponto do pivô de rotação.
+     * @param rotation ângulo de rotação em graus (sentido horário).
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, Vector point, Vector origin, double rotation, Color color ) {
+        drawText( text, point.x, point.y, origin.x, origin.y, rotation, color );
     }
 
     /**
@@ -2145,6 +2229,20 @@ public abstract class Engine extends JFrame {
      */
     public void drawText( String text, Vector point, int fontSize, Color color ) {
         drawText( text, point.x, point.y, fontSize, color );
+    }
+
+    /**
+     * Desenha um texto rotacionado.
+     * 
+     * @param text o texto a ser desenhado.
+     * @param point ponto do inicio do desenho do texto.
+     * @param origin ponto do pivô de rotação.
+     * @param rotation ângulo de rotação em graus (sentido horário).
+     * @param fontSize tamanho da fonte.
+     * @param color cor de desenho.
+     */
+    public void drawText( String text, Vector point, Vector origin, double rotation, int fontSize, Color color ) {
+        drawText( text, point.x, point.y, origin.x, origin.y, rotation, fontSize, color );
     }
 
     /**

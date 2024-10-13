@@ -2,7 +2,6 @@ package br.com.davidbuzatto.mysimplegameengine.geom;
 
 import br.com.davidbuzatto.mysimplegameengine.core.Drawable;
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
-import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
 
 import java.awt.Color;
 
@@ -26,7 +25,7 @@ public class Vector implements Drawable {
 
     @Override
     public void draw( Engine engine, Color color ) {
-        engine.drawLine( Utils.vector2DZero(), this, color );
+        engine.drawLine( 0, 0, x, y, color );
     }
 
     @Override

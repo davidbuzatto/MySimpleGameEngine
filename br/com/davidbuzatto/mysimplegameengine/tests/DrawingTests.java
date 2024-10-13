@@ -118,6 +118,12 @@ public class DrawingTests extends Engine {
 
         fillCubicCurve( 400, 340, 350, 380, 450, 420, 400, 460, ORANGE );
         drawCubicCurve( 400, 340, 350, 380, 450, 420, 400, 460, BLACK );
+
+        setFontSize( 20 );
+        //drawText( "teste", 500, 200, 10, BLACK );
+        drawText( "teste", new Vector( 500, 200 ), new Vector( 500, 200 ), -45, 10, BLACK );
+
+        drawText( getFrameTime() + "", new Vector( 500, 300 ), new Vector( 500, 300 ), 45, 20, BLACK );
         
     }
 
