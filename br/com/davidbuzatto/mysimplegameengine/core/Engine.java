@@ -352,7 +352,7 @@ public abstract class Engine extends JFrame {
      * @param vector vetor do pixel.
      * @param color cor de desenho.
      */
-    public void drawPixel( Vector vector, Color color ) {
+    public void drawPixel( Vector2 vector, Color color ) {
         drawPixel( vector.x, vector.y, color );
     }
 
@@ -387,7 +387,7 @@ public abstract class Engine extends JFrame {
      * @param endVector vetor final.
      * @param color cor de desenho.
      */
-    public void drawLine( Vector startVector, Vector endVector, Color color ) {
+    public void drawLine( Vector2 startVector, Vector2 endVector, Color color ) {
         drawLine( startVector.x, startVector.y, endVector.x, endVector.y, color );
     }
 
@@ -434,7 +434,7 @@ public abstract class Engine extends JFrame {
      * @param height altura.
      * @param color cor de desenho.
      */
-    public void drawRectangle( Vector pos, double width, double height, Color color ) {
+    public void drawRectangle( Vector2 pos, double width, double height, Color color ) {
         drawRectangle( pos.x, pos.y, width, height, color );
     }
     
@@ -482,7 +482,7 @@ public abstract class Engine extends JFrame {
      * @param height altura.
      * @param color cor de desenho.
      */
-    public void fillRectangle( Vector pos, double width, double height, Color color ) {
+    public void fillRectangle( Vector2 pos, double width, double height, Color color ) {
         fillRectangle( pos.x, pos.y, width, height, color );
     }
 
@@ -542,7 +542,7 @@ public abstract class Engine extends JFrame {
      * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void drawRectanglePro( Vector pos, double width, double height, Point origin, double rotation, Color color ) {
+    public void drawRectanglePro( Vector2 pos, double width, double height, Point origin, double rotation, Color color ) {
         drawRectanglePro( pos.x, pos.y, width, height, origin.x, origin.y, rotation, color );
     }
 
@@ -606,7 +606,7 @@ public abstract class Engine extends JFrame {
      * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void fillRectanglePro( Vector pos, double width, double height, Point origin, double rotation, Color color ) {
+    public void fillRectanglePro( Vector2 pos, double width, double height, Point origin, double rotation, Color color ) {
         fillRectanglePro( pos.x, pos.y, width, height, origin.x, origin.y, rotation, color );
     }
 
@@ -660,7 +660,7 @@ public abstract class Engine extends JFrame {
      * @param roundness arredondamento dos cantos.
      * @param color cor de desenho.
      */
-    public void drawRoundRectangle( Vector pos, double width, double height, double roundness, Color color ) {
+    public void drawRoundRectangle( Vector2 pos, double width, double height, double roundness, Color color ) {
         drawRoundRectangle( pos.x, pos.y, width, height, roundness, color );
     }
 
@@ -711,7 +711,7 @@ public abstract class Engine extends JFrame {
      * @param roundness arredondamento dos cantos.
      * @param color cor de desenho.
      */
-    public void fillRoundRectangle( Vector pos, double width, double height, double roundness, Color color ) {
+    public void fillRoundRectangle( Vector2 pos, double width, double height, double roundness, Color color ) {
         fillRoundRectangle( pos.x, pos.y, width, height, roundness, color );
     }
 
@@ -762,7 +762,7 @@ public abstract class Engine extends JFrame {
      * @param color1 cor inicial do gradiente.
      * @param color2 cor final do gradiente.
      */
-    public void fillRectangleGradientH( Vector pos, double width, double height, Color color1, Color color2 ) {
+    public void fillRectangleGradientH( Vector2 pos, double width, double height, Color color1, Color color2 ) {
         fillRectangleGradientH( pos.x, pos.y, width, height, color1, color2 );
     }
 
@@ -827,7 +827,7 @@ public abstract class Engine extends JFrame {
      * @param color1 cor inicial do gradiente.
      * @param color2 cor final do gradiente.
      */
-    public void fillRectangleGradientV( Vector pos, double width, double height, Color color1, Color color2 ) {
+    public void fillRectangleGradientV( Vector2 pos, double width, double height, Color color1, Color color2 ) {
         fillRectangleGradientV( pos.x, pos.y, width, height, color1, color2 );
     }
 
@@ -862,7 +862,7 @@ public abstract class Engine extends JFrame {
      * @param radius raio.
      * @param color cor de desenho.
      */
-    public void drawCircle( Vector center, double radius, Color color ) {
+    public void drawCircle( Vector2 center, double radius, Color color ) {
         drawCircle( center.x, center.y, radius, color );
     }
 
@@ -907,7 +907,7 @@ public abstract class Engine extends JFrame {
      * @param radius raio.
      * @param color cor de desenho.
      */
-    public void fillCircle( Vector center, double radius, Color color ) {
+    public void fillCircle( Vector2 center, double radius, Color color ) {
         fillCircle( center.x, center.y, radius, color );
     }
 
@@ -954,7 +954,7 @@ public abstract class Engine extends JFrame {
      * @param radiusV raio vertical.
      * @param color cor de desenho.
      */
-    public void drawEllipse( Vector center, double radiusH, double radiusV, Color color ) {
+    public void drawEllipse( Vector2 center, double radiusH, double radiusV, Color color ) {
         drawEllipse( center.x, center.y, radiusH, radiusV, color );
     }
 
@@ -1002,7 +1002,7 @@ public abstract class Engine extends JFrame {
      * @param radiusV raio vertical.
      * @param color cor de desenho.
      */
-    public void fillEllipse( Vector center, double radiusH, double radiusV, Color color ) {
+    public void fillEllipse( Vector2 center, double radiusH, double radiusV, Color color ) {
         fillEllipse( center.x, center.y, radiusH, radiusV, color );
     }
 
@@ -1053,7 +1053,7 @@ public abstract class Engine extends JFrame {
      * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void drawCircleSector( Vector center, double radius, double startAngle, double endAngle, Color color ) {
+    public void drawCircleSector( Vector2 center, double radius, double startAngle, double endAngle, Color color ) {
         drawCircleSector( center.x, center.y, radius, startAngle, endAngle, color );
     }
 
@@ -1119,7 +1119,7 @@ public abstract class Engine extends JFrame {
      * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void fillCircleSector( Vector center, double radius, double startAngle, double endAngle, Color color ) {
+    public void fillCircleSector( Vector2 center, double radius, double startAngle, double endAngle, Color color ) {
         fillCircleSector( center.x, center.y, radius, startAngle, endAngle, color );
     }
 
@@ -1187,7 +1187,7 @@ public abstract class Engine extends JFrame {
      * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void drawEllipseSector( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
+    public void drawEllipseSector( Vector2 center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         drawEllipseSector( center.x, center.y, radiusH, radiusV, startAngle, endAngle, color );
     }
 
@@ -1256,7 +1256,7 @@ public abstract class Engine extends JFrame {
      * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void fillEllipseSector( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
+    public void fillEllipseSector( Vector2 center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         fillEllipseSector( center.x, center.y, radiusH, radiusV, startAngle, endAngle, color );
     }
 
@@ -1325,7 +1325,7 @@ public abstract class Engine extends JFrame {
      * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void drawArc( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
+    public void drawArc( Vector2 center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         drawArc( center.x, center.y, radiusH, radiusV, startAngle, endAngle, color );
     }
 
@@ -1382,7 +1382,7 @@ public abstract class Engine extends JFrame {
      * @param endAngle ângulo final em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void fillArc( Vector center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
+    public void fillArc( Vector2 center, double radiusH, double radiusV, double startAngle, double endAngle, Color color ) {
         fillArc( center.x, center.y, radiusH, radiusV, startAngle, endAngle, color );
     }
 
@@ -1439,7 +1439,7 @@ public abstract class Engine extends JFrame {
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
-    public void drawRing( Vector center, double innerRadius, double outerRadius, double startAngle, double endAngle, int segments, Color color ) {
+    public void drawRing( Vector2 center, double innerRadius, double outerRadius, double startAngle, double endAngle, int segments, Color color ) {
         drawRing( center.x, center.y, innerRadius, outerRadius, startAngle, endAngle, segments, color );
     }
 
@@ -1495,7 +1495,7 @@ public abstract class Engine extends JFrame {
      * @param segments quantidade de segmentos.
      * @param color cor de desenho.
      */
-    public void fillRing( Vector center, double innerRadius, double outerRadius, double startAngle, double endAngle, int segments, Color color ) {
+    public void fillRing( Vector2 center, double innerRadius, double outerRadius, double startAngle, double endAngle, int segments, Color color ) {
         fillRing( center.x, center.y, innerRadius, outerRadius, startAngle, endAngle, segments, color );
     }
 
@@ -1602,7 +1602,7 @@ public abstract class Engine extends JFrame {
      * @param v3 terceiro vértice.
      * @param color cor de desenho.
      */
-    public void drawTriangle( Vector v1, Vector v2, Vector v3, Color color ) {
+    public void drawTriangle( Vector2 v1, Vector2 v2, Vector2 v3, Color color ) {
         drawTriangle( v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color );
     }
 
@@ -1651,7 +1651,7 @@ public abstract class Engine extends JFrame {
      * @param v3 terceiro vértice.
      * @param color cor de desenho.
      */
-    public void fillTriangle( Vector v1, Vector v2, Vector v3, Color color ) {
+    public void fillTriangle( Vector2 v1, Vector2 v2, Vector2 v3, Color color ) {
         fillTriangle( v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color );
     }
 
@@ -1721,7 +1721,7 @@ public abstract class Engine extends JFrame {
      * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void drawPolygon( Vector center, double sides, double radius, double rotation, Color color ) {
+    public void drawPolygon( Vector2 center, double sides, double radius, double rotation, Color color ) {
         drawPolygon( center.x, center.y, sides, radius, rotation, color );
     }
 
@@ -1771,7 +1771,7 @@ public abstract class Engine extends JFrame {
      * @param rotation rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void fillPolygon( Vector center, double sides, double radius, double rotation, Color color ) {
+    public void fillPolygon( Vector2 center, double sides, double radius, double rotation, Color color ) {
         fillPolygon( center.x, center.y, sides, radius, rotation, color );
     }
 
@@ -1885,7 +1885,7 @@ public abstract class Engine extends JFrame {
      * @param p2 ponto final.
      * @param color cor de desenhho.
      */
-    public void drawQuadCurve( Vector p1, Vector c, Vector p2, Color color ) {
+    public void drawQuadCurve( Vector2 p1, Vector2 c, Vector2 p2, Color color ) {
         drawQuadCurve( p1.x, p1.y, c.x, c.y, p2.x, p2.y, color );
     }
 
@@ -1935,7 +1935,7 @@ public abstract class Engine extends JFrame {
      * @param p2 ponto final.
      * @param color cor de desenhho.
      */
-    public void fillQuadCurve( Vector p1, Vector c, Vector p2, Color color ) {
+    public void fillQuadCurve( Vector2 p1, Vector2 c, Vector2 p2, Color color ) {
         fillQuadCurve( p1.x, p1.y, c.x, c.y, p2.x, p2.y, color );
     }
 
@@ -1988,7 +1988,7 @@ public abstract class Engine extends JFrame {
      * @param p2 ponto final.
      * @param color cor de desenhho.
      */
-    public void drawCubicCurve( Vector p1, Vector c1, Vector c2, Vector p2, Color color ) {
+    public void drawCubicCurve( Vector2 p1, Vector2 c1, Vector2 c2, Vector2 p2, Color color ) {
         drawCubicCurve( p1.x, p1.y, c1.x, c1.y, c2.x, c2.y, p2.x, p2.y, color );
     }
 
@@ -2042,7 +2042,7 @@ public abstract class Engine extends JFrame {
      * @param p2 ponto final.
      * @param color cor de desenhho.
      */
-    public void fillCubicCurve( Vector p1, Vector c1, Vector c2, Vector p2, Color color ) {
+    public void fillCubicCurve( Vector2 p1, Vector2 c1, Vector2 c2, Vector2 p2, Color color ) {
         fillCubicCurve( p1.x, p1.y, c1.x, c1.y, c2.x, c2.y, p2.x, p2.y, color );
     }
 
@@ -2202,7 +2202,7 @@ public abstract class Engine extends JFrame {
      * @param point ponto do inicio do desenho do texto.
      * @param color cor de desenho.
      */
-    public void drawText( String text, Vector point, Color color ) {
+    public void drawText( String text, Vector2 point, Color color ) {
         drawText( text, point.x, point.y, color );
     }
 
@@ -2215,7 +2215,7 @@ public abstract class Engine extends JFrame {
      * @param rotation ângulo de rotação em graus (sentido horário).
      * @param color cor de desenho.
      */
-    public void drawText( String text, Vector point, Vector origin, double rotation, Color color ) {
+    public void drawText( String text, Vector2 point, Vector2 origin, double rotation, Color color ) {
         drawText( text, point.x, point.y, origin.x, origin.y, rotation, color );
     }
 
@@ -2227,7 +2227,7 @@ public abstract class Engine extends JFrame {
      * @param fontSize tamanho da fonte.
      * @param color cor de desenho.
      */
-    public void drawText( String text, Vector point, int fontSize, Color color ) {
+    public void drawText( String text, Vector2 point, int fontSize, Color color ) {
         drawText( text, point.x, point.y, fontSize, color );
     }
 
@@ -2241,7 +2241,7 @@ public abstract class Engine extends JFrame {
      * @param fontSize tamanho da fonte.
      * @param color cor de desenho.
      */
-    public void drawText( String text, Vector point, Vector origin, double rotation, int fontSize, Color color ) {
+    public void drawText( String text, Vector2 point, Vector2 origin, double rotation, int fontSize, Color color ) {
         drawText( text, point.x, point.y, origin.x, origin.y, rotation, fontSize, color );
     }
 

@@ -11,7 +11,7 @@ import br.com.davidbuzatto.mysimplegameengine.geom.*;
 public class DrawingTests extends Engine {
 
     private Point point;
-    private Vector vector;
+    private Vector2 vector;
     private Line line;
     private Rectangle rectangle;
     private RoundRectangle roundRectangle;
@@ -34,7 +34,7 @@ public class DrawingTests extends Engine {
     public void create() {
 
         point = new Point( 50, 50 );
-        vector = new Vector( 30, 30 );
+        vector = new Vector2( 30, 30 );
         line = new Line( 60, 60, 100, 100 );
         rectangle = new Rectangle( 50, 120, 50, 100 );
         roundRectangle = new RoundRectangle( 50, 370, 80, 60, 20 );
@@ -121,9 +121,9 @@ public class DrawingTests extends Engine {
 
         setFontSize( 20 );
         //drawText( "teste", 500, 200, 10, BLACK );
-        drawText( "teste", new Vector( 500, 200 ), new Vector( 500, 200 ), -45, 10, BLACK );
+        drawText( "teste", new Vector2( 500, 200 ), new Vector2( 500, 200 ), -45, 10, BLACK );
 
-        drawText( getFrameTime() + "", new Vector( 500, 300 ), new Vector( 500, 300 ), 45, 20, BLACK );
+        drawText( getFrameTime() + "", new Vector2( 500, 300 ), new Vector2( 500, 300 ), 45, 20, BLACK );
         
     }
 

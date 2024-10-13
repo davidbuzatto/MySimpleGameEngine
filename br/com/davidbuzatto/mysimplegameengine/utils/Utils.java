@@ -12,7 +12,7 @@ import br.com.davidbuzatto.mysimplegameengine.geom.Polygon;
 import br.com.davidbuzatto.mysimplegameengine.geom.QuadCurve;
 import br.com.davidbuzatto.mysimplegameengine.geom.Rectangle;
 import br.com.davidbuzatto.mysimplegameengine.geom.Triangle;
-import br.com.davidbuzatto.mysimplegameengine.geom.Vector;
+import br.com.davidbuzatto.mysimplegameengine.geom.Vector2;
 
 /**
  * Classe com métodos estáticos utilitários.
@@ -143,8 +143,8 @@ public class Utils {
      * 
      * @return Um vetor 2D com ambos os componentes iguais a 1.0.
      */
-    public static Vector vectorOne() {
-        return new Vector( 1.0, 1.0 );
+    public static Vector2 vectorOne() {
+        return new Vector2( 1.0, 1.0 );
     }
 
     /**
@@ -154,8 +154,8 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor 2D com a soma dos vetores passados.
      */
-    public static Vector add( final Vector v1, final Vector v2 ) {
-        return new Vector( v1.x + v2.x, v1.y + v2.y );
+    public static Vector2 add( final Vector2 v1, final Vector2 v2 ) {
+        return new Vector2( v1.x + v2.x, v1.y + v2.y );
     }
 
     /**
@@ -165,8 +165,8 @@ public class Utils {
      * @param value O valor a somar.
      * @return Um novo vetor 2D com os componentes somados ao valor passado.
      */
-    public static Vector addValue( final Vector v, double value ) {
-        return new Vector( v.x + value, v.y + value );
+    public static Vector2 addValue( final Vector2 v, double value ) {
+        return new Vector2( v.x + value, v.y + value );
     }
 
     /**
@@ -176,8 +176,8 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor 2D com a subtração dos vetores passados.
      */
-    public static Vector subtract( final Vector v1, final Vector v2 ) {
-        return new Vector( v1.x - v2.x, v1.y - v2.y );
+    public static Vector2 subtract( final Vector2 v1, final Vector2 v2 ) {
+        return new Vector2( v1.x - v2.x, v1.y - v2.y );
     }
 
     /**
@@ -187,8 +187,8 @@ public class Utils {
      * @param value O valor a subtrair.
      * @return Um novo vetor 2D com os componentes subtraídos do valor passado.
      */
-    public static Vector subtractValue( final Vector v, double value ) {
-        return new Vector( v.x - value, v.y - value );
+    public static Vector2 subtractValue( final Vector2 v, double value ) {
+        return new Vector2( v.x - value, v.y - value );
     }
 
     /**
@@ -197,7 +197,7 @@ public class Utils {
      * @param v Um vetor.
      * @return O comprimento do vetor passado.
      */
-    public static double length( final Vector v ) {
+    public static double length( final Vector2 v ) {
         return Math.sqrt( v.x * v.x + v.y * v.y );
     }
 
@@ -208,7 +208,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return O produto escalar entre os vetores passados.
      */
-    public static double dotProduct( final Vector v1, final Vector v2 ) {
+    public static double dotProduct( final Vector2 v1, final Vector2 v2 ) {
         return v1.x * v2.x + v1.y * v2.y;
     }
 
@@ -219,7 +219,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return A distância entre os vetores passados.
      */
-    public static double distance( final Vector v1, final Vector v2 ) {
+    public static double distance( final Vector2 v1, final Vector2 v2 ) {
         return Math.sqrt( ( v1.x - v2.x ) * ( v1.x - v2.x ) + ( v1.y - v2.y ) * ( v1.y - v2.y ) );
     }
 
@@ -231,7 +231,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return O ângulo entre os dois vetores passados.
      */
-    public static double angle( final Vector v1, final Vector v2 ) {
+    public static double angle( final Vector2 v1, final Vector2 v2 ) {
 
         double dot = v1.x * v2.x + v1.y * v2.y;
         double det = v1.x * v2.y - v1.y * v2.x;
@@ -247,8 +247,8 @@ public class Utils {
      * @param scale A escala.
      * @return Um novo vetor 2D escalonado.
      */
-    public static Vector scale( final Vector v, double scale ) {
-        return new Vector( v.x * scale, v.y * scale );
+    public static Vector2 scale( final Vector2 v, double scale ) {
+        return new Vector2( v.x * scale, v.y * scale );
     }
 
     /**
@@ -258,8 +258,8 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o resultado da multiplicação dos vetores passados.
      */
-    public static Vector multiply( final Vector v1, final Vector v2 ) {
-        return new Vector( v1.x * v2.x, v1.y * v2.y );
+    public static Vector2 multiply( final Vector2 v1, final Vector2 v2 ) {
+        return new Vector2( v1.x * v2.x, v1.y * v2.y );
     }
 
     /**
@@ -268,8 +268,8 @@ public class Utils {
      * @param v Um vetor.
      * @return Um novo vetor com a negação do vetor passado.
      */
-    public static Vector negate( final Vector v ) {
-        return new Vector( -v.x, -v.y );
+    public static Vector2 negate( final Vector2 v ) {
+        return new Vector2( -v.x, -v.y );
     }
 
     /**
@@ -279,8 +279,8 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o resultado da divisão dos vetores passados.
      */
-    public static Vector divide( final Vector v1, final Vector v2 ) {
-        return new Vector( v1.x / v2.x, v1.y / v2.y );
+    public static Vector2 divide( final Vector2 v1, final Vector2 v2 ) {
+        return new Vector2( v1.x / v2.x, v1.y / v2.y );
     }
 
     /**
@@ -289,9 +289,9 @@ public class Utils {
      * @param v Um vetor.
      * @return Um novo vetor 2D normalizado.
      */
-    public static Vector normalize( final Vector v ) {
+    public static Vector2 normalize( final Vector2 v ) {
 
-        Vector result = new Vector();
+        Vector2 result = new Vector2();
         double length = Math.sqrt( v.x * v.x + v.y * v.y );
 
         if ( length > 0 ) {
@@ -312,10 +312,10 @@ public class Utils {
      * @param amount quantidade (0 a 1)
      * @return Um vetor que representa a interpolação linear entre dois vetores.
      */
-    public static Vector lerp( final Vector start, final Vector end, double amount ) {
+    public static Vector2 lerp( final Vector2 start, final Vector2 end, double amount ) {
         double x = start.x + ( end.x - start.x ) * amount;
         double y = start.y + ( end.y - start.y ) * amount;
-        return new Vector( x, y );
+        return new Vector2( x, y );
     }
 
     /**
@@ -325,9 +325,9 @@ public class Utils {
      * @param normal Vetor normal.
      * @return Um novo vetor refletido.
      */
-    public static Vector reflect( final Vector v, final Vector normal ) {
+    public static Vector2 reflect( final Vector2 v, final Vector2 normal ) {
 
-        Vector result = new Vector();
+        Vector2 result = new Vector2();
 
         double dotProduct = ( v.x * normal.x + v.y * normal.y ); // produto escalar
 
@@ -345,9 +345,9 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o mínimo dos componentes dos vetores passados.
      */
-    public static Vector min( final Vector v1, final Vector v2 ) {
+    public static Vector2 min( final Vector2 v1, final Vector2 v2 ) {
 
-        Vector result = new Vector();
+        Vector2 result = new Vector2();
 
         result.x = Math.min( v1.x, v2.x );
         result.y = Math.min( v1.y, v2.y );
@@ -363,9 +363,9 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o máximo dos componentes dos vetores passados.
      */
-    public static Vector max( final Vector v1, final Vector v2 ) {
+    public static Vector2 max( final Vector2 v1, final Vector2 v2 ) {
 
-        Vector result = new Vector();
+        Vector2 result = new Vector2();
 
         result.x = Math.max( v1.x, v2.x );
         result.y = Math.max( v1.y, v2.y );
@@ -381,9 +381,9 @@ public class Utils {
      * @param angle O ângulo.
      * @return Um novo vetor rotacionado.
      */
-    public static Vector rotate( final Vector v, double angle ) {
+    public static Vector2 rotate( final Vector2 v, double angle ) {
 
-        Vector result = new Vector();
+        Vector2 result = new Vector2();
 
         double cos = Math.cos( angle );
         double sin = Math.sin( angle );
@@ -403,9 +403,9 @@ public class Utils {
      * @param maxDistance A distância máxima.
      * @return Um novo vetor movido em direção ao alvo.
      */
-    public static Vector moveTowards( final Vector v, final Vector target, double maxDistance ) {
+    public static Vector2 moveTowards( final Vector2 v, final Vector2 target, double maxDistance ) {
 
-        Vector result = new Vector();
+        Vector2 result = new Vector2();
 
         double dx = target.x - v.x;
         double dy = target.y - v.y;
@@ -430,8 +430,8 @@ public class Utils {
      * @param v Um vetor.
      * @return Um novo vetor invertido.
      */
-    public static Vector invert( final Vector v ) {
-        return new Vector( 1.0 / v.x, 1.0 / v.y );
+    public static Vector2 invert( final Vector2 v ) {
+        return new Vector2( 1.0 / v.x, 1.0 / v.y );
     }
 
     /**
@@ -442,9 +442,9 @@ public class Utils {
      * @param max O vetor máximo.
      * @return Um novo vetor fixado entre o vetor mínimo e o vetor máximo.
      */
-    public static Vector clamp( final Vector v, final Vector min, final Vector max ) {
+    public static Vector2 clamp( final Vector2 v, final Vector2 min, final Vector2 max ) {
 
-        Vector result = new Vector();
+        Vector2 result = new Vector2();
 
         result.x = Math.min( max.x, Math.max( min.x, v.x ) );
         result.y = Math.min( max.y, Math.max( min.y, v.y ) );
@@ -461,9 +461,9 @@ public class Utils {
      * @param max O valor máximo.
      * @return o valor fixado da magnitude entre os valores mínimo e máximo.
      */
-    public static Vector clampValue( final Vector v, double min, double max ) {
+    public static Vector2 clampValue( final Vector2 v, double min, double max ) {
 
-        Vector result = new Vector( v.x, v.y );
+        Vector2 result = new Vector2( v.x, v.y );
 
         double length = v.x * v.x + v.y * v.y;
 
@@ -493,7 +493,7 @@ public class Utils {
      * @param v Um vetor 2D.
      * @return Um ponto 2D.
      */
-    public static Point vectorToPoint( Vector v ) {
+    public static Point vectorToPoint( Vector2 v ) {
         return new Point( v.x, v.y );
     }
 
@@ -503,8 +503,8 @@ public class Utils {
      * @param p Um ponto 2D.
      * @return Um vetor 2D.
      */
-    public static Vector pointToVector( Point p ) {
-        return new Vector( p.x, p.y );
+    public static Vector2 pointToVector( Point p ) {
+        return new Vector2( p.x, p.y );
     }
 
     /**
@@ -523,8 +523,8 @@ public class Utils {
      * @param e O evento do mouse.
      * @return O vetor onde ocorreu o evento do mouse.
      */
-    public static Vector mouseEventPositionToVector( MouseEvent e ) {
-        return new Vector( e.getX(), e.getY() );
+    public static Vector2 mouseEventPositionToVector( MouseEvent e ) {
+        return new Vector2( e.getX(), e.getY() );
     }
 
     /**
@@ -566,7 +566,7 @@ public class Utils {
      * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da linha.
      */
-    public static Point getPointAtLine( Vector v1, Vector v2, double amount ) {
+    public static Point getPointAtLine( Vector2 v1, Vector2 v2, double amount ) {
         return getPointAtLine( v1.x, v1.y, v2.x, v2.y, amount )        ;
     }
 
@@ -628,7 +628,7 @@ public class Utils {
      * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtQuadCurve( Vector v1, Vector c, Vector v2, double amount ) {
+    public static Point getPointAtQuadCurve( Vector2 v1, Vector2 c, Vector2 v2, double amount ) {
         return getPointAtQuadCurve( v1.x, v1.y, c.x, c.y, v2.x, v2.y, amount );
     }
     
@@ -695,7 +695,7 @@ public class Utils {
      * @param amount Um valor de 0 a 1 que representa a posição, em porcentagem, do ponto desejado.
      * @return O ponto dentro da curva.
      */
-    public static Point getPointAtCubicCurve( Vector v1, Vector c1, Vector c2, Vector v2, double amount ) {
+    public static Point getPointAtCubicCurve( Vector2 v1, Vector2 c1, Vector2 c2, Vector2 v2, double amount ) {
         return getPointAtCubicCurve( v1.x, v1.y, c1.x, c1.y, c2.x, c2.y, v2.x, v2.y, amount );
     }
 
@@ -754,7 +754,7 @@ public class Utils {
      * @param radius2 Raio do segundo círculo.
      * @return Verdadeiro caso os círculos tenham colidido, falso caso contrário.
      */
-    public static boolean checkCollisionCircles( Vector center1, double radius1, Vector center2, double radius2 ) {
+    public static boolean checkCollisionCircles( Vector2 center1, double radius1, Vector2 center2, double radius2 ) {
         return checkCollisionCircles( vectorToPoint( center1 ), radius1, vectorToPoint( center2 ), radius2 );
 
     }
@@ -820,7 +820,7 @@ public class Utils {
      * @param p2 Vetor final da linha.
      * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionCircleLine( Point center, double radius, Vector p1, Vector p2 ) {
+    public static boolean checkCollisionCircleLine( Point center, double radius, Vector2 p1, Vector2 p2 ) {
         return checkCollisionCircleLine( center, radius, vectorToPoint( p1 ), vectorToPoint( p2 ) );
     }
 
@@ -834,7 +834,7 @@ public class Utils {
      * @param p2 Ponto final da linha.
      * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionCircleLine( Vector center, double radius, Point p1, Point p2 ) {
+    public static boolean checkCollisionCircleLine( Vector2 center, double radius, Point p1, Point p2 ) {
         return checkCollisionCircleLine( vectorToPoint( center ), radius, p1, p2 );
     }
 
@@ -848,7 +848,7 @@ public class Utils {
      * @param p2 Vetor final da linha.
      * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionCircleLine( Vector center, double radius, Vector p1, Vector p2 ) {
+    public static boolean checkCollisionCircleLine( Vector2 center, double radius, Vector2 p1, Vector2 p2 ) {
         return checkCollisionCircleLine( vectorToPoint( center ), radius, vectorToPoint( p1 ), vectorToPoint( p2 ) );
     }
 
@@ -872,7 +872,7 @@ public class Utils {
      * @param p2 Vetor final da linha.
      * @return Verdadeiro caso o círculo tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionCircleLine( Circle circle, Vector p1, Vector p2 ) {
+    public static boolean checkCollisionCircleLine( Circle circle, Vector2 p1, Vector2 p2 ) {
         return checkCollisionCircleLine( new Point( circle.x, circle.y ), circle.radius, vectorToPoint( p1 ), vectorToPoint( p2 ) );
     }
 
@@ -938,7 +938,7 @@ public class Utils {
      * @param rec Um retângulo.
      * @return Verdadeiro caso o círculo tenha colidido com o retângulo, falso caso contrário.
      */
-    public static boolean checkCollisionCircleRectangle( Vector center, double radius, Rectangle rec ) {
+    public static boolean checkCollisionCircleRectangle( Vector2 center, double radius, Rectangle rec ) {
         return checkCollisionCircleRectangle( vectorToPoint( center ), radius, rec );
     }
 
@@ -988,7 +988,7 @@ public class Utils {
      * @param rec O retângulo.
      * @return Verdadeiro caso o ponto tenha colidido com o retângulo, falso caso contrário.
      */
-    public static boolean checkCollisionVectorRectangle( Vector vector, Rectangle rec ) {
+    public static boolean checkCollisionVectorRectangle( Vector2 vector, Rectangle rec ) {
         return checkCollisionPointRectangle( vector.x, vector.y, rec );
     }
 
@@ -1027,7 +1027,7 @@ public class Utils {
      * @param radius Raio do círculo.
      * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
      */
-    public static boolean checkCollisionPointCircle( Point point, Vector center, double radius ) {
+    public static boolean checkCollisionPointCircle( Point point, Vector2 center, double radius ) {
         return checkCollisionPointCircle( point.x, point.y, vectorToPoint( center ), radius );
     }
 
@@ -1050,7 +1050,7 @@ public class Utils {
      * @param radius Raio do círculo.
      * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
      */
-    public static boolean checkCollisionVectorCircle( Vector vector, Point center, double radius ) {
+    public static boolean checkCollisionVectorCircle( Vector2 vector, Point center, double radius ) {
         return checkCollisionPointCircle( vector.x, vector.y, center, radius );
     }
     
@@ -1062,7 +1062,7 @@ public class Utils {
      * @param radius Raio do círculo.
      * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
      */
-    public static boolean checkCollisionVectorCircle( Vector vector, Vector center, double radius ) {
+    public static boolean checkCollisionVectorCircle( Vector2 vector, Vector2 center, double radius ) {
         return checkCollisionPointCircle( vector.x, vector.y, vectorToPoint( center ), radius );
     }
 
@@ -1073,7 +1073,7 @@ public class Utils {
      * @param circle O círculo.
      * @return Verdadeiro caso o ponto tenha colidido com o círculo, falso caso contrário.
      */
-    public static boolean checkCollisionVectorCircle( Vector vector, Circle circle ) {
+    public static boolean checkCollisionVectorCircle( Vector2 vector, Circle circle ) {
         return checkCollisionPointCircle( vector.x, vector.y, new Point( circle.x, circle.y ), circle.radius );
     }
 
@@ -1109,7 +1109,7 @@ public class Utils {
      * @param p3 Vetor do terceiro vértice do triângulo.
      * @return Verdadeiro caso o ponto tenha colidido com o triângulo, falso caso contrário.
      */
-    public static boolean checkCollisionPointTriangle( Point point, Vector p1, Vector p2, Vector p3 ) {
+    public static boolean checkCollisionPointTriangle( Point point, Vector2 p1, Vector2 p2, Vector2 p3 ) {
         return checkCollisionPointTriangle( point, vectorToPoint( p1 ), vectorToPoint( p2 ), vectorToPoint( p3 ) );
     }
 
@@ -1138,7 +1138,7 @@ public class Utils {
      * @param p3 Ponto do terceiro vértice do triângulo.
      * @return Verdadeiro caso o vetor tenha colidido com o triângulo, falso caso contrário.
      */
-    public static boolean checkCollisionVectorTriangle( Vector vector, Point p1, Point p2, Point p3 ) {
+    public static boolean checkCollisionVectorTriangle( Vector2 vector, Point p1, Point p2, Point p3 ) {
         return checkCollisionPointTriangle( vectorToPoint( vector ), p1, p2, p3 );
     }
 
@@ -1151,7 +1151,7 @@ public class Utils {
      * @param p3 Vetor do terceiro vértice do triângulo.
      * @return Verdadeiro caso o vetor tenha colidido com o triângulo, falso caso contrário.
      */
-    public static boolean checkCollisionVectorTriangle( Vector vector, Vector p1, Vector p2, Vector p3 ) {
+    public static boolean checkCollisionVectorTriangle( Vector2 vector, Vector2 p1, Vector2 p2, Vector2 p3 ) {
         return checkCollisionPointTriangle( vectorToPoint( vector ), vectorToPoint( p1 ), vectorToPoint( p2 ), vectorToPoint( p3 ) );
     }
 
@@ -1162,7 +1162,7 @@ public class Utils {
      * @param triangle O triângulo.
      * @return Verdadeiro caso o vetor tenha colidido com o triângulo, falso caso contrário.
      */
-    public static boolean checkCollisionPointTriangle( Vector vector, Triangle triangle ) {
+    public static boolean checkCollisionPointTriangle( Vector2 vector, Triangle triangle ) {
         return checkCollisionPointTriangle( 
             vectorToPoint( vector ), 
             new Point( triangle.x1, triangle.y1 ),
@@ -1214,7 +1214,7 @@ public class Utils {
      * @param polygon O polígono.
      * @return Verdadeiro caso o ponto tenha colidido com o polígono, falso caso contrário.
      */
-    public static boolean checkCollisionVectorPolygon( Vector vector, Polygon polygon ) {
+    public static boolean checkCollisionVectorPolygon( Vector2 vector, Polygon polygon ) {
         return checkCollisionPointPolygon( vectorToPoint( vector ), polygon );
     }
 
@@ -1268,7 +1268,7 @@ public class Utils {
      * @param endPos2 Vetor final da segunda linha.
      * @return Retorna o ponto de colisão caso as linhas tenham se interceptado ou nulo caso contrário.
      */
-    public static Point checkCollisionLines( Vector startPos1, Vector endPos1, Vector startPos2, Vector endPos2 ) {
+    public static Point checkCollisionLines( Vector2 startPos1, Vector2 endPos1, Vector2 startPos2, Vector2 endPos2 ) {
         return checkCollisionLines( vectorToPoint( startPos1 ), vectorToPoint( endPos1 ), vectorToPoint( startPos2 ), vectorToPoint( endPos2 ) );
     }
 
@@ -1325,7 +1325,7 @@ public class Utils {
      * @param threshold O limite de proximidade entre o ponto e a linha.
      * @return Verdadeiro caso o ponto tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionPointLine( Point point, Vector v1, Vector v2, int threshold ) {
+    public static boolean checkCollisionPointLine( Point point, Vector2 v1, Vector2 v2, int threshold ) {
         return checkCollisionPointLine( point, vectorToPoint( v1 ), vectorToPoint( v2 ), threshold );
     }
 
@@ -1350,7 +1350,7 @@ public class Utils {
      * @param threshold O limite de proximidade entre o vetor e a linha.
      * @return Verdadeiro caso o vetor tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionVectorLine( Vector vector, Point p1, Point p2, int threshold ) {
+    public static boolean checkCollisionVectorLine( Vector2 vector, Point p1, Point p2, int threshold ) {
         return checkCollisionPointLine( vectorToPoint( vector ), p1, p2, threshold );
     }
 
@@ -1363,7 +1363,7 @@ public class Utils {
      * @param threshold O limite de proximidade entre o vetor e a linha.
      * @return Verdadeiro caso o vetor tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionVectorLine( Vector vector, Vector v1, Vector v2, int threshold ) {
+    public static boolean checkCollisionVectorLine( Vector2 vector, Vector2 v1, Vector2 v2, int threshold ) {
         return checkCollisionPointLine( vectorToPoint( vector ), vectorToPoint( v1 ), vectorToPoint( v2 ), threshold );
     }
 
@@ -1375,7 +1375,7 @@ public class Utils {
      * @param threshold O limite de proximidade entre o vetor e a linha.
      * @return Verdadeiro caso o vetor tenha colidido com a linha, falso caso contrário.
      */
-    public static boolean checkCollisionVectorLine( Vector vector, Line line, int threshold ) {
+    public static boolean checkCollisionVectorLine( Vector2 vector, Line line, int threshold ) {
         return checkCollisionPointLine( vectorToPoint( vector ), new Point( line.x1, line.y1 ), new Point( line.x2, line.y2 ), threshold );
     }
 
