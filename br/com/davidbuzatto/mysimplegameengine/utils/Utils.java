@@ -154,7 +154,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor 2D com a soma dos vetores passados.
      */
-    public static Vector2 add( final Vector2 v1, final Vector2 v2 ) {
+    public static Vector2 add( Vector2 v1, Vector2 v2 ) {
         return new Vector2( v1.x + v2.x, v1.y + v2.y );
     }
 
@@ -165,7 +165,7 @@ public class Utils {
      * @param value O valor a somar.
      * @return Um novo vetor 2D com os componentes somados ao valor passado.
      */
-    public static Vector2 addValue( final Vector2 v, double value ) {
+    public static Vector2 addValue( Vector2 v, double value ) {
         return new Vector2( v.x + value, v.y + value );
     }
 
@@ -176,7 +176,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor 2D com a subtração dos vetores passados.
      */
-    public static Vector2 subtract( final Vector2 v1, final Vector2 v2 ) {
+    public static Vector2 subtract( Vector2 v1, Vector2 v2 ) {
         return new Vector2( v1.x - v2.x, v1.y - v2.y );
     }
 
@@ -187,7 +187,7 @@ public class Utils {
      * @param value O valor a subtrair.
      * @return Um novo vetor 2D com os componentes subtraídos do valor passado.
      */
-    public static Vector2 subtractValue( final Vector2 v, double value ) {
+    public static Vector2 subtractValue( Vector2 v, double value ) {
         return new Vector2( v.x - value, v.y - value );
     }
 
@@ -197,7 +197,7 @@ public class Utils {
      * @param v Um vetor.
      * @return O comprimento do vetor passado.
      */
-    public static double length( final Vector2 v ) {
+    public static double length( Vector2 v ) {
         return Math.sqrt( v.x * v.x + v.y * v.y );
     }
 
@@ -208,7 +208,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return O produto escalar entre os vetores passados.
      */
-    public static double dotProduct( final Vector2 v1, final Vector2 v2 ) {
+    public static double dotProduct( Vector2 v1, Vector2 v2 ) {
         return v1.x * v2.x + v1.y * v2.y;
     }
 
@@ -219,7 +219,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return A distância entre os vetores passados.
      */
-    public static double distance( final Vector2 v1, final Vector2 v2 ) {
+    public static double distance( Vector2 v1, Vector2 v2 ) {
         return Math.sqrt( ( v1.x - v2.x ) * ( v1.x - v2.x ) + ( v1.y - v2.y ) * ( v1.y - v2.y ) );
     }
 
@@ -231,7 +231,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return O ângulo entre os dois vetores passados.
      */
-    public static double angle( final Vector2 v1, final Vector2 v2 ) {
+    public static double angle( Vector2 v1, Vector2 v2 ) {
 
         double dot = v1.x * v2.x + v1.y * v2.y;
         double det = v1.x * v2.y - v1.y * v2.x;
@@ -247,7 +247,7 @@ public class Utils {
      * @param scale A escala.
      * @return Um novo vetor 2D escalonado.
      */
-    public static Vector2 scale( final Vector2 v, double scale ) {
+    public static Vector2 scale( Vector2 v, double scale ) {
         return new Vector2( v.x * scale, v.y * scale );
     }
 
@@ -258,7 +258,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o resultado da multiplicação dos vetores passados.
      */
-    public static Vector2 multiply( final Vector2 v1, final Vector2 v2 ) {
+    public static Vector2 multiply( Vector2 v1, Vector2 v2 ) {
         return new Vector2( v1.x * v2.x, v1.y * v2.y );
     }
 
@@ -268,7 +268,7 @@ public class Utils {
      * @param v Um vetor.
      * @return Um novo vetor com a negação do vetor passado.
      */
-    public static Vector2 negate( final Vector2 v ) {
+    public static Vector2 negate( Vector2 v ) {
         return new Vector2( -v.x, -v.y );
     }
 
@@ -279,7 +279,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o resultado da divisão dos vetores passados.
      */
-    public static Vector2 divide( final Vector2 v1, final Vector2 v2 ) {
+    public static Vector2 divide( Vector2 v1, Vector2 v2 ) {
         return new Vector2( v1.x / v2.x, v1.y / v2.y );
     }
 
@@ -289,7 +289,7 @@ public class Utils {
      * @param v Um vetor.
      * @return Um novo vetor 2D normalizado.
      */
-    public static Vector2 normalize( final Vector2 v ) {
+    public static Vector2 normalize( Vector2 v ) {
 
         Vector2 result = new Vector2();
         double length = Math.sqrt( v.x * v.x + v.y * v.y );
@@ -312,7 +312,7 @@ public class Utils {
      * @param amount quantidade (0 a 1)
      * @return Um vetor que representa a interpolação linear entre dois vetores.
      */
-    public static Vector2 lerp( final Vector2 start, final Vector2 end, double amount ) {
+    public static Vector2 lerp( Vector2 start, Vector2 end, double amount ) {
         double x = start.x + ( end.x - start.x ) * amount;
         double y = start.y + ( end.y - start.y ) * amount;
         return new Vector2( x, y );
@@ -325,7 +325,7 @@ public class Utils {
      * @param normal Vetor normal.
      * @return Um novo vetor refletido.
      */
-    public static Vector2 reflect( final Vector2 v, final Vector2 normal ) {
+    public static Vector2 reflect( Vector2 v, Vector2 normal ) {
 
         Vector2 result = new Vector2();
 
@@ -345,7 +345,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o mínimo dos componentes dos vetores passados.
      */
-    public static Vector2 min( final Vector2 v1, final Vector2 v2 ) {
+    public static Vector2 min( Vector2 v1, Vector2 v2 ) {
 
         Vector2 result = new Vector2();
 
@@ -363,7 +363,7 @@ public class Utils {
      * @param v2 Outro vetor.
      * @return Um novo vetor com o máximo dos componentes dos vetores passados.
      */
-    public static Vector2 max( final Vector2 v1, final Vector2 v2 ) {
+    public static Vector2 max( Vector2 v1, Vector2 v2 ) {
 
         Vector2 result = new Vector2();
 
@@ -381,7 +381,7 @@ public class Utils {
      * @param angle O ângulo.
      * @return Um novo vetor rotacionado.
      */
-    public static Vector2 rotate( final Vector2 v, double angle ) {
+    public static Vector2 rotate( Vector2 v, double angle ) {
 
         Vector2 result = new Vector2();
 
@@ -403,7 +403,7 @@ public class Utils {
      * @param maxDistance A distância máxima.
      * @return Um novo vetor movido em direção ao alvo.
      */
-    public static Vector2 moveTowards( final Vector2 v, final Vector2 target, double maxDistance ) {
+    public static Vector2 moveTowards( Vector2 v, Vector2 target, double maxDistance ) {
 
         Vector2 result = new Vector2();
 
@@ -430,7 +430,7 @@ public class Utils {
      * @param v Um vetor.
      * @return Um novo vetor invertido.
      */
-    public static Vector2 invert( final Vector2 v ) {
+    public static Vector2 invert( Vector2 v ) {
         return new Vector2( 1.0 / v.x, 1.0 / v.y );
     }
 
@@ -442,7 +442,7 @@ public class Utils {
      * @param max O vetor máximo.
      * @return Um novo vetor fixado entre o vetor mínimo e o vetor máximo.
      */
-    public static Vector2 clamp( final Vector2 v, final Vector2 min, final Vector2 max ) {
+    public static Vector2 clamp( Vector2 v, Vector2 min, Vector2 max ) {
 
         Vector2 result = new Vector2();
 
@@ -461,7 +461,7 @@ public class Utils {
      * @param max O valor máximo.
      * @return o valor fixado da magnitude entre os valores mínimo e máximo.
      */
-    public static Vector2 clampValue( final Vector2 v, double min, double max ) {
+    public static Vector2 clampValue( Vector2 v, double min, double max ) {
 
         Vector2 result = new Vector2( v.x, v.y );
 
@@ -1579,7 +1579,7 @@ public class Utils {
      * @param amount quantidade (0 a 1)
      * @return Uma cor que representa a interpolação linear entre duas cores pontos.
      */
-    public static Color lerp( final Color start, final Color end, double amount ) {
+    public static Color lerp( Color start, Color end, double amount ) {
         int r = (int) clamp( lerp( start.getRed(), end.getRed(), amount ), 0, 255 );
         int g = (int) clamp( lerp( start.getGreen(), end.getGreen(), amount ), 0, 255 );
         int b = (int) clamp( lerp( start.getBlue(), end.getBlue(), amount ), 0, 255 );
