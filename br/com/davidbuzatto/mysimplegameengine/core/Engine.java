@@ -1,9 +1,5 @@
 package br.com.davidbuzatto.mysimplegameengine.core;
 
-import br.com.davidbuzatto.mysimplegameengine.event.*;
-import br.com.davidbuzatto.mysimplegameengine.geom.*;
-import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
-
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,13 +16,33 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import br.com.davidbuzatto.mysimplegameengine.event.KeyboardEventType;
+import br.com.davidbuzatto.mysimplegameengine.event.MouseEventType;
+import br.com.davidbuzatto.mysimplegameengine.geom.Arc;
+import br.com.davidbuzatto.mysimplegameengine.geom.Circle;
+import br.com.davidbuzatto.mysimplegameengine.geom.CircleSector;
+import br.com.davidbuzatto.mysimplegameengine.geom.CubicCurve;
+import br.com.davidbuzatto.mysimplegameengine.geom.Ellipse;
+import br.com.davidbuzatto.mysimplegameengine.geom.EllipseSector;
+import br.com.davidbuzatto.mysimplegameengine.geom.Line;
+import br.com.davidbuzatto.mysimplegameengine.geom.Path;
+import br.com.davidbuzatto.mysimplegameengine.geom.Point;
+import br.com.davidbuzatto.mysimplegameengine.geom.Polygon;
+import br.com.davidbuzatto.mysimplegameengine.geom.QuadCurve;
+import br.com.davidbuzatto.mysimplegameengine.geom.Rectangle;
+import br.com.davidbuzatto.mysimplegameengine.geom.Ring;
+import br.com.davidbuzatto.mysimplegameengine.geom.RoundRectangle;
+import br.com.davidbuzatto.mysimplegameengine.geom.Triangle;
+import br.com.davidbuzatto.mysimplegameengine.geom.Vector2;
+import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
 
 /**
  * Engine simples para criação de jogos ou simulações usando Java 2D.
@@ -82,6 +98,9 @@ public abstract class Engine extends JFrame {
     
     // flag para controle de execução da thread de desenho
     private boolean running;
+
+    // gerenciador de entradas
+    private InputManager inputManager;
 
     /**
      * Processa a entrada inicial fornecida pelo usuário e cria
@@ -153,7 +172,7 @@ public abstract class Engine extends JFrame {
                    boolean fullScreen, 
                    boolean undecorated, 
                    boolean alwaysOnTop ) {
-
+                    
         if ( windowWidth <= 0 ) {
             throw new IllegalArgumentException( "width must be positive!" );
         }
@@ -176,7 +195,8 @@ public abstract class Engine extends JFrame {
         drawingPanel = new DrawingPanel();
         drawingPanel.setPreferredSize( new Dimension( windowWidth, windowHeight ) );
         drawingPanel.setFocusable( true );
-        prepararEventosPainel( drawingPanel );
+        prepareInputManager();
+        prepareDrawingPanelEvents();
 
         // configura a engine
         setTitle( windowTitle );
@@ -326,6 +346,179 @@ public abstract class Engine extends JFrame {
 
         }
 
+    }
+
+
+
+    private GameAction mouseLeftAction;
+    private GameAction mouseLeftActionInitial;
+    private GameAction mouseCenterAction;
+    private GameAction mouseCenterActionInitial;
+    private GameAction mouseRightAction;
+    private GameAction mouseRightActionInitial;
+    private GameAction mouseWheelUpAction;
+    private GameAction mouseWheelDownAction;
+
+    private void prepareInputManager() {
+
+        inputManager = new InputManager( drawingPanel );
+
+        mouseLeftAction = new GameAction( "mouse button left" );
+        mouseLeftActionInitial = new GameAction( "mouse button left initial", true );
+        mouseCenterAction = new GameAction( "mouse button center" );
+        mouseCenterActionInitial = new GameAction( "mouse button center initial", true );
+        mouseRightAction = new GameAction( "mouse button right" );
+        mouseRightActionInitial = new GameAction( "mouse button right initial", true );
+
+        mouseWheelUpAction = new GameAction( "mouse wheel up", true );
+        mouseWheelDownAction = new GameAction( "mouse wheel down", true );
+
+        inputManager.mapToMouse( mouseLeftAction, InputManager.MOUSE_BUTTON_1 );
+        inputManager.mapToMouse( mouseLeftActionInitial, InputManager.MOUSE_BUTTON_1 );
+        inputManager.mapToMouse( mouseCenterAction, InputManager.MOUSE_BUTTON_2 );
+        inputManager.mapToMouse( mouseCenterActionInitial, InputManager.MOUSE_BUTTON_2 );
+        inputManager.mapToMouse( mouseRightAction, InputManager.MOUSE_BUTTON_3 );
+        inputManager.mapToMouse( mouseRightActionInitial, InputManager.MOUSE_BUTTON_3 );
+
+        inputManager.mapToMouse( mouseWheelUpAction, InputManager.MOUSE_WHEEL_UP );
+        inputManager.mapToMouse( mouseWheelDownAction, InputManager.MOUSE_WHEEL_DOWN );
+
+    }
+
+    /**
+     * Retorna se um botão do mouse foi pressionado uma vez.
+     * 
+     * @param button O inteiro que identifica o botão do mouse desejado.
+     * @return Verdadeiro caso o botão tenha sido pressionado uma vez, falso caso contrário.
+     */
+    public boolean isMouseButtonPressed( int button ) {
+        switch ( button ) {
+            case MouseEvent.BUTTON1:
+                return mouseLeftActionInitial.isPressed();
+            case MouseEvent.BUTTON2:
+                return mouseCenterActionInitial.isPressed();
+            case MouseEvent.BUTTON3:
+                return mouseRightActionInitial.isPressed();
+        }
+        return false;
+    }
+
+    /**
+     * Retorna se um botão do mouse foi solto.
+     * 
+     * @param button O inteiro que identifica o botão do mouse desejado.
+     * @return Verdadeiro caso o botão tenha sido solto, falso caso contrário.
+     */
+    public boolean isMouseButtonReleased( int button ) {
+        switch ( button ) {
+            case MouseEvent.BUTTON1:
+                return mouseLeftAction.isPressed() && mouseLeftAction.getAmount() == 0;
+            case MouseEvent.BUTTON2:
+                return mouseCenterAction.isPressed() && mouseCenterAction.getAmount() == 0;
+            case MouseEvent.BUTTON3:
+                return mouseRightAction.isPressed() && mouseRightAction.getAmount() == 0;
+        }
+        return false;
+    }
+
+    /**
+     * Retorna se um botão do mouse está pressionado.
+     * 
+     * @param button O inteiro que identifica o botão do mouse desejado.
+     * @return Verdadeiro caso o botão esteja pressionado, falso caso contrário.
+     */
+    public boolean isMouseButtonDown( int button ) {
+        switch ( button ) {
+            case MouseEvent.BUTTON1:
+                return mouseLeftAction.isPressed();
+            case MouseEvent.BUTTON2:
+                return mouseCenterAction.isPressed();
+            case MouseEvent.BUTTON3:
+                return mouseRightAction.isPressed();
+        }
+        return false;
+    }
+    
+    /**
+     * Retorna se um botão do mouse não está pressionado.
+     * 
+     * @param button O inteiro que identifica o botão do mouse desejado.
+     * @return Verdadeiro caso o botão não esteja pressionado, falso caso contrário.
+     */
+    public boolean isMouseButtonUp( int button ) {
+        return !isMouseButtonDown( button );
+    }
+
+    /**
+     * Obtém a posição x do mouse.
+     * 
+     * @return A posição x do mouse.
+     */
+    public int getMouseX() {
+        return inputManager.getMouseX();
+    }
+    
+    /**
+     * Obtém a posição y do mouse.
+     * 
+     * @return A posição y do mouse.
+     */
+    public int getMouseY() {
+        return inputManager.getMouseY();
+    }
+
+    /**
+     * Obtém a posição do mouse como um ponto.
+     * 
+     * @return A posição do mouse como um ponto.
+     */
+    public Point getMousePositionPoint() {
+        return new Point( inputManager.getMouseX(), inputManager.getMouseY() );
+    }
+
+    /**
+     * Obtém a posição do mouse como um vetor.
+     * 
+     * @return A posição do mouse como um vetor.
+     */
+    public Vector2 getMousePositionVector2() {
+        return new Vector2( inputManager.getMouseX(), inputManager.getMouseY() );
+    }
+
+    /**
+     * Obtém a movimentação da roda de rolagem do mouse.
+     * Positivo para cima, negativo para baixo e zero para estacionária.
+     * 
+     * @return A movimentação da roda de rolagem do mouse.
+     */
+    public double getMouseWheelMove() {
+        double vUp = mouseWheelUpAction.getAmount();
+        double vDown = mouseWheelDownAction.getAmount();
+        return vUp >= vDown ? vUp : -vDown;
+    }
+
+    /**
+     * Obtém um ponto com movimentação da roda de rolagem do mouse.
+     * Em x a movimentação para cima e em y a movimentação para baixo.
+     * 
+     * @return Um ponto com a movimentação da roda de rolagem do mouse.
+     */
+    public Point getMouseWheelMovePoint() {
+        double vUp = mouseWheelUpAction.getAmount();
+        double vDown = mouseWheelDownAction.getAmount();
+        return new Point( vUp, vDown );
+    }
+
+    /**
+     * Obtém um vetor com movimentação da roda de rolagem do mouse.
+     * Em x a movimentação para cima e em y a movimentação para baixo.
+     * 
+     * @return Um vetor com a movimentação da roda de rolagem do mouse.
+     */
+    public Vector2 getMouseWheelMoveVector() {
+        double vUp = mouseWheelUpAction.getAmount();
+        double vDown = mouseWheelDownAction.getAmount();
+        return new Vector2( vUp, vDown );
     }
 
 
@@ -2579,9 +2772,9 @@ public abstract class Engine extends JFrame {
     /***************************************************************************
      * Controle interno dos eventos.
      **************************************************************************/
-    private void prepararEventosPainel( DrawingPanel painelDesenho ) {
+    private void prepareDrawingPanelEvents() {
 
-        painelDesenho.addMouseListener( new MouseListener() {
+        drawingPanel.addMouseListener( new MouseListener() {
 
             @Override
             public void mouseClicked( MouseEvent e ) {
@@ -2610,7 +2803,7 @@ public abstract class Engine extends JFrame {
             
         });
 
-        painelDesenho.addMouseMotionListener( new MouseMotionListener() {
+        drawingPanel.addMouseMotionListener( new MouseMotionListener() {
 
             @Override
             public void mouseDragged( MouseEvent e ) {
@@ -2624,7 +2817,7 @@ public abstract class Engine extends JFrame {
             
         });
 
-        painelDesenho.addMouseWheelListener( new MouseWheelListener() {
+        drawingPanel.addMouseWheelListener( new MouseWheelListener() {
 
             @Override
             public void mouseWheelMoved( MouseWheelEvent e ) {
@@ -2633,7 +2826,7 @@ public abstract class Engine extends JFrame {
             
         });
 
-        painelDesenho.addKeyListener( new KeyAdapter() {
+        drawingPanel.addKeyListener( new KeyAdapter() {
 
             @Override
             public void keyPressed( KeyEvent e ) {
