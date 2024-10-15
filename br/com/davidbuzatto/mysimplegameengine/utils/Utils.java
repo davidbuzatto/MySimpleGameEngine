@@ -1,7 +1,6 @@
 package br.com.davidbuzatto.mysimplegameengine.utils;
 
 import java.awt.Color;
-import java.awt.event.MouseEvent;
 import java.util.Random;
 
 import br.com.davidbuzatto.mysimplegameengine.geom.Circle;
@@ -505,26 +504,6 @@ public class Utils {
      */
     public static Vector2 pointToVector2( Point p ) {
         return new Vector2( p.x, p.y );
-    }
-
-    /**
-     * Ontém a coordenada do mouse de um evento do mouse e gera um ponto.
-     * 
-     * @param e O evento do mouse.
-     * @return O ponto onde ocorreu o evento do mouse.
-     */
-    public static Point mouseEventPositionToPoint( MouseEvent e ) {
-        return new Point( e.getX(), e.getY() );
-    }
-
-    /**
-     * Ontém a coordenada do mouse de um evento do mouse e gera um vetor.
-     * 
-     * @param e O evento do mouse.
-     * @return O vetor onde ocorreu o evento do mouse.
-     */
-    public static Vector2 mouseEventPositionToVector( MouseEvent e ) {
-        return new Vector2( e.getX(), e.getY() );
     }
 
     /**

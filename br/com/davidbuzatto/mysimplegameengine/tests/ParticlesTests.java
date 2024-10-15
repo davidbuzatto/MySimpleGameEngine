@@ -1,29 +1,26 @@
 package br.com.davidbuzatto.mysimplegameengine.tests;
 
 import java.awt.Color;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
-import br.com.davidbuzatto.mysimplegameengine.event.MouseEventType;
 import br.com.davidbuzatto.mysimplegameengine.geom.Point;
 import br.com.davidbuzatto.mysimplegameengine.geom.Vector2;
 import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
 
 /**
- * Classe básica de exemplo de utilização da engine.
+ * Testes de partículas.
  * 
  * @author Prof. Dr. David Buzatto
  * @copyright Copyright (c) 2024
  */
-public class ParticlesTest extends Engine {
+public class ParticlesTests extends Engine {
 
-    private static final double GRAVIDADE = 50;
-    private Point mousePos;
-    boolean mousePressed;
+    private static final double GRAVITY = 50;
 
     private class Particula {
+
         Vector2 pos;
         Vector2 vel;
         Color cor;
@@ -57,7 +54,7 @@ public class ParticlesTest extends Engine {
             }*/
 
             vel.x = vel.x * atrito;
-            vel.y = vel.y * atrito + GRAVIDADE;
+            vel.y = vel.y * atrito + GRAVITY;
 
         }
 
@@ -65,40 +62,23 @@ public class ParticlesTest extends Engine {
 
     List<Particula> particulas;
 
-    public ParticlesTest() {
-        super( 800, 600, "Título da Janela", 60, true );
+    public ParticlesTests() {
+        super( 800, 600, "Particle Tests", 60, true );
     }
 
-    /**
-     * Processa a entrada inicial fornecida pelo usuário e cria
-     * e/ou inicializa os objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void create() {
         particulas = new CopyOnWriteArrayList<>();
     }
 
     @Override
-    public void handleMouseEvents(MouseEvent e, MouseEventType met) {
-        
-        if ( met == MouseEventType.PRESSED || met == MouseEventType.DRAGGED ) {
-            mousePressed = true;
-            mousePos = Utils.mouseEventPositionToPoint( e );
-        } else if ( met == MouseEventType.RELEASED ) {
-            mousePressed = false;
-        }
-
-    }
-
-    /**
-     * Atualiza os objetos/contextos/variáveis do jogo ou simulação.
-     */
-    @Override
     public void update() {        
 
         double delta = getFrameTime();
 
-        if ( mousePressed ) {
+        Point mousePos = getMousePositionPoint();
+
+        if ( isMouseButtonDown( MOUSE_BUTTON_LEFT ) ) {
             for ( int i = 0; i < 20; i++ ) {
                 Particula p = new Particula();
                 p.pos = new Vector2( mousePos.x, mousePos.y );
@@ -116,21 +96,21 @@ public class ParticlesTest extends Engine {
         }
     }
 
-    /**
-     * Desenha o estado dos objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void draw() {
+
         clearBackground( BLACK );
         drawFps( 10, 20 );
         drawText( "Particles: " + particulas.size(), 10, 40, 20, WHITE );
+
         for ( Particula p : particulas ) {
             p.desenhar( this );
         }
+        
     }
 
     public static void main( String[] args ) {
-        new ParticlesTest();
+        new ParticlesTests();
     }
 
 }

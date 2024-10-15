@@ -1,16 +1,21 @@
 package br.com.davidbuzatto.mysimplegameengine.core;
 
+import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.KeyAdapter;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -18,14 +23,20 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import br.com.davidbuzatto.mysimplegameengine.event.KeyboardEventType;
-import br.com.davidbuzatto.mysimplegameengine.event.MouseEventType;
 import br.com.davidbuzatto.mysimplegameengine.geom.Arc;
 import br.com.davidbuzatto.mysimplegameengine.geom.Circle;
 import br.com.davidbuzatto.mysimplegameengine.geom.CircleSector;
@@ -102,6 +113,16 @@ public abstract class Engine extends JFrame {
     // gerenciador de entradas
     private InputManager inputManager;
 
+    // ações padrão para o mouse
+    private GameAction mouseLeftAction;
+    private GameAction mouseLeftActionInitial;
+    private GameAction mouseMiddleAction;
+    private GameAction mouseMiddleActionInitial;
+    private GameAction mouseRightAction;
+    private GameAction mouseRightActionInitial;
+    private GameAction mouseWheelUpAction;
+    private GameAction mouseWheelDownAction;
+
     /**
      * Processa a entrada inicial fornecida pelo usuário e cria
      * e/ou inicializa os objetos/contextos/variáveis do jogo ou simulação.
@@ -123,32 +144,6 @@ public abstract class Engine extends JFrame {
      * É executado uma vez a cada frame, sempre após o método de atualização.
      */
     public abstract void draw();
-
-    /**
-     * Trata os eventos do mouse.
-     * 
-     * @param e Objeto que contém os dados do evento que foi capturado.
-     * @param met Tipo de evento que foi capturado.
-     */
-    public void handleMouseEvents( MouseEvent e, MouseEventType met ) {
-    }
-
-    /**
-     * Trata os eventos relacionaos a roda de rolagem do mouse.
-     * 
-     * @param e Objeto que contém os dados do evento que foi capturado.
-     */
-    public void handleMouseWheelEvents( MouseWheelEvent e ) {
-    }
-
-    /**
-     * Trata os eventos relacionados ao teclado.
-     * 
-     * @param e Objeto que contém os dados do evento que foi capturado.
-     * @param ket Tipo de evento que foi capturado.
-     */
-    public void handleKeyboardEvents( KeyEvent e, KeyboardEventType ket ) {
-    }
 
     /**
      * Cria uma instância da engine e inicia sua execução.
@@ -196,7 +191,6 @@ public abstract class Engine extends JFrame {
         drawingPanel.setPreferredSize( new Dimension( windowWidth, windowHeight ) );
         drawingPanel.setFocusable( true );
         prepareInputManager();
-        prepareDrawingPanelEvents();
 
         // configura a engine
         setTitle( windowTitle );
@@ -319,72 +313,39 @@ public abstract class Engine extends JFrame {
 
     }
 
-    /**
-     * Classe inerna que encapsula o processo de desenho.
-     */
-    private class DrawingPanel extends JPanel {
-
-        @Override
-        public void paintComponent( Graphics g ) {
-
-            super.paintComponent( g );
-            g2d = (Graphics2D) g.create();
-
-            g2d.setFont( defaultFont );
-            g2d.setStroke( defaultStroke );
-            
-            g2d.clearRect( 0, 0, getWidth(), getHeight() );
-
-            if ( antialiasing ) {
-                g2d.setRenderingHint( 
-                    RenderingHints.KEY_ANTIALIASING, 
-                    RenderingHints.VALUE_ANTIALIAS_ON );
-            }
-
-            draw();
-            g2d.dispose();
-
-        }
-
-    }
-
-
-
-    private GameAction mouseLeftAction;
-    private GameAction mouseLeftActionInitial;
-    private GameAction mouseCenterAction;
-    private GameAction mouseCenterActionInitial;
-    private GameAction mouseRightAction;
-    private GameAction mouseRightActionInitial;
-    private GameAction mouseWheelUpAction;
-    private GameAction mouseWheelDownAction;
-
     private void prepareInputManager() {
 
         inputManager = new InputManager( drawingPanel );
 
         mouseLeftAction = new GameAction( "mouse button left" );
         mouseLeftActionInitial = new GameAction( "mouse button left initial", true );
-        mouseCenterAction = new GameAction( "mouse button center" );
-        mouseCenterActionInitial = new GameAction( "mouse button center initial", true );
+        mouseMiddleAction = new GameAction( "mouse button center" );
+        mouseMiddleActionInitial = new GameAction( "mouse button center initial", true );
         mouseRightAction = new GameAction( "mouse button right" );
         mouseRightActionInitial = new GameAction( "mouse button right initial", true );
 
         mouseWheelUpAction = new GameAction( "mouse wheel up", true );
         mouseWheelDownAction = new GameAction( "mouse wheel down", true );
 
-        inputManager.mapToMouse( mouseLeftAction, InputManager.MOUSE_BUTTON_1 );
-        inputManager.mapToMouse( mouseLeftActionInitial, InputManager.MOUSE_BUTTON_1 );
-        inputManager.mapToMouse( mouseCenterAction, InputManager.MOUSE_BUTTON_2 );
-        inputManager.mapToMouse( mouseCenterActionInitial, InputManager.MOUSE_BUTTON_2 );
-        inputManager.mapToMouse( mouseRightAction, InputManager.MOUSE_BUTTON_3 );
-        inputManager.mapToMouse( mouseRightActionInitial, InputManager.MOUSE_BUTTON_3 );
+        inputManager.mapToMouse( mouseLeftAction, MOUSE_BUTTON_LEFT );
+        inputManager.mapToMouse( mouseLeftActionInitial, MOUSE_BUTTON_LEFT );
+        inputManager.mapToMouse( mouseMiddleAction, MOUSE_BUTTON_MIDDLE );
+        inputManager.mapToMouse( mouseMiddleActionInitial, MOUSE_BUTTON_MIDDLE );
+        inputManager.mapToMouse( mouseRightAction, MOUSE_BUTTON_RIGHT );
+        inputManager.mapToMouse( mouseRightActionInitial, MOUSE_BUTTON_RIGHT );
 
         inputManager.mapToMouse( mouseWheelUpAction, InputManager.MOUSE_WHEEL_UP );
         inputManager.mapToMouse( mouseWheelDownAction, InputManager.MOUSE_WHEEL_DOWN );
 
+        registerAllKeys();
+
     }
 
+
+
+    /***************************************************************************
+     * Tratamento do mouse.
+     **************************************************************************/
     /**
      * Retorna se um botão do mouse foi pressionado uma vez.
      * 
@@ -396,7 +357,7 @@ public abstract class Engine extends JFrame {
             case MouseEvent.BUTTON1:
                 return mouseLeftActionInitial.isPressed();
             case MouseEvent.BUTTON2:
-                return mouseCenterActionInitial.isPressed();
+                return mouseMiddleActionInitial.isPressed();
             case MouseEvent.BUTTON3:
                 return mouseRightActionInitial.isPressed();
         }
@@ -414,7 +375,7 @@ public abstract class Engine extends JFrame {
             case MouseEvent.BUTTON1:
                 return mouseLeftAction.isPressed() && mouseLeftAction.getAmount() == 0;
             case MouseEvent.BUTTON2:
-                return mouseCenterAction.isPressed() && mouseCenterAction.getAmount() == 0;
+                return mouseMiddleAction.isPressed() && mouseMiddleAction.getAmount() == 0;
             case MouseEvent.BUTTON3:
                 return mouseRightAction.isPressed() && mouseRightAction.getAmount() == 0;
         }
@@ -432,7 +393,7 @@ public abstract class Engine extends JFrame {
             case MouseEvent.BUTTON1:
                 return mouseLeftAction.isPressed();
             case MouseEvent.BUTTON2:
-                return mouseCenterAction.isPressed();
+                return mouseMiddleAction.isPressed();
             case MouseEvent.BUTTON3:
                 return mouseRightAction.isPressed();
         }
@@ -519,6 +480,133 @@ public abstract class Engine extends JFrame {
         double vUp = mouseWheelUpAction.getAmount();
         double vDown = mouseWheelDownAction.getAmount();
         return new Vector2( vUp, vDown );
+    }
+
+
+
+    /***************************************************************************
+     * Tratamento do teclado.
+     **************************************************************************/
+
+     /**
+     * Registra um código de tecla para ser "ouvido".
+     * 
+     * @param keyCode O código da tecla desejada.
+     */
+    @SuppressWarnings( "unused" )
+    private void registerKey( int keyCode ) {
+        inputManager.mapToKey( new GameAction( "key " + keyCode ), keyCode );
+        inputManager.mapToKey( new GameAction( "key " + keyCode, true ), keyCode );
+    }
+
+    /**
+     * Registra todas as teclas configuradas como constantes.
+     */
+    private void registerAllKeys() {
+
+        try {
+
+            Class<? extends Engine> klass = Engine.class;
+            
+            for ( Field f : klass.getDeclaredFields() ) {
+                if ( Modifier.isStatic( f.getModifiers() ) ) {
+                    if ( f.getName().startsWith( "KEY_" ) ) {
+                        int keyCode = f.getInt( null );
+                        inputManager.mapToKey( new GameAction( "key " + keyCode ), keyCode );
+                        inputManager.mapToKey( new GameAction( "key " + keyCode, true ), keyCode );
+                    }
+                }
+            }
+
+        } catch ( IllegalAccessException exc ) {
+            exc.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Retorna se uma tecla foi pressionada uma vez.
+     * 
+     * @param keyCode O inteiro que identifica a tecla desejado.
+     * @return Verdadeiro caso a tecla tenha sido pressionada uma vez, falso caso contrário.
+     */
+    public boolean isKeyPressed( int keyCode ) {
+
+        List<GameAction> keyActions = inputManager.getKeyActions( keyCode );
+        
+        if ( keyActions != null ) {
+            for ( GameAction ga : keyActions ) {
+                if ( ga.isInitialPressOnly() ) {
+                    return ga.isPressed();
+                }
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Retorna se uma tecla foi solta.
+     * 
+     * @param keyCode O inteiro que identifica a tecla desejada.
+     * @return Verdadeiro caso a tecla tenha sido solta, falso caso contrário.
+     */
+    public boolean isKeyReleased( int keyCode ) {
+
+        List<GameAction> keyActions = inputManager.getKeyActions( keyCode );
+        
+        if ( keyActions != null ) {
+            for ( GameAction ga : keyActions ) {
+                if ( !ga.isInitialPressOnly() ) {
+                    return ga.isPressed() && ga.getAmount() == 0;
+                }
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Retorna se uma tecla está pressionada.
+     * 
+     * @param keyCode O inteiro que identifica a tecla desejad.
+     * @return Verdadeiro caso a tecla esteja pressionada, falso caso contrário.
+     */
+    public boolean isKeyDown( int keyCode ) {
+        
+        List<GameAction> keyActions = inputManager.getKeyActions( keyCode );
+        
+        if ( keyActions != null ) {
+            for ( GameAction ga : keyActions ) {
+                if ( !ga.isInitialPressOnly() ) {
+                    return ga.isPressed();
+                }
+            }
+        }
+
+        return false;
+
+    }
+    
+    /**
+     * Retorna se uma tecla não está pressionada.
+     * 
+     * @param keyCode O inteiro que identifica a tecla desejada.
+     * @return Verdadeiro caso a tecla não esteja pressionada, falso caso contrário.
+     */
+    public boolean isKeyUp( int keyCode ) {
+        return !isKeyDown( keyCode );
+    }
+
+    /**
+     * Retorna um conjunto dos códigos das teclas pressionadas no momento.
+     * 
+     * @return Um conjunto dos códigos de teclas pressionadas.
+     */
+    public Set<Integer> getKeyPressed() {
+        return inputManager.getKeysFromPressedActions();
     }
 
 
@@ -2768,108 +2856,768 @@ public abstract class Engine extends JFrame {
     }
 
 
+    /**
+     * Classe interna que encapsula o processo de desenho.
+     */
+    private class DrawingPanel extends JPanel {
 
-    /***************************************************************************
-     * Controle interno dos eventos.
-     **************************************************************************/
-    private void prepareDrawingPanelEvents() {
+        @Override
+        public void paintComponent( Graphics g ) {
 
-        drawingPanel.addMouseListener( new MouseListener() {
+            super.paintComponent( g );
+            g2d = (Graphics2D) g.create();
 
-            @Override
-            public void mouseClicked( MouseEvent e ) {
-                handleMouseEvents( e, MouseEventType.CLICKED );
-            }
-
-            @Override
-            public void mousePressed( MouseEvent e ) {
-                handleMouseEvents( e, MouseEventType.PRESSED );
-            }
-
-            @Override
-            public void mouseReleased( MouseEvent e ) {
-                handleMouseEvents( e, MouseEventType.RELEASED );
-            }
-
-            @Override
-            public void mouseEntered( MouseEvent e ) {
-                handleMouseEvents( e, MouseEventType.ENTERED );
-            }
-
-            @Override
-            public void mouseExited( MouseEvent e ) {
-                handleMouseEvents( e, MouseEventType.EXITED );
-            }
+            g2d.setFont( defaultFont );
+            g2d.setStroke( defaultStroke );
             
-        });
+            g2d.clearRect( 0, 0, getWidth(), getHeight() );
 
-        drawingPanel.addMouseMotionListener( new MouseMotionListener() {
-
-            @Override
-            public void mouseDragged( MouseEvent e ) {
-                handleMouseEvents( e, MouseEventType.DRAGGED );
+            if ( antialiasing ) {
+                g2d.setRenderingHint( 
+                    RenderingHints.KEY_ANTIALIASING, 
+                    RenderingHints.VALUE_ANTIALIAS_ON );
             }
 
-            @Override
-            public void mouseMoved( MouseEvent e ) {
-                handleMouseEvents( e, MouseEventType.MOVED );
-            }
-            
-        });
+            draw();
+            g2d.dispose();
 
-        drawingPanel.addMouseWheelListener( new MouseWheelListener() {
-
-            @Override
-            public void mouseWheelMoved( MouseWheelEvent e ) {
-                handleMouseWheelEvents( e );
-            }
-            
-        });
-
-        drawingPanel.addKeyListener( new KeyAdapter() {
-
-            @Override
-            public void keyPressed( KeyEvent e ) {
-                handleKeyboardEvents( e, KeyboardEventType.PRESSED );
-            }
-
-            @Override
-            public void keyReleased( KeyEvent e ) {
-                handleKeyboardEvents( e, KeyboardEventType.RELEASED );
-            }
-            
-        });
+        }
 
     }
+
+    /**
+     * Classe interna para gerenciamento da entrada de teclas e mouse.
+     * Os eventos são mapeados para GameActions.
+     *
+     * @author Prof. Dr. David Buzatto
+     */
+    private class InputManager implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+        
+        /**
+         * Um cursor invisível.
+         */
+        @SuppressWarnings( "unused" )
+        public static final Cursor INVISIBLE_CURSOR =
+                Toolkit.getDefaultToolkit().createCustomCursor(
+                    Toolkit.getDefaultToolkit().getImage( "" ),
+                    new java.awt.Point( 0, 0 ),
+                    "invisible"
+                );
+        
+        /**
+         * Códigos do mouse (apenas para diferenciar as operações de rolagem
+         * da roda do mouse).
+         */
+        public static final int MOUSE_WHEEL_UP = 3000;
+        public static final int MOUSE_WHEEL_DOWN = 4000;
+
+        private Map<Integer, List<GameAction>> keyActionsMap = new HashMap<>();
+        private Map<Integer, List<GameAction>> mouseActionsMap = new HashMap<>();
+
+        private java.awt.Point mouseLocation;
+        private java.awt.Point centerLocation;
+        private Component comp;
+        private Robot robot;
+        private boolean isRecentering;
+        
+        /**
+         * Cria um novo InputManager que ouve as entradas de um componente 
+         * específico.
+         */
+        public InputManager( Component comp ) {
+
+            this.comp = comp;
+            mouseLocation = new java.awt.Point();
+            centerLocation = new java.awt.Point();
+
+            // registra os ouvintes de tecla e do mouse
+            comp.addKeyListener( this );
+            comp.addMouseListener( this );
+            comp.addMouseMotionListener( this );
+            comp.addMouseWheelListener( this );
+            
+            /*
+            * permite a entrada da tecla TAB e outras teclas normalmente usadas
+            * pelo focus traversal.
+            */
+            comp.setFocusTraversalKeysEnabled( false );
+
+        }
+        
+        /**
+         * Configura o cursor no componente do InputManager.
+         */
+        @SuppressWarnings( "unused" )
+        public void setCursor( Cursor cursor ) {
+            comp.setCursor( cursor );
+        }
+
+        
+        /**
+         * Configura quando o modo relativo do mouse está ligado ou não.
+         * Para o modo relativo do mouse, o cursor fica "trancado" no centro
+         * da tela, e somente a mudança no movimento do mouse é medida.
+         * No modo normal, o mouse fica livre para mover pela a tela.
+         */
+        @SuppressWarnings( "unused" )
+        public void setRelativeMouseMode( boolean mode ) {
+
+            if ( mode == isRelativeMouseMode() ) {
+                return;
+            }
+
+            if ( mode ) {
+                try {
+                    robot = new Robot();
+                    recenterMouse();
+                }
+                catch ( AWTException exc ) {
+                    // não pôde criar um Robot
+                    robot = null;
+                }
+            } else {
+                robot = null;
+            }
+
+        }
+        
+        /**
+         * Retorna se o modo relativo do mouse está ligado ou não.
+         */
+        public boolean isRelativeMouseMode() {
+            return ( robot != null );
+        }
+
+        /**
+         * Mapeia uma GameAction para uma tecla específica.
+         * Os códigos das telas são definidos em java.awt.KeyEvent, mas
+         * remapeados para constantes iguais à da Raylib.
+         * Cuidado, não há sobrescrição de actions, pois são listas.
+         */
+        public void mapToKey( GameAction gameAction, int keyCode ) {
+            if ( !keyActionsMap.containsKey(keyCode) ) {
+                keyActionsMap.put( keyCode, new ArrayList<>() );
+            }
+            keyActionsMap.get( keyCode ).add( gameAction );
+        }
+        
+        /**
+         * Mapeia uma GameAction para uma ação específica do mouse.
+         * Os códigos do mouse são definidos aqui nas constantes da engine
+         * Cuidado, não há sobrescrição de actions, pois são listas.
+         */
+        public void mapToMouse( GameAction gameAction, int mouseCode ) {
+            if ( !mouseActionsMap.containsKey(mouseCode) ) {
+                mouseActionsMap.put( mouseCode, new ArrayList<>() );
+            }
+            mouseActionsMap.get( mouseCode ).add( gameAction );
+        }
+        
+        /**
+         * Limpa todas as teclas mapeadas e ações do mouse para essa GameAction.
+         */
+        @SuppressWarnings( "unused" )
+        public void clearMap( GameAction gameAction ) {
+            keyActionsMap.clear();
+            mouseActionsMap.clear();
+            gameAction.reset();
+        }
+        
+        /**
+         * Reseta todas as GameAction, então elas ficam em um estado que parece
+         * que elas não foram executadas.
+         */
+        @SuppressWarnings( "unused" )
+        public void resetAllGameActions() {
+
+            for ( Map.Entry<Integer, List<GameAction>> e : keyActionsMap.entrySet() ) {
+                for ( GameAction ga : e.getValue() ) {
+                    ga.reset();
+                }
+            }
+
+            for ( Map.Entry<Integer, List<GameAction>> e : mouseActionsMap.entrySet() ) {
+                for ( GameAction ga : e.getValue() ) {
+                    ga.reset();
+                }
+            }
+
+        }
+        
+        /**
+         * Obtém o nome de um código de tecla.
+         */
+        @SuppressWarnings( "unused" )
+        public static String getKeyName( int keyCode ) {
+            return KeyEvent.getKeyText( keyCode );
+        }
+        
+        /**
+         * Obtém o nome de um código do mouse.
+         */
+        @SuppressWarnings( "unused" )
+        public static String getMouseName( int mouseCode ) {
+
+            switch ( mouseCode ) {
+                    
+                case MOUSE_BUTTON_LEFT: 
+                    return "Mouse Button Left";
+                    
+                case MOUSE_BUTTON_RIGHT: 
+                    return "Mouse Button Right";
+                    
+                case MOUSE_BUTTON_MIDDLE: 
+                    return "Mouse Button Middle";
+
+                case MOUSE_WHEEL_UP: 
+                    return "Mouse Wheel Up";
+                    
+                case MOUSE_WHEEL_DOWN: 
+                    return "Mouse Wheel Down";
+                    
+                default: 
+                    return "Unknown mouse code " + mouseCode;
+            }
+
+        }
+
+        /**
+         * Obtém a posição x do mouse.
+         */
+        public int getMouseX() {
+            return mouseLocation.x;
+        }
+        
+        /**
+         * Obtém a posição y do mouse.
+         */
+        public int getMouseY() {
+            return mouseLocation.y;
+        }
+
+        /**
+         * Usa a classe Robot para tentar posicionar o mouse no centro da tela.
+         * Note que o uso da classe Robot pode não ser possível em todas as 
+         * plataformas.
+         */
+        private synchronized void recenterMouse() {
+
+            if ( robot != null && comp.isShowing() ) {
+                centerLocation.x = comp.getWidth() / 2;
+                centerLocation.y = comp.getHeight() / 2;
+                SwingUtilities.convertPointToScreen( centerLocation, comp );
+                isRecentering = true;
+                robot.mouseMove( centerLocation.x, centerLocation.y );
+            }
+
+        }
+        
+        /**
+         * Retorna as GameActions associadas ao KeyEvent.
+         */
+        private List<GameAction> getKeyActions( KeyEvent e ) {
+
+            int keyCode = e.getKeyCode();
+
+            if ( keyActionsMap.containsKey( keyCode ) ) {
+                return keyActionsMap.get( keyCode );
+            }
+
+            return null;
+
+        }
+
+        /**
+         * Retorna as GameActions associada ao código da tecla.
+         */
+        public List<GameAction> getKeyActions( int keyCode ) {
+
+            if ( keyActionsMap.containsKey( keyCode ) ) {
+                return keyActionsMap.get( keyCode );
+            }
+
+            return null;
+
+        }
+
+        /**
+         * Obtém um conjunto com os códigos de todas as teclas pressionadas
+         * no momento. Retorna um conjunto com apenas o código nulo caso nenhuma
+         * tecla tenha sido pressionada.
+         * 
+         * @return Um conjunto com o código das teclas pressionadas.
+         */
+        public Set<Integer> getKeysFromPressedActions() {
+
+            Set<Integer> keys = new HashSet<>();
+
+            for ( Map.Entry<Integer, List<GameAction>> e : keyActionsMap.entrySet() ) {
+                for ( GameAction ga : e.getValue() ) {
+                    if ( ga.isPressed() ) {
+                        keys.add( e.getKey() );
+                    }
+                }
+            }
+
+            if ( keys.isEmpty() ) {
+                keys.add( KEY_NULL );
+            }
+
+            return keys;
+
+        }
+        
+        /**
+         * Obtém o código do mouse para o botão especificado no MouseEvent
+         */
+        public static int getMouseButtonCode( MouseEvent e ) {
+
+            switch ( e.getButton() ) {
+                
+                case MouseEvent.BUTTON1:
+                    return MOUSE_BUTTON_LEFT;
+                    
+                case MouseEvent.BUTTON2:
+                    return MOUSE_BUTTON_MIDDLE;
+                    
+                case MouseEvent.BUTTON3:
+                    return MOUSE_BUTTON_RIGHT;
+                    
+                default:
+                    return -1;
+
+            }
+
+        }
+        
+        /**
+         * Retorna as GameActions associadas ao MouseEvent.
+         */
+        private List<GameAction> getMouseButtonActions( MouseEvent e ) {
+
+            int mouseCode = getMouseButtonCode( e );
+
+            if ( mouseCode != -1 ) {
+                return mouseActionsMap.get( mouseCode );
+            }
+
+            return null;
+
+        }
+
+        @Override
+        public void keyTyped( KeyEvent e ) {
+            // dá certeza que a tecla não é processada por mais ninguém
+            e.consume();
+        }
+        
+        @Override
+        public void keyPressed( KeyEvent e ) {
+
+            List<GameAction> gameActions = getKeyActions( e );
+
+            if ( gameActions != null ) {
+                for ( GameAction ga : gameActions ) {
+                    ga.press();
+                }
+            }
+
+            // dá certeza que a tecla não é processada por mais ninguém
+            e.consume();
+
+        }
+
+        @Override
+        public void keyReleased( KeyEvent e ) {
+
+            List<GameAction> gameActions = getKeyActions( e );
+
+            if ( gameActions != null ) {
+                for ( GameAction ga : gameActions ) {
+                    ga.release();
+                }
+            }
+
+            // dá certeza que a tecla não é processada por mais ninguém
+            e.consume();
+
+        }
+
+        @Override
+        public void mouseClicked( MouseEvent e ) {
+            // não faz nada
+        }
+        
+        @Override
+        public void mousePressed( MouseEvent e ) {
+
+            List<GameAction> gameActions = getMouseButtonActions( e );
+
+            if ( gameActions != null ) {
+                for ( GameAction ga : gameActions ) {
+                    ga.press();
+                }
+            }
+
+        }
+
+        @Override
+        public void mouseReleased( MouseEvent e ) {
+
+            List<GameAction> gameActions = getMouseButtonActions( e );
+
+            if ( gameActions != null ) {
+                for ( GameAction ga : gameActions ) {
+                    ga.release();
+                }
+            }
+
+        }
+
+        @Override
+        public void mouseEntered( MouseEvent e ) {
+            mouseMoved( e );
+        }
+        
+        @Override
+        public void mouseExited( MouseEvent e ) {
+            mouseMoved( e );
+        }
+        
+        @Override
+        public void mouseDragged( MouseEvent e ) {
+            mouseMoved( e );
+        }
+        
+        @Override
+        public synchronized void mouseMoved( MouseEvent e ) {
+
+            // este evento é para recentralizar o mouse
+            if ( isRecentering &&
+                centerLocation.x == e.getX() &&
+                centerLocation.y == e.getY() ) {
+                isRecentering = false;
+            } else {
+                if ( isRelativeMouseMode() ) {
+                    recenterMouse();
+                }
+            }
+
+            mouseLocation.x = e.getX();
+            mouseLocation.y = e.getY();
+
+        }
+        
+        @Override
+        public void mouseWheelMoved( MouseWheelEvent e ) {
+            mouseHelper( MOUSE_WHEEL_UP, MOUSE_WHEEL_DOWN, e.getWheelRotation() );
+        }
+        
+        /**
+         * Calcula e configura a movimentação do mouse.
+         */
+        private void mouseHelper( int codeNeg, int codePos, int amount ) {
+
+            List<GameAction> gameActions;
+
+            if ( amount < 0 ) {
+                gameActions = mouseActionsMap.get( codeNeg );
+            } else {
+                gameActions = mouseActionsMap.get( codePos );
+            }
+            
+            if ( gameActions != null ) {
+                for ( GameAction ga : gameActions ) {
+                    ga.press( Math.abs( amount ) );
+                    ga.release();
+                }
+            }
+
+        }
+
+    }
+
+    /**
+     * A classe GameAction é uma abstração para uma ação iniciada pelo usuário,
+     * como pular ou mover. As GameActions podem ser mapeadas para teclas ou
+     * mouse usando o InputManager. Atualmente não são expostas, pois são
+     * utilizadas para simular o comportamento da Raylib.
+     *
+     * @author Prof. Dr. David Buzatto
+     */
+    public class GameAction {
+        
+        private static final int STATE_RELEASED = 0;
+        private static final int STATE_PRESSED = 1;
+        private static final int STATE_WAITING_FOR_RELEASE = 2;
+        
+        private String name;
+        private boolean initialPressOnly;
+        private int amount;
+        private int state;
+        
+        /**
+         * Cria uma nova GameAction com comportamento normal.
+         */
+        public GameAction( String name ) {
+            this( name, false );
+        }
+        
+        /**
+         * Cria uma nova GameAction com o comportamento de detectar
+         * apenas o pressionamento inicial.
+         */
+        public GameAction( String name, boolean initialPressOnly ) {
+            this.name = name;
+            this.initialPressOnly = initialPressOnly;
+            reset();
+        }
+        
+        /**
+         * Obtém o nome dessa GameAction.
+         */
+        public String getName() {
+            return name;
+        }
+        
+        /**
+         * Retorna se a ação é só de pressionamento inicial.
+         * @return 
+         */
+        public boolean isInitialPressOnly() {
+            return initialPressOnly;
+        }
+
+        /**
+         * Reseta esta GameAction, fazendo parecer que esta não foi pressionada.
+         */
+        public void reset() {
+            state = STATE_RELEASED;
+            amount = 0;
+        }
+        
+        /**
+         * Pressionamento rápido para essa GameAction. O mesmo que chamar press()
+         * seguido de release().
+         */
+        public synchronized void tap() {
+            press();
+            release();
+        }
+        
+        /**
+         * Sinaliza que a tecla foi pressionada.
+         */
+        public synchronized void press() {
+            press( 1 );
+        }
+        
+        /**
+         * Sinaliza que a tecla foi pressionada na quantidade de vezes especificada,
+         * ou que o mouse se moveu numa distância especificada.
+         */
+        public synchronized void press( int amount ) {
+            if ( state != STATE_WAITING_FOR_RELEASE ) {
+                this.amount += amount;
+                state = STATE_PRESSED;
+            }
+        }
+        
+        /**
+         * Sinaliza que a tecla foi solta.
+         */
+        public synchronized void release() {
+            state = STATE_RELEASED;
+        }
+        
+        /**
+         * Retorna se a tecla foi pressionada ou não desde a última checagem.
+         */
+        public synchronized boolean isPressed() {
+            return ( getAmount() != 0 );
+        }
+        
+        /**
+         * Para teclas, é a quantidade de vezes que a tecla foi pressionada desde
+         * a última vez que foi checada.
+         * Para eventos do mouse é a distância que cursor foi movido.
+         */
+        public synchronized int getAmount() {
+
+            int retVal = amount;
+
+            if ( retVal != 0 ) {
+                if ( state == STATE_RELEASED ) {
+                    amount = 0;
+                } else if ( initialPressOnly ) {
+                    state = STATE_WAITING_FOR_RELEASE;
+                    amount = 0;
+                }
+            }
+
+            return retVal;
+            
+        }
+        
+    }
+
+    /*
+     * Constantes para controle de teclado e mouse, iguais à da raylib.
+     */
+    public static final int KEY_NULL            = 0;                         // Tecla: NULL, usada para indicar que nenhuma tecla foi pressionada
+
+    // alfa-numéricos
+    public static final int KEY_APOSTROPHE      = KeyEvent.VK_QUOTE;         // Tecla: '
+    public static final int KEY_COMMA           = KeyEvent.VK_COMMA;         // Tecla: ,
+    public static final int KEY_MINUS           = KeyEvent.VK_MINUS;         // Tecla: -
+    public static final int KEY_PERIOD          = KeyEvent.VK_PERIOD;        // Tecla: .
+    public static final int KEY_SLASH           = KeyEvent.VK_SLASH;         // Tecla: /
+    public static final int KEY_ZERO            = KeyEvent.VK_0;             // Tecla: 0
+    public static final int KEY_ONE             = KeyEvent.VK_1;             // Tecla: 1
+    public static final int KEY_TWO             = KeyEvent.VK_2;             // Tecla: 2
+    public static final int KEY_THREE           = KeyEvent.VK_3;             // Tecla: 3
+    public static final int KEY_FOUR            = KeyEvent.VK_4;             // Tecla: 4
+    public static final int KEY_FIVE            = KeyEvent.VK_5;             // Tecla: 5
+    public static final int KEY_SIX             = KeyEvent.VK_6;             // Tecla: 6
+    public static final int KEY_SEVEN           = KeyEvent.VK_7;             // Tecla: 7
+    public static final int KEY_EIGHT           = KeyEvent.VK_8;             // Tecla: 8
+    public static final int KEY_NINE            = KeyEvent.VK_9;             // Tecla: 9
+    public static final int KEY_SEMICOLON       = KeyEvent.VK_SEMICOLON;     // Tecla: ;
+    public static final int KEY_EQUAL           = KeyEvent.VK_EQUALS;        // Tecla: =
+    public static final int KEY_A               = KeyEvent.VK_A;             // Tecla: A | a
+    public static final int KEY_B               = KeyEvent.VK_B;             // Tecla: B | b
+    public static final int KEY_C               = KeyEvent.VK_C;             // Tecla: C | c
+    public static final int KEY_D               = KeyEvent.VK_D;             // Tecla: D | d
+    public static final int KEY_E               = KeyEvent.VK_E;             // Tecla: E | e
+    public static final int KEY_F               = KeyEvent.VK_F;             // Tecla: F | f
+    public static final int KEY_G               = KeyEvent.VK_G;             // Tecla: G | g
+    public static final int KEY_H               = KeyEvent.VK_H;             // Tecla: H | h
+    public static final int KEY_I               = KeyEvent.VK_I;             // Tecla: I | i
+    public static final int KEY_J               = KeyEvent.VK_J;             // Tecla: J | j
+    public static final int KEY_K               = KeyEvent.VK_K;             // Tecla: K | k
+    public static final int KEY_L               = KeyEvent.VK_L;             // Tecla: L | l
+    public static final int KEY_M               = KeyEvent.VK_M;             // Tecla: M | m
+    public static final int KEY_N               = KeyEvent.VK_N;             // Tecla: N | n
+    public static final int KEY_O               = KeyEvent.VK_O;             // Tecla: O | o
+    public static final int KEY_P               = KeyEvent.VK_P;             // Tecla: P | p
+    public static final int KEY_Q               = KeyEvent.VK_Q;             // Tecla: Q | q
+    public static final int KEY_R               = KeyEvent.VK_R;             // Tecla: R | r
+    public static final int KEY_S               = KeyEvent.VK_S;             // Tecla: S | s
+    public static final int KEY_T               = KeyEvent.VK_T;             // Tecla: T | t
+    public static final int KEY_U               = KeyEvent.VK_U;             // Tecla: U | u
+    public static final int KEY_V               = KeyEvent.VK_V;             // Tecla: V | v
+    public static final int KEY_W               = KeyEvent.VK_W;             // Tecla: W | w
+    public static final int KEY_X               = KeyEvent.VK_X;             // Tecla: X | x
+    public static final int KEY_Y               = KeyEvent.VK_Y;             // Tecla: Y | y
+    public static final int KEY_Z               = KeyEvent.VK_Z;             // Tecla: Z | z
+    public static final int KEY_LEFT_BRACKET    = KeyEvent.VK_OPEN_BRACKET;  // Tecla: [
+    public static final int KEY_RIGHT_BRACKET   = KeyEvent.VK_CLOSE_BRACKET; // Tecla: ]
+    public static final int KEY_BACKSLASH       = KeyEvent.VK_BACK_SLASH;    // Tecla: '\'
+    public static final int KEY_GRAVE           = KeyEvent.VK_BACK_QUOTE;    // Tecla: `
+
+    // teclas de funções
+    public static final int KEY_SPACE           = KeyEvent.VK_SPACE;         // Tecla: Space
+    public static final int KEY_ESCAPE          = KeyEvent.VK_ESCAPE;        // Tecla: Esc
+    public static final int KEY_ENTER           = KeyEvent.VK_ENTER;         // Tecla: Enter
+    public static final int KEY_TAB             = KeyEvent.VK_TAB;           // Tecla: Tab
+    public static final int KEY_BACKSPACE       = KeyEvent.VK_BACK_SPACE;    // Tecla: Backspace
+    public static final int KEY_INSERT          = KeyEvent.VK_INSERT;        // Tecla: Ins
+    public static final int KEY_DELETE          = KeyEvent.VK_DELETE;        // Tecla: Del
+    public static final int KEY_RIGHT           = KeyEvent.VK_RIGHT;         // Tecla: Cursor right
+    public static final int KEY_LEFT            = KeyEvent.VK_LEFT;          // Tecla: Cursor left
+    public static final int KEY_DOWN            = KeyEvent.VK_DOWN;          // Tecla: Cursor down
+    public static final int KEY_UP              = KeyEvent.VK_UP;            // Tecla: Cursor up
+    public static final int KEY_PAGE_UP         = KeyEvent.VK_PAGE_UP;       // Tecla: Page up
+    public static final int KEY_PAGE_DOWN       = KeyEvent.VK_PAGE_DOWN;     // Tecla: Page down
+    public static final int KEY_HOME            = KeyEvent.VK_HOME;          // Tecla: Home
+    public static final int KEY_END             = KeyEvent.VK_END;           // Tecla: End
+    public static final int KEY_CAPS_LOCK       = KeyEvent.VK_CAPS_LOCK;     // Tecla: Caps lock
+    public static final int KEY_SCROLL_LOCK     = KeyEvent.VK_SCROLL_LOCK;   // Tecla: Scroll down
+    public static final int KEY_NUM_LOCK        = KeyEvent.VK_NUM_LOCK;      // Tecla: Num lock
+    public static final int KEY_PRINT_SCREEN    = KeyEvent.VK_PRINTSCREEN;   // Tecla: Print screen
+    public static final int KEY_PAUSE           = KeyEvent.VK_PAUSE;         // Tecla: Pause
+    public static final int KEY_F1              = KeyEvent.VK_F1;            // Tecla: F1
+    public static final int KEY_F2              = KeyEvent.VK_F2;            // Tecla: F2
+    public static final int KEY_F3              = KeyEvent.VK_F3;            // Tecla: F3
+    public static final int KEY_F4              = KeyEvent.VK_F4;            // Tecla: F4
+    public static final int KEY_F5              = KeyEvent.VK_F5;            // Tecla: F5
+    public static final int KEY_F6              = KeyEvent.VK_F6;            // Tecla: F6
+    public static final int KEY_F7              = KeyEvent.VK_F7;            // Tecla: F7
+    public static final int KEY_F8              = KeyEvent.VK_F8;            // Tecla: F8
+    public static final int KEY_F9              = KeyEvent.VK_F9;            // Tecla: F9
+    public static final int KEY_F10             = KeyEvent.VK_F10;           // Tecla: F10
+    public static final int KEY_F11             = KeyEvent.VK_F11;           // Tecla: F11
+    public static final int KEY_F12             = KeyEvent.VK_F12;           // Tecla: F12
+    public static final int KEY_SHIFT           = KeyEvent.VK_SHIFT;         // Tecla: Shift left
+    public static final int KEY_CONTROL         = KeyEvent.VK_CONTROL;       // Tecla: Control left
+    public static final int KEY_ALT             = KeyEvent.VK_ALT;           // Tecla: Alt left
+    public static final int KEY_SUPER           = KeyEvent.VK_WINDOWS;       // Tecla: Super left
+
+    // teclas do teclado numérico
+    public static final int KEY_KP_0            = KeyEvent.VK_NUMPAD0;       // Tecla: Keypad 0
+    public static final int KEY_KP_1            = KeyEvent.VK_NUMPAD1;       // Tecla: Keypad 1
+    public static final int KEY_KP_2            = KeyEvent.VK_NUMPAD2;       // Tecla: Keypad 2
+    public static final int KEY_KP_3            = KeyEvent.VK_NUMPAD3;       // Tecla: Keypad 3
+    public static final int KEY_KP_4            = KeyEvent.VK_NUMPAD4;       // Tecla: Keypad 4
+    public static final int KEY_KP_5            = KeyEvent.VK_NUMPAD5;       // Tecla: Keypad 5
+    public static final int KEY_KP_6            = KeyEvent.VK_NUMPAD6;       // Tecla: Keypad 6
+    public static final int KEY_KP_7            = KeyEvent.VK_NUMPAD7;       // Tecla: Keypad 7
+    public static final int KEY_KP_8            = KeyEvent.VK_NUMPAD8;       // Tecla: Keypad 8
+    public static final int KEY_KP_9            = KeyEvent.VK_NUMPAD9;       // Tecla: Keypad 9
+    public static final int KEY_KP_DIVIDE       = KeyEvent.VK_DIVIDE;        // Tecla: Keypad /
+    public static final int KEY_KP_MULTIPLY     = KeyEvent.VK_MULTIPLY;      // Tecla: Keypad *
+    public static final int KEY_KP_SUBTRACT     = KeyEvent.VK_SUBTRACT;      // Tecla: Keypad -
+    public static final int KEY_KP_ADD          = KeyEvent.VK_ADD;           // Tecla: Keypad +
+
+    // constantes para o mouse
+    public static final int MOUSE_BUTTON_LEFT    = MouseEvent.BUTTON1;       // botão da esquerda do mouse
+    public static final int MOUSE_BUTTON_RIGHT   = MouseEvent.BUTTON3;       // botão da direitra do mouse
+    public static final int MOUSE_BUTTON_MIDDLE  = MouseEvent.BUTTON2;       // botão do meio do mouse (pressionado)
+
+    // constantes para o cursor (por enquanto, fazer via API do Java)
+    /*
+    public static final int MOUSE_CURSOR_DEFAULT       = 0;     // Default pointer shape
+    public static final int MOUSE_CURSOR_ARROW         = 1;     // Arrow shape
+    public static final int MOUSE_CURSOR_IBEAM         = 2;     // Text writing cursor shape
+    public static final int MOUSE_CURSOR_CROSSHAIR     = 3;     // Cross shape
+    public static final int MOUSE_CURSOR_POINTING_HAND = 4;     // Pointing hand cursor
+    public static final int MOUSE_CURSOR_RESIZE_EW     = 5;     // Horizontal resize/move arrow shape
+    public static final int MOUSE_CURSOR_RESIZE_NS     = 6;     // Vertical resize/move arrow shape
+    public static final int MOUSE_CURSOR_RESIZE_NWSE   = 7;     // Top-left to bottom-right diagonal resize/move arrow shape
+    public static final int MOUSE_CURSOR_RESIZE_NESW   = 8;     // The top-right to bottom-left diagonal resize/move arrow shape
+    public static final int MOUSE_CURSOR_RESIZE_ALL    = 9;     // The omnidirectional resize/move cursor shape
+    public static final int MOUSE_CURSOR_NOT_ALLOWED   = 10;    // The operation-not-allowed shape
+    */
+
 
     /*
      * Cores padrão.
      */
-    protected static final Color LIGHTGRAY  = new Color( 200, 200, 200 );
-    protected static final Color GRAY       = new Color( 130, 130, 130 );
-    protected static final Color DARKGRAY   = new Color( 80, 80, 80 );
-    protected static final Color YELLOW     = new Color( 253, 249, 0 );
-    protected static final Color GOLD       = new Color( 255, 203, 0 );
-    protected static final Color ORANGE     = new Color( 255, 161, 0 );
-    protected static final Color PINK       = new Color( 255, 109, 194 );
-    protected static final Color RED        = new Color( 230, 41, 55 );
-    protected static final Color MAROON     = new Color( 190, 33, 55 );
-    protected static final Color GREEN      = new Color( 0, 228, 48 );
-    protected static final Color LIME       = new Color( 0, 158, 47 );
-    protected static final Color DARKGREEN  = new Color( 0, 117, 44 );
-    protected static final Color SKYBLUE    = new Color( 102, 191, 255 );
-    protected static final Color BLUE       = new Color( 0, 121, 241 );
-    protected static final Color DARKBLUE   = new Color( 0, 82, 172 );
-    protected static final Color PURPLE     = new Color( 200, 122, 255 );
-    protected static final Color VIOLET     = new Color( 135, 60, 190 );
-    protected static final Color DARKPURPLE = new Color( 112, 31, 126 );
-    protected static final Color BEIGE      = new Color( 211, 176, 131 );
-    protected static final Color BROWN      = new Color( 127, 106, 79 );
-    protected static final Color DARKBROWN  = new Color( 76, 63, 47 );
-    protected static final Color WHITE      = new Color( 255, 255, 255 );
-    protected static final Color BLACK      = new Color( 0, 0, 0 );
-    protected static final Color BLANK      = new Color( 0, 0, 0, 0 );
-    protected static final Color MAGENTA    = new Color( 255, 0, 255 );
-    protected static final Color RAYWHITE   = new Color( 245, 245, 245 );
+    public static final Color LIGHTGRAY  = new Color( 200, 200, 200 );
+    public static final Color GRAY       = new Color( 130, 130, 130 );
+    public static final Color DARKGRAY   = new Color( 80, 80, 80 );
+    public static final Color YELLOW     = new Color( 253, 249, 0 );
+    public static final Color GOLD       = new Color( 255, 203, 0 );
+    public static final Color ORANGE     = new Color( 255, 161, 0 );
+    public static final Color PINK       = new Color( 255, 109, 194 );
+    public static final Color RED        = new Color( 230, 41, 55 );
+    public static final Color MAROON     = new Color( 190, 33, 55 );
+    public static final Color GREEN      = new Color( 0, 228, 48 );
+    public static final Color LIME       = new Color( 0, 158, 47 );
+    public static final Color DARKGREEN  = new Color( 0, 117, 44 );
+    public static final Color SKYBLUE    = new Color( 102, 191, 255 );
+    public static final Color BLUE       = new Color( 0, 121, 241 );
+    public static final Color DARKBLUE   = new Color( 0, 82, 172 );
+    public static final Color PURPLE     = new Color( 200, 122, 255 );
+    public static final Color VIOLET     = new Color( 135, 60, 190 );
+    public static final Color DARKPURPLE = new Color( 112, 31, 126 );
+    public static final Color BEIGE      = new Color( 211, 176, 131 );
+    public static final Color BROWN      = new Color( 127, 106, 79 );
+    public static final Color DARKBROWN  = new Color( 76, 63, 47 );
+    public static final Color WHITE      = new Color( 255, 255, 255 );
+    public static final Color BLACK      = new Color( 0, 0, 0 );
+    public static final Color BLANK      = new Color( 0, 0, 0, 0 );
+    public static final Color MAGENTA    = new Color( 255, 0, 255 );
+    public static final Color RAYWHITE   = new Color( 245, 245, 245 );
 
 }

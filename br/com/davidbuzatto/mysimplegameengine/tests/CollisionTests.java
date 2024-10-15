@@ -2,10 +2,8 @@ package br.com.davidbuzatto.mysimplegameengine.tests;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.MouseEvent;
 
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
-import br.com.davidbuzatto.mysimplegameengine.event.MouseEventType;
 import br.com.davidbuzatto.mysimplegameengine.geom.*;
 import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
 
@@ -34,8 +32,6 @@ public class CollisionTests extends Engine {
     private Color moveableCircleColor;
     private boolean mcDragging;
 
-    private Point mousePos;
-
     private Color noOverlapColor = RAYWHITE;
     private Color overlapColor = GOLD;
     private Rectangle overlapRec;
@@ -60,7 +56,7 @@ public class CollisionTests extends Engine {
     private String textCircleGeom;
 
     public CollisionTests() {
-        super( 800, 600, "Test Window", 60, true );
+        super( 800, 600, "Collisions Tests", 60, true );
     }
 
     @Override
@@ -93,6 +89,50 @@ public class CollisionTests extends Engine {
     public void update() {
 
         double delta = getFrameTime();
+        Point mousePos = getMousePositionPoint();
+        
+        if ( isMouseButtonPressed( MOUSE_BUTTON_LEFT ) ) {
+
+            if ( Utils.checkCollisionPointLine( mousePos, line, 5 ) ) {
+                textPointGeom = "line!";
+            } else if ( Utils.checkCollisionPointRectangle( mousePos, rectangle ) ) {
+                textPointGeom = "rectangle!";
+            } else if ( Utils.checkCollisionPointCircle( mousePos, circle ) ) {
+                textPointGeom = "circle!";
+            } else if ( Utils.checkCollisionPointTriangle( mousePos, triangle ) ) {
+                textPointGeom = "triangle!";
+            } else if ( Utils.checkCollisionPointPolygon( mousePos, polygon ) ) {
+                textPointGeom = "polygon!";
+            } else {
+                textPointGeom = "none";
+            }
+
+            if ( Utils.checkCollisionPointLine( mousePos, moveableLine, 10 ) ) {
+                mlDragging = true;
+                xOffset = moveableLine.x1 - mousePos.x;
+                yOffset = moveableLine.y1 - mousePos.y;
+            }
+
+            if ( Utils.checkCollisionPointRectangle( mousePos, moveableRect ) ) {
+                mrDragging = true;
+                xOffset = moveableRect.x - mousePos.x;
+                yOffset = moveableRect.y - mousePos.y;
+            }
+
+            if ( Utils.checkCollisionPointCircle( mousePos, moveableCircle ) ) {
+                mcDragging = true;
+                xOffset = moveableCircle.x - mousePos.x;
+                yOffset = moveableCircle.y - mousePos.y;
+            }
+
+        }
+
+        if ( isMouseButtonReleased( MOUSE_BUTTON_LEFT ) ) {
+            mlDragging = false;
+            mrDragging = false;
+            mcDragging = false;
+        }
+
         amount += amountVel * delta;
         if ( amount < 0.0 ) {
             amountVel = -amountVel;
@@ -207,62 +247,6 @@ public class CollisionTests extends Engine {
         drawText( "  Line x Geom: " + textLineGeom, 10, 90, 20, BLACK );
         drawText( "  Rect x Geom: " + textRectGeom, 10, 120, 20, BLACK );
         drawText( "Circle x Geom: " + textCircleGeom, 10, 150, 20, BLACK );
-
-    }
-
-    @Override
-    public void handleMouseEvents( MouseEvent e, MouseEventType met ) {
-        
-        if ( met == MouseEventType.PRESSED ) {
-            if ( e.getButton() == MouseEvent.BUTTON1 ) {
-
-                Point p = Utils.mouseEventPositionToPoint( e );
-
-                if ( Utils.checkCollisionPointLine( p, line, 5 ) ) {
-                    textPointGeom = "line!";
-                } else if ( Utils.checkCollisionPointRectangle( p, rectangle ) ) {
-                    textPointGeom = "rectangle!";
-                } else if ( Utils.checkCollisionPointCircle( p, circle ) ) {
-                    textPointGeom = "circle!";
-                } else if ( Utils.checkCollisionPointTriangle( p, triangle ) ) {
-                    textPointGeom = "triangle!";
-                } else if ( Utils.checkCollisionPointPolygon( p, polygon ) ) {
-                    textPointGeom = "polygon!";
-                } else {
-                    textPointGeom = "none";
-                }
-
-                if ( Utils.checkCollisionPointLine( p, moveableLine, 10 ) ) {
-                    mlDragging = true;
-                    xOffset = moveableLine.x1 - p.x;
-                    yOffset = moveableLine.y1 - p.y;
-                }
-
-                if ( Utils.checkCollisionPointRectangle( p, moveableRect ) ) {
-                    mrDragging = true;
-                    xOffset = moveableRect.x - p.x;
-                    yOffset = moveableRect.y - p.y;
-                }
-
-                if ( Utils.checkCollisionPointCircle( p, moveableCircle ) ) {
-                    mcDragging = true;
-                    xOffset = moveableCircle.x - p.x;
-                    yOffset = moveableCircle.y - p.y;
-                }
-
-            }
-
-        }
-
-        if ( met == MouseEventType.MOVED || met == MouseEventType.DRAGGED ) {
-            mousePos = Utils.mouseEventPositionToPoint( e );
-        }
-
-        if ( met == MouseEventType.RELEASED ) {
-            mlDragging = false;
-            mrDragging = false;
-            mcDragging = false;
-        }
 
     }
 

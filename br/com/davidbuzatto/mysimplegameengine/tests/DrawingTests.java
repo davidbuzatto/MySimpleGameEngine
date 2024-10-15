@@ -27,7 +27,7 @@ public class DrawingTests extends Engine {
     private CubicCurve cubicCurve;
 
     public DrawingTests() {
-        super( 800, 600, "Test Window", 60, true );
+        super( 800, 600, "Drawing Tests", 60, true );
     }
 
     @Override

@@ -3,14 +3,12 @@ package br.com.davidbuzatto.mysimplegameengine.tests;
 import br.com.davidbuzatto.mysimplegameengine.core.Engine;
 
 /**
- * Classe básica de exemplo de utilização da engine.
+ * Testes das flags para criação da janela.
  * 
  * @author Prof. Dr. David Buzatto
  * @copyright Copyright (c) 2024
  */
 public class WindowFlagsTests extends Engine {
-
-    // declaração de variáveis
 
     public WindowFlagsTests() {
 
@@ -29,24 +27,14 @@ public class WindowFlagsTests extends Engine {
 
     }
 
-    /**
-     * Processa a entrada inicial fornecida pelo usuário e cria
-     * e/ou inicializa os objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void create() {
     }
 
-    /**
-     * Atualiza os objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void update() {
     }
 
-    /**
-     * Desenha o estado dos objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void draw() {
         drawLine( 0, 0, getScreenWidth(), getScreenHeight(), BLACK );

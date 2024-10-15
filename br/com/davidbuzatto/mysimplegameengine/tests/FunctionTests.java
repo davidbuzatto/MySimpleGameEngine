@@ -6,38 +6,25 @@ import br.com.davidbuzatto.mysimplegameengine.core.Engine;
 import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
 
 /**
- * Classe básica de exemplo de utilização da engine.
+ * Testes de algumas funções.
  * 
  * @author Prof. Dr. David Buzatto
  * @copyright Copyright (c) 2024
  */
 public class FunctionTests extends Engine {
 
-    // declaração de variáveis
-
     public FunctionTests() {
-        super( 800, 600, "Test Window", 60, true );
+        super( 800, 600, "Utilitary Functions Test", 60, true );
     }
 
-    /**
-     * Processa a entrada inicial fornecida pelo usuário e cria
-     * e/ou inicializa os objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void create() {
-        
     }
 
-    /**
-     * Atualiza os objetos/contextos/variáveis do jogo ou simulação.
-     */
     @Override
     public void update() {
     }
-
-    /**
-     * Desenha o estado dos objetos/contextos/variáveis do jogo ou simulação.
-     */
+    
     @Override
     public void draw() {
 
