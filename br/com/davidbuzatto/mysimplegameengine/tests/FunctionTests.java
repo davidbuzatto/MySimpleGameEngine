@@ -14,7 +14,7 @@ import br.com.davidbuzatto.mysimplegameengine.utils.Utils;
 public class FunctionTests extends Engine {
 
     public FunctionTests() {
-        super( 800, 600, "Utilitary Functions Test", 60, true );
+        super( 800, 500, "Utilitary Functions Test", 60, true );
     }
 
     @Override

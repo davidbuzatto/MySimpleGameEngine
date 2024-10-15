@@ -15,7 +15,7 @@ public class WindowFlagsTests extends Engine {
         // cria a janela do jogo ou simulação
         super( 
             800,
-            600,
+            450,
             "Título da Janela",
             60,
             true,
@@ -40,8 +40,8 @@ public class WindowFlagsTests extends Engine {
         drawLine( 0, 0, getScreenWidth(), getScreenHeight(), BLACK );
         drawText( getTime() + "", 20, 20, 20, BLACK );
         drawText( getFrameTime() + "", 20, 40, 20, BLACK );
-        drawText( getFps() + "", 20, 60, 20, BLACK );
-        drawFps( 10, 100 );
+        drawText( getFPS() + "", 20, 60, 20, BLACK );
+        drawFPS( 10, 100 );
     }
 
     public static void main( String[] args ) {

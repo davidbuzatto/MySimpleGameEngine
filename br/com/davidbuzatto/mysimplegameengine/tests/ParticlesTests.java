@@ -63,7 +63,7 @@ public class ParticlesTests extends Engine {
     List<Particula> particulas;
 
     public ParticlesTests() {
-        super( 800, 600, "Particle Tests", 60, true );
+        super( 800, 450, "Particle Tests", 60, true );
     }
 
     @Override
@@ -100,7 +100,7 @@ public class ParticlesTests extends Engine {
     public void draw() {
 
         clearBackground( BLACK );
-        drawFps( 10, 20 );
+        drawFPS( 10, 20 );
         drawText( "Particles: " + particulas.size(), 10, 40, 20, WHITE );
 
         for ( Particula p : particulas ) {

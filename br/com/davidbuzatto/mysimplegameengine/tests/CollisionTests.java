@@ -56,7 +56,7 @@ public class CollisionTests extends Engine {
     private String textCircleGeom;
 
     public CollisionTests() {
-        super( 800, 600, "Collisions Tests", 60, true );
+        super( 800, 450, "Collisions Tests", 60, true );
     }
 
     @Override
@@ -242,7 +242,7 @@ public class CollisionTests extends Engine {
         fillCircle( pointForQuad, 10, GREEN );
         fillCircle( pointForCubic, 10, BLUE );
 
-        drawFps( 10, 30 );
+        drawFPS( 10, 30 );
         drawText( " Point x Geom: " + textPointGeom, 10, 60, 20, BLACK );
         drawText( "  Line x Geom: " + textLineGeom, 10, 90, 20, BLACK );
         drawText( "  Rect x Geom: " + textRectGeom, 10, 120, 20, BLACK );

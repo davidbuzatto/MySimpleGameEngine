@@ -75,7 +75,7 @@ public abstract class Engine extends JFrame {
 
     // fonte padrão
     private Font defaultFont;
-    private Font defaultFpsFont;
+    private Font defaultFPSFont;
 
     // contorno padrão
     private BasicStroke defaultStroke;
@@ -93,13 +93,13 @@ public abstract class Engine extends JFrame {
     private long frameTime;
 
     // quadros por segundo
-    private int targetFps;
+    private int targetFPS;
 
     // quadros por segundo atual
-    private int currentFps;
+    private int currentFPS;
 
     // tempo esperado baseado na quantidade de quadros por segundo
-    private long waitTimeFps;
+    private long waitTimeFPS;
 
     // tempo de início da execução do jogo/simulação
     private long startTime;
@@ -151,7 +151,7 @@ public abstract class Engine extends JFrame {
      * @param windowWidth Largura da janela.
      * @param windowHeight Altura da janela.
      * @param windowTitle Título de janela.
-     * @param targetFps A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
+     * @param targetFPS A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
      * @param antialiasing Flag que indica se deve ou não usar suavização para o desenho no contexto gráfico.
      * @param resizable Flag que indica se a janela é redimensionável.
      * @param fullScreen Flag que indica se a janela deve rodar em modo tela cheia exclusivo.
@@ -161,7 +161,7 @@ public abstract class Engine extends JFrame {
     public Engine( int windowWidth, 
                    int windowHeight, 
                    String windowTitle, 
-                   int targetFps, 
+                   int targetFPS, 
                    boolean antialiasing,
                    boolean resizable, 
                    boolean fullScreen, 
@@ -177,14 +177,14 @@ public abstract class Engine extends JFrame {
         }
 
         startTime = System.currentTimeMillis();
-        setTargetFps( targetFps );
+        setTargetFPS( targetFPS );
 
         defaultFont = new Font( Font.MONOSPACED, Font.PLAIN, 10 );
-        defaultFpsFont = new Font( Font.MONOSPACED, Font.BOLD, 20 );
+        defaultFPSFont = new Font( Font.MONOSPACED, Font.BOLD, 20 );
         defaultStroke = new BasicStroke( 1 );
 
         this.antialiasing = antialiasing;
-        waitTimeFps = (long) ( 1000.0 / this.targetFps );   // quanto se espera que cada frame demore
+        waitTimeFPS = (long) ( 1000.0 / this.targetFPS );   // quanto se espera que cada frame demore
 
         // cria e configura o painel de desenho
         drawingPanel = new DrawingPanel();
@@ -238,15 +238,15 @@ public abstract class Engine extends JFrame {
      * @param windowWidth Largura da janela.
      * @param windowHeight Altura da janela.
      * @param windowTitle Título de janela.
-     * @param targetFps A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
+     * @param targetFPS A quantidade máxima de frames por segundo que se deseja que o processo de atualização e desenho mantenha.
      * @param antialiasing Flag que indica se deve ou não usar suavização para o desenho no contexto gráfico.
      */
     public Engine( int windowWidth, 
                    int windowHeight, 
                    String windowTitle, 
-                   int targetFps, 
+                   int targetFPS, 
                    boolean antialiasing ) {
-        this( windowWidth, windowHeight, windowTitle, targetFps, antialiasing, false, false, false, false );
+        this( windowWidth, windowHeight, windowTitle, targetFPS, antialiasing, false, false, false, false );
     }
 
     private void start() {
@@ -272,7 +272,7 @@ public abstract class Engine extends JFrame {
                 frameTime = timeAfter - timeBefore;
 
                 // quanto se deve esperar?
-                waitTime = waitTimeFps - frameTime;
+                waitTime = waitTimeFPS - frameTime;
 
                 //System.out.printf( "%d %d %d %d\n", timeBefore, timeAfter, frameTime, waitTime );
 
@@ -291,14 +291,14 @@ public abstract class Engine extends JFrame {
                     frameTime = waitTime;  // o tempo que o frame demorou para executar
                 }
 
-                int localFps = (int) ( Math.round( 1000.0 / frameTime / 10.0 ) ) * 10;
+                int localFPS = (int) ( Math.round( 1000.0 / frameTime / 10.0 ) ) * 10;
 
-                if ( localFps > targetFps ) {
-                    localFps = targetFps;
+                if ( localFPS > targetFPS ) {
+                    localFPS = targetFPS;
                 }
 
-                if ( localFps >= 0 ) {
-                    currentFps = localFps;
+                if ( localFPS >= 0 ) {
+                    currentFPS = localFPS;
                 }
 
                 try {
@@ -2575,15 +2575,15 @@ public abstract class Engine extends JFrame {
      * Configura o quantidade de quadros por segundo desejado para a execução
      * do jogo/simulação.
      * 
-     * @param targetFps A quantidade de quadros por segundo.
+     * @param targetFPS A quantidade de quadros por segundo.
      */
-    public void setTargetFps( int targetFps ) {
+    public void setTargetFPS( int targetFPS ) {
 
-        if ( targetFps <= 0 ) {
-            throw new IllegalArgumentException( "target fps must be positive!" );
+        if ( targetFPS <= 0 ) {
+            throw new IllegalArgumentException( "target FPS must be positive!" );
         }
 
-        this.targetFps = targetFps;
+        this.targetFPS = targetFPS;
 
     }
 
@@ -2610,8 +2610,8 @@ public abstract class Engine extends JFrame {
      * 
      * @return a quantidade de quadros por segundo atual.
      */
-    public int getFps() {
-        return currentFps;
+    public int getFPS() {
+        return currentFPS;
     }
 
     /**
@@ -2692,14 +2692,14 @@ public abstract class Engine extends JFrame {
      * @param x A posição em x para o desenho.
      * @param y A posição em y para o desenho.
      */
-    public void drawFps( double x, double y ) {
+    public void drawFPS( double x, double y ) {
 
         Font t = g2d.getFont();
-        g2d.setFont( defaultFpsFont );
+        g2d.setFont( defaultFPSFont );
 
         drawText( 
-            String.format( "%d FPS", currentFps ), 
-            x, y, Utils.lerp( RED, LIME, currentFps / (double) targetFps ) );
+            String.format( "%d FPS", currentFPS ), 
+            x, y, Utils.lerp( RED, LIME, currentFPS / (double) targetFPS ) );
 
         g2d.setFont( t );
 

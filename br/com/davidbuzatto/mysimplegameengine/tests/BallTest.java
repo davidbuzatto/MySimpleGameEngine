@@ -85,7 +85,7 @@ public class BallTest extends Engine {
     Bolinha bolinha;
 
     public BallTest() {
-        super( 800, 600, "Ball Simulation", 60, true );
+        super( 800, 450, "Ball Simulation", 60, true );
     }
 
     @Override

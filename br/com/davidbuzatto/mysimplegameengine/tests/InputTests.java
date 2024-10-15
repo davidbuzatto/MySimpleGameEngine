@@ -13,7 +13,7 @@ public class InputTests extends Engine {
     private double value;
 
     public InputTests() {
-        super( 800, 600, "Input tests", 60, true );
+        super( 800, 450, "Input tests", 60, true );
     }
 
     @Override

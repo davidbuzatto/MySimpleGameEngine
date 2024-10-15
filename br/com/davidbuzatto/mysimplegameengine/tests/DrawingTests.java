@@ -58,7 +58,7 @@ public class DrawingTests extends Engine {
     @Override
     public void draw() {
 
-        drawFps( 10, 30 );
+        drawFPS( 10, 30 );
         //rotate( 90, getScreenWidth() / 2, getScreenHeight() / 2 );
         //translate( 100, 100 );
         //scale( 2, 2 );
