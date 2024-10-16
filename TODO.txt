@@ -1,1 +1,0 @@
-Funções para carga, desenho e transformação de imagens e texturas.
